@@ -18,13 +18,14 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(String username, String password, boolean isAdmin) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setAdmin(isAdmin);
-        System.out.println(user);
+    public User registerUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+           // Return une Erreur 403
+            return null;
 
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        System.out.println(user);
         return userRepository.save(user);
     }
 }
