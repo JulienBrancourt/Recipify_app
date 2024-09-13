@@ -16,5 +16,5 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String ingredientName;
-    private long calorie;
+    private int calorie;
 }
