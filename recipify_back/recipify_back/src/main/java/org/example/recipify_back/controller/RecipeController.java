@@ -2,6 +2,8 @@ package org.example.recipify_back.controller;
 
 import org.example.recipify_back.entity.Recipe;
 import org.example.recipify_back.service.RecipeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,9 +25,11 @@ public class RecipeController {
     }
 
     @PutMapping("/recipe/{recipeName}")
-    public Recipe updateRecipe(@RequestBody Recipe updatedRecipe, @PathVariable String recipeName) {
-        return recipeService.updateRecipe(updatedRecipe.getTitle(), updatedRecipe.getInstruction(), updatedRecipe.getServing());
+    public void updateRecipe(@RequestBody Recipe recipe) {
+        recipeService.updateRecipe(recipe.getTitle(), recipe.getInstruction(), recipe.getServing());
     }
+
+
 
     @DeleteMapping("/recipe/{recipeName}")
     public void deleteRecipe(@PathVariable String recipeName) {

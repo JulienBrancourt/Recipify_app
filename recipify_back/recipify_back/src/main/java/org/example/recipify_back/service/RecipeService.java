@@ -25,17 +25,19 @@ public class RecipeService {
         return recipeRepository.findByTitle(recipeName);
    }
 
-   public Recipe updateRecipe(String title, String instruction, int serving) {
-       Recipe recipe = recipeRepository.findByTitle(title);
-        try {
+    public Recipe updateRecipe(String title, String instruction, int serving) {
+        Recipe recipe = recipeRepository.findByTitle(title);
+        if (recipe != null) {
             recipe.setTitle(title);
             recipe.setInstruction(instruction);
             recipe.setServing(serving);
-        } catch (Exception e) {
+            return recipeRepository.save(recipe);
+        } else {
             throw new RuntimeException("Recipe not found");
         }
-        return recipeRepository.save(recipe);
-   }
+    }
+
+
 
    public void deleteRecipe(String recipeName) {
         Recipe recipe = recipeRepository.findByTitle(recipeName);
