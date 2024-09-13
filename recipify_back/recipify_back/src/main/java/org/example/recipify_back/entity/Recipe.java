@@ -20,5 +20,7 @@ public class Recipe {
     private String insctruction;
     private long calorie;
     private int serving;
+    private boolean is_approved;
+    private boolean is_private;
 
 }
