@@ -15,6 +15,8 @@ public class IngredientService {
     }
 
     public Ingredient addIngredient(Ingredient ingredient) {
+
+        ingredient.setIngredientName(ingredient.getIngredientName().toLowerCase());
         return ingredientRepository.save(ingredient);
     }
 

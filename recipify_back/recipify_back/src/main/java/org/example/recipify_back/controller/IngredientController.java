@@ -2,10 +2,9 @@ package org.example.recipify_back.controller;
 
 import org.example.recipify_back.entity.Ingredient;
 import org.example.recipify_back.service.IngredientService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class IngredientController {
@@ -20,4 +19,13 @@ public class IngredientController {
         return ingredientService.addIngredient(ingredient);
     }
 
+    @GetMapping("/ingredient/{ingredientName}")
+    public Ingredient getIngredient(@PathVariable String ingredientName) {
+        return ingredientService.getIngredientByName(ingredientName);
+    }
+
+    @GetMapping("/ingredients")
+    public List<Ingredient> getAllIngredients() {
+        return ingredientService.getAllIngredients();
+    }
 }
