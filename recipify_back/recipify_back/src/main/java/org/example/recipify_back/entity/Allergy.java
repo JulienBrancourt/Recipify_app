@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -15,5 +19,12 @@ public class Allergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String allergyName;
+
+    @ManyToMany(mappedBy = "allergies")
+    @JsonBackReference
+    private List<User> users;
 }
+
+

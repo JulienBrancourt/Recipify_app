@@ -20,10 +20,15 @@ public class AllergyService {
     }
 
     public Allergy addAllergy(Allergy allergy) {
+        allergy.setAllergyName(allergy.getAllergyName().toLowerCase());
         return allergyRepository.save(allergy);
     }
 
     public Optional<Allergy> findAllergyByName(String allergyName) {
-        return allergyRepository.findByAllergyName(allergyName);
+        return allergyRepository.findByAllergyName(allergyName.toLowerCase());
     }
+
+
+
+
 }
