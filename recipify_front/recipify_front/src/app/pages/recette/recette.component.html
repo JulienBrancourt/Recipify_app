@@ -1,0 +1,35 @@
+<!-- recipe.component.html -->
+<div class="recipe-container">
+    <!-- Image de la recette -->
+    <div class="recipe-image">
+      <!-- <img [src]= "https://mccormick.widen.net/content/ohhuv9j6f7/original/spaghettis_a_la_bolognaise_2000x1125.jpg"> -->
+    </div>
+  
+    <!-- Détails de la recette -->
+    <div class="recipe-details">
+      <h1>Spagetthis Bolognaise</h1>
+  
+      <!-- <app-ingredients-card [ingredients]="recipe.ingredients"></app-ingredients-card> -->
+       <h2>Liste des ingrédients</h2>
+       <ul>
+        <li>
+            <p>Viande Hachée, spaghettis, ...</p>
+        </li>
+       </ul>
+  
+      <!-- Instructions de la recette -->
+      <div class="recipe-instructions">
+        <h3>Instructions</h3>
+        <!-- <p>{{ recipe.instructions }}</p> -->
+
+        Faites Bouillir de l'eau blablabla
+      </div>
+  
+      <!-- Boutons d'action -->
+      <div class="recipe-actions">
+        <button (click)="addToFavorites()">Ajouter aux favoris</button>
+        <button (click)="shareRecipe()">Partager la recette</button>
+      </div>
+    </div>
+  </div>
+  
