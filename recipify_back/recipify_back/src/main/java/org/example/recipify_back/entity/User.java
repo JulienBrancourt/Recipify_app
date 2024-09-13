@@ -33,6 +33,14 @@ public class User {
     )
     @JsonManagedReference
     private List<Allergy> allergies;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_recipes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
+    private List<Recipe> favoriteRecipes;
 }
 
 

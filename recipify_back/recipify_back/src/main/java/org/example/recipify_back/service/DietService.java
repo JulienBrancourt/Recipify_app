@@ -12,19 +12,18 @@ public class DietService {
         this.dietRepository = dietRepository;
     }
 
-    public Diet registerDiet(String dietName){
-        Diet diet = new Diet();
-        diet.setDietName(dietName);
+    public Diet registerDiet(Diet diet) {
+        diet.setDietName(diet.getDietName().toLowerCase());
         return dietRepository.save(diet);
     }
 
-    public Diet getDiet(String dietName){
+    public Diet getDiet(String dietName) {
         return dietRepository.findByDietName(dietName);
     }
 
-    public Diet updateDiet(String dietName){
+    public Diet updateDiet(String dietName) {
         Diet diet = dietRepository.findByDietName(dietName);
-        if (diet != null){
+        if (diet != null) {
             diet.setDietName(dietName);
             return dietRepository.save(diet);
 
@@ -33,9 +32,9 @@ public class DietService {
         }
     }
 
-    public void deleteDiet(String dietName){
+    public void deleteDiet(String dietName) {
         Diet diet = dietRepository.findByDietName(dietName);
-        if (diet != null){
+        if (diet != null) {
             dietRepository.delete(diet);
         } else {
             throw new RuntimeException("Diet not found");
