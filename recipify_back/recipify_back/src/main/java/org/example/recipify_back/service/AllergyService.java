@@ -2,10 +2,12 @@ package org.example.recipify_back.service;
 
 import org.example.recipify_back.entity.Allergy;
 import org.example.recipify_back.repository.AllergyRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AllergyService {
     private AllergyRepository allergyRepository;
 

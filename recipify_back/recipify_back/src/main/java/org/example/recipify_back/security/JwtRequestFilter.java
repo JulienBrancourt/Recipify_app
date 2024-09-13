@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 @Slf4j  // Cette annotation ajoute un logger (via Lombok)
@@ -34,7 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         log.info("Request path: {}", path);
 
         // Skip JWT filter for specific paths
-        if (path.startsWith("/register") || path.startsWith("/authenticate")) {
+        if (!path.startsWith("/admin") && !path.startsWith("/user")) {
             log.info("Skipping filter for path: {}", path);
             chain.doFilter(request, response);
             return;
