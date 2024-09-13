@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
+
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
@@ -83,6 +84,7 @@ public class JwtUtil {
         log.info("JWT validation for user {}: {}", username, isValid ? "valid" : "invalid");  // Log la validation
         return isValid;
     }
+
     // Charger la clé privée à partir d'un fichier PEM dans le classpath
     private PrivateKey loadPrivateKey() throws Exception {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("private_key.pem")) {
