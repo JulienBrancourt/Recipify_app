@@ -17,7 +17,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
-    private String insctruction;
+    private String instruction;
     private int calorie;
     private int serving;
     private boolean is_approved;
