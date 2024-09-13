@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class Diet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     private String dietName;
 }

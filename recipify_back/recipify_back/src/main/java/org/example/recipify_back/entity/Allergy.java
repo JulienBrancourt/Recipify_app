@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class Allergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     private String allergyName;
 }
