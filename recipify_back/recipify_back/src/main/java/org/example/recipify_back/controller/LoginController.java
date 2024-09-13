@@ -2,9 +2,7 @@ package org.example.recipify_back.controller;
 
 import org.example.recipify_back.entity.User;
 import org.example.recipify_back.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoginController {
@@ -17,9 +15,7 @@ public class LoginController {
 
 
     @PostMapping("/register")
-    public User register(@RequestParam String username,
-                         @RequestParam String password,
-                         @RequestParam(defaultValue = "false") boolean isAdmin) {
-        return userService.registerUser(username, password, isAdmin);
+    public User register(@RequestBody User user) {
+        return userService.registerUser(user);
     }
 }
