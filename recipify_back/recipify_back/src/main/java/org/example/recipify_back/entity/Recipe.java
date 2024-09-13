@@ -2,10 +2,9 @@ package org.example.recipify_back.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -17,10 +16,18 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
+
+    @Column(unique = true)
+    private String slug;
     private String instruction;
     private int calorie;
+
+    @NonNull
     private int serving;
     private boolean is_approved;
     private boolean is_private;
+
+    @ManyToMany(mappedBy = "favoriteRecipes")
+    private List<User> usersWhoFavorited;
 
 }
