@@ -44,7 +44,6 @@
 #  postgres-data:
 
 
-
 services:
   recipify_front:
     build:
@@ -70,7 +69,8 @@ services:
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: mdp
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy  # Correct indentation here
     networks:
       - app-network
 
@@ -81,7 +81,12 @@ services:
       POSTGRES_PASSWORD: mdp
       POSTGRES_DB: mydatabase
     ports:
-      - "5433:5432"
+      - "5433:5432"  # Added missing closing quote
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d mydatabase"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
@@ -93,3 +98,4 @@ networks:
 
 volumes:
   postgres-data:
+
