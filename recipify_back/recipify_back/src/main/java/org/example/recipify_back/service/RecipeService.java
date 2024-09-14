@@ -3,12 +3,19 @@ package org.example.recipify_back.service;
 import org.example.recipify_back.entity.Recipe;
 import org.example.recipify_back.repository.RecipeRepository;
 import org.example.recipify_back.utils.Slug;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
 @Service
 public class RecipeService {
+    private static final Logger log = LoggerFactory.getLogger(RecipeService.class);
     private final RecipeRepository recipeRepository;
     private final Slug slugGenerator;
 
@@ -23,8 +30,19 @@ public class RecipeService {
         // Générer un slug unique avec accents retirés et formatage propre
         String baseSlug = recipe.getTitle();
         String uniqueSlug = slugGenerator.generateUniqueSlug(baseSlug);
-
         recipe.setSlug(uniqueSlug);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+            log.info("User is admin, approving recipe automatically");
+            recipe.setApproved(true);
+        } else {
+            log.info("User is not admin, recipe will be pending approval");
+            recipe.setApproved(false);
+        }
+
         return recipeRepository.save(recipe);
     }
 
