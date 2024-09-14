@@ -1,3 +1,4 @@
 # ajout ignore vscode
 .vscode/
 .idea/
+/recipify_front/.idea

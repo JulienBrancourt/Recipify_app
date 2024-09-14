@@ -1,13 +1,64 @@
+#services:
+#  recipify_front:
+#    build:
+#      context: ./recipify_front/recipify_front
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - recipify_back
+#    networks:
+#      - app-network
+#
+#  recipify_back:
+#    build:
+#      context: ./recipify_back/recipify_back
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/mydatabase?currentSchema=recipify
+#      SPRING_DATASOURCE_USERNAME: user
+#      SPRING_DATASOURCE_PASSWORD: mdp
+#    depends_on:
+#      - postgres-db
+#    networks:
+#      - app-network
+#
+#  postgres-db:
+#    image: postgres:15-alpine
+#    environment:
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: mdp
+#      POSTGRES_DB: mydatabase
+#    ports:
+#      - "5433:5432"  # Expose PostgreSQL to the host on port 5433, but inside Docker use 5432
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+#    networks:
+#      - app-network
+#
+#networks:
+#  app-network:
+#    driver: bridge
+#
+#volumes:
+#  postgres-data:
+
+
+
 services:
   recipify_front:
     build:
       context: ./recipify_front/recipify_front
     ports:
-      - "80:80"
+      - "4200:4200"  # Expose le port 4200 pour ng serve
+    volumes:
+      - ./recipify_front/recipify_front:/app  # Synchronise les fichiers entre l'hôte et le conteneur
+      - /app/node_modules  # Exclure node_modules pour éviter des conflits
     depends_on:
       - recipify_back
     networks:
       - app-network
+    command: npm start  # Lancer ng serve dans le conteneur
 
   recipify_back:
     build:
@@ -30,7 +81,7 @@ services:
       POSTGRES_PASSWORD: mdp
       POSTGRES_DB: mydatabase
     ports:
-      - "5433:5432"  # Expose PostgreSQL to the host on port 5433, but inside Docker use 5432
+      - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
