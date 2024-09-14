@@ -23,6 +23,8 @@ public class User {
 
     private String username;
     private String password;
+
+    @Column(name = "is_admin")
     private boolean isAdmin;
 
     @ManyToMany

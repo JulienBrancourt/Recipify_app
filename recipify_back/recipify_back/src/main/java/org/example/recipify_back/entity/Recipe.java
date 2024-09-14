@@ -24,8 +24,14 @@ public class Recipe {
 
     @NonNull
     private int serving;
-    private boolean is_approved;
-    private boolean is_private;
+
+    @Builder.Default
+    @Column(name = "is_approved")
+    private boolean isApproved = false;
+
+    @Builder.Default
+    @Column(name = "is_private")
+    private boolean isPrivate = false;
 
     @ManyToMany(mappedBy = "favoriteRecipes")
     private List<User> usersWhoFavorited;

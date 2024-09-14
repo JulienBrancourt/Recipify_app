@@ -9,4 +9,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     Recipe findBySlug(String slug);
 
     boolean existsBySlug(String slug);
+
+    Recipe findBySlugAndIsApproved(String slug, boolean isApproved);
+
+
 }
