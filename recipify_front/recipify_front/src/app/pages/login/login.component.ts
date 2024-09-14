@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-Login',
+  selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule
   ],
-  templateUrl: './Login.component.html',
-  styleUrl: './Login.component.css'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
 
@@ -19,15 +19,7 @@ export class LoginComponent {
 
   constructor() {}
 
-
   handleSubmit() {
-    // const credentials = this.form.value as Pick<User, 'email' | 'password'>;
-    // this.authService.login(credentials).subscribe({
-    //   next: res => {
-    //     if(res) {
-    //       this.router.navigate(['/'])
-       return console.log("vous etes connecté") 
+    console.log("vous etes connecté");
   }
-        
-      }
-
+}
