@@ -17,4 +17,7 @@ public class Ingredient {
     private int id;
     private String ingredientName;
     private int calorie;
+
+    @Enumerated(EnumType.STRING)
+    private IngredientCategory ingredientCategory;
 }
