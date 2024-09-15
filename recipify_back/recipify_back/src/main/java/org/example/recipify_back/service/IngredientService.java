@@ -1,7 +1,7 @@
 package org.example.recipify_back.service;
 
 import org.example.recipify_back.entity.Ingredient;
-import org.example.recipify_back.entity.IngredientCategory;
+import org.example.recipify_back.entity.enumEntity.IngredientCategory;
 import org.example.recipify_back.repository.IngredientRepository;
 import org.springframework.stereotype.Service;
 

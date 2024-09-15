@@ -1,7 +1,7 @@
 package org.example.recipify_back.repository;
 
 import org.example.recipify_back.entity.Ingredient;
-import org.example.recipify_back.entity.IngredientCategory;
+import org.example.recipify_back.entity.enumEntity.IngredientCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

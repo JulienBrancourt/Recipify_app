@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.recipify_back.entity.enumEntity.IngredientCategory;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +23,7 @@ public class Ingredient {
 
     @Enumerated(EnumType.STRING)
     private IngredientCategory ingredientCategory;
+
+    @OneToMany(mappedBy = "ingredient")
+    private List<FridgeItem> fridgeItems;
 }
