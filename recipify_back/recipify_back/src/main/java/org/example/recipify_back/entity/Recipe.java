@@ -36,4 +36,17 @@ public class Recipe {
     @ManyToMany(mappedBy = "favoriteRecipes")
     private List<User> usersWhoFavorited;
 
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<RecipeIngredient> recipeIngredients;
+
+
+    public int getTotalCalories() {
+        return recipeIngredients.stream()
+                .mapToInt(ri -> {
+                    double adjustedQuantity = ri.getUnit().convertToStandard(ri.getQuantity());
+                    return (int)((ri.getIngredient().getCalorie() * adjustedQuantity) / 100);
+                })
+                .sum();
+    }
+
 }
