@@ -1,4 +1,4 @@
-package org.example.recipify_back.entity;
+package org.example.recipify_back.entity.enumEntity;
 
 public enum IngredientCategory {
     VIANDE,
