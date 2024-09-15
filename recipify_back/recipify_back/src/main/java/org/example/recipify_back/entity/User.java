@@ -43,6 +43,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
     private List<Recipe> favoriteRecipes;
+
+    @OneToMany(mappedBy = "user")
+    private List<FridgeItem> fridgeItems;
 }
 
 

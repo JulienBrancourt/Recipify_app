@@ -1,7 +1,7 @@
 package org.example.recipify_back.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.recipify_back.entity.AuthRequest;
+import org.example.recipify_back.entity.security.AuthRequest;
 import org.example.recipify_back.security.JwtUtil;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +35,7 @@ public class AuthController {
             throw new Exception("Incorrect username or password", e);
         }
 
-        // Générer un token JWT et le retourner
+
         String jwt = jwtUtil.generateToken(authRequest.getUsername());
         log.info("JWT generated for user: {}", authRequest.getUsername());
         return jwt;
