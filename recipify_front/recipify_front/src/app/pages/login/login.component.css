@@ -1,5 +1,6 @@
 #login {
   min-height: 72vh;
+  height: 100%;
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -8,6 +9,10 @@
   grid-row-gap: 0px;
 }
 
+
+form{
+  padding: 15px 0;
+}
 
 .accueille, .formulaire{
   display: flex;

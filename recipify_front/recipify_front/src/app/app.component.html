@@ -1,5 +1,8 @@
-<app-nav></app-nav>
+
+
+<app-nav *ngIf="isLogged"></app-nav>
+
 <main>
   <router-outlet />
 </main>
-<app-footer></app-footer>
+<app-footer *ngIf="isLogged"></app-footer>
