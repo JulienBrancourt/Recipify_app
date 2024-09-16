@@ -21,15 +21,37 @@ public class RecipeController {
     }
 
     @PostMapping("/recipe")
-    public void registerRecipe(@RequestBody Recipe recipe) {
-        recipeService.registerRecipe(recipe);
+    public ResponseEntity<?> registerRecipe(@RequestBody Recipe recipe) {
+        try {
+            recipeService.registerRecipe(recipe);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Recipe created");
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while registering the recipe.");
+        }
     }
 
     @PostMapping("/userFavoriteRecipe")
-    public ResponseEntity<User> updateUserFavoriteRecipe(@RequestParam String userName,
-             @RequestParam String slug) {
-        User updateUserFavorite = userService.addFavoriteRecipeToUser(userName, slug);
-        return ResponseEntity.ok(updateUserFavorite);
+    public ResponseEntity<?> updateUserFavoriteRecipe(@RequestParam String userName,
+                                                      @RequestParam String slug) {
+        try {
+            User updateUserFavorite = userService.addFavoriteRecipeToUser(userName, slug);
+            return ResponseEntity.ok(updateUserFavorite);
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating user favorite recipes.");
+        }
     }
 
     @GetMapping("/recipe/{slug}")
@@ -43,13 +65,35 @@ public class RecipeController {
     }
 
     @PutMapping("/recipe/{slug}")
-    public void updateRecipe(@PathVariable("slug") String slug, @RequestBody Recipe updatedRecipe) {
-        recipeService.updateRecipe(slug, updatedRecipe);
+    public ResponseEntity<?> updateRecipe(@PathVariable("slug") String slug, @RequestBody Recipe updatedRecipe) {
+        try {
+            recipeService.updateRecipe(slug, updatedRecipe);
+            return ResponseEntity.ok("Recipe updated successfully.");
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Recipe not found.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating the recipe.");
+        }
     }
 
     @DeleteMapping("/recipe/{recipeName}")
-    public void deleteRecipe(@PathVariable String recipeName) {
-        recipeService.deleteRecipe(recipeName);
+    public ResponseEntity<?> deleteRecipe(@PathVariable String recipeName) {
+        try {
+            recipeService.deleteRecipe(recipeName);
+            return ResponseEntity.ok("Recipe deleted successfully.");
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Recipe not found.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while deleting the recipe.");
+        }
     }
 
 }
