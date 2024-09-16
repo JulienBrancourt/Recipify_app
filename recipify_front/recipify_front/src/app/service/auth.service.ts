@@ -20,7 +20,10 @@ export class AuthService {
       )
       ;
   }
-
+  register(email: string, password: string): Observable<any> {
+    const payload = { email, password };
+    return this.http.post(`${this.apiUrl}/register`, payload);
+  }
   logout(): void {
     localStorage.removeItem('authToken');
   }
