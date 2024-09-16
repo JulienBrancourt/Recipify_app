@@ -4,6 +4,7 @@ import org.example.recipify_back.entity.Ingredient;
 import org.example.recipify_back.entity.enumEntity.IngredientCategory;
 import org.example.recipify_back.service.IngredientService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,8 +19,14 @@ public class IngredientController {
     }
 
     @PostMapping("/ingredient")
-    public Ingredient addIngredient(@RequestBody Ingredient ingredient) {
-        return ingredientService.addIngredient(ingredient);
+    public ResponseEntity<?> addIngredient(@RequestBody Ingredient ingredient) {
+        try {
+            ingredientService.addIngredient(ingredient);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("ingredient created");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping("/ingredient/{ingredientName}")
@@ -41,7 +48,6 @@ public class IngredientController {
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid ingredient category");
         }
-
         return ingredientService.getIngredientsByCategory(ingredientCategory);
     }
 }
