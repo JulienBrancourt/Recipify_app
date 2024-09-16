@@ -6,23 +6,24 @@
 <div class="ingredient-form">
     <h2>Ingrédients</h2>
 
-    <form id="ingredients-form">
+    <form [formGroup]="form" (ngSubmit)="submitIngredients()">
         <div id="ingredient-fields">
             <div class="ingredient-field">
-                <label for="ingredient1">Ingrédient 1 :</label>
-                <input type="text" id="ingredient1" name="ingredient1">
+                <label>Ingrédient 1 :</label>
+                <input type="text" formControlName="ingredientName">
+                <label>Quantité :</label> 
+                <input type="number" formControlName= "quantity">
             </div>
             <div class="ingredient-field">
-                <label for="ingredient2">Ingrédient 2 :</label>
-                <input type="text" id="ingredient2" name="ingredient2">
-            </div>
-            <div class="ingredient-field">
-                <label for="ingredient3">Ingrédient 3 :</label>
-                <input type="text" id="ingredient3" name="ingredient3">
+                <label>Ingrédient 1 :</label>
+                <input type="text" formControlName="ingredientName">
+                <label>Quantité :</label> 
+                <input type="number" formControlName= "quantity">
             </div>
         </div>
 
-    <button type="button" (click)="addIngredient()">Ajouter un ingrédient</button>
+    <button type="button" (click)="addInput()">Ajouter un ingrédient</button>
+
 
     <button (click)="goToPage()">Voir la recette</button>
 
