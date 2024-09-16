@@ -1,11 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+  --main-font: 'Inter', sans-serif;
+  --bg-color: #f5e5d3;
+  --primary: #A4D4B4;
+  --secondary: #D36135;
+  --tertiary: #3B1C32;
+  --text-color: #1A1A1A;
+}
+
+
+
+
 body{
   margin: 0;
   padding: 0;
-  height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color)
+
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
 }
 
 main{
   height: 100%;
   padding: 0;
   margin: 0;
+}
+
+
+.button {
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  padding: 13px 20px 13px;
+  outline: 0;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  z-index: 1;
+  color: white;
+}
+
+.button:after {
+  content: "";
+  background-color: var(--tertiary);
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  top: 7px;
+  left: 7px;
+  transition: 0.2s;
+}
+
+.button:hover:after {
+  top: 0px;
+  left: 0px;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  button {
+    padding: 13px 50px 13px;
+  }
 }
