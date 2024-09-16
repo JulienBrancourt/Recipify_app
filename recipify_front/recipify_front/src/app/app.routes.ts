@@ -4,10 +4,11 @@ import { dashboardComponent } from './pages/dashboard/dashboard.component';
 import { FavorisComponent } from './pages/favoris/favoris.component';
 import { FormRecetteComponent } from './components/form-recette/form-recette.component';
 import { RecetteComponent } from './pages/recette/recette.component';
+import {AdminComponent} from "./pages/admin/admin.component";
 
 
 
-export const routes: Routes = 
+export const routes: Routes =
 
 [{path: '', component: LoginComponent},
 
@@ -18,5 +19,7 @@ export const routes: Routes =
  {path: 'form-recette', component: FormRecetteComponent},
 
  {path: 'recette', component: RecetteComponent},
-    
+
+  {path: 'admin', component: AdminComponent},
+
 ];
