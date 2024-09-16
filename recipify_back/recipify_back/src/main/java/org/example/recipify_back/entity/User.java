@@ -33,9 +33,9 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "allergy_id")
     )
+
     @JsonManagedReference
     private List<Allergy> allergies;
-
     @ManyToMany
     @JoinTable(
             name = "user_favorite_recipes",
@@ -43,6 +43,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
     private List<Recipe> favoriteRecipes;
+
 
     @OneToMany(mappedBy = "user")
     private List<FridgeItem> fridgeItems;
