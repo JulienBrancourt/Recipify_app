@@ -1,7 +1,12 @@
 <nav class="navbar">
   <div class="logo">Recipify</div>
   <ul #navLinks class="nav-links">
-    <li><a routerLink="/" (click)="activeBurger()">Connexion</a></li>
+    @if (!isLoggedIn()){
+      <li><a routerLink="/" (click)="activeBurger()">Connexion</a></li>
+    } @else {
+      <li><a (click)="logout()">Déconnexion</a></li>
+    }
+
     <li><a routerLink="/dashboard" (click)="activeBurger()">Accueil</a></li>
     <li><a routerLink="/favoris" (click)="activeBurger()">Recettes Favorites</a></li>
     <li><a routerLink="/form-recette" (click)="activeBurger()">Créer une recette</a></li>

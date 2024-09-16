@@ -1,5 +1,6 @@
 import { Component, ElementRef, signal, ViewChild, AfterViewInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
+import {AuthService} from "../../service/auth.service";
 
 @Component({
   selector: 'app-nav',
@@ -12,6 +13,16 @@ export class NavComponent implements AfterViewInit {
   @ViewChild('burger') burger!: ElementRef;
   @ViewChild('navLinks') navLinks!: ElementRef;
 
+  constructor(private authService: AuthService, private router: Router) {
+  }
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
   // Signal to manage the state of the burger menu (open/close)
   isNavActive = signal(false);
 
