@@ -1,0 +1,72 @@
+/* Container styling */
+.container {
+  padding: 2rem 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.col {
+  flex: 1 1 200px; /* Ajuste chaque colonne pour être flexible */
+  padding: 1rem;
+}
+
+/* Styling for links */
+a {
+  display: block;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Button styling */
+button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Dropdown styling */
+.dropdowns {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.dropdown-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Centered text styling */
+.text-center {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+small {
+  display: block;
+  margin-top: 1rem;
+  color: #666;
+}

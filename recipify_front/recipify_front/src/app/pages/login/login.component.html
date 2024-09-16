@@ -1,15 +1,27 @@
-<h1>Connexion</h1>
 
-<form [formGroup]="form" (ngSubmit)="handleSubmit()">
-  <p>
-    <label>Email</label>
-    <input formControlName="email">
-  </p>
-  <p>
-    <label>Mot de passe</label>
-    <input formControlName="password">
-  </p>
-  <p>
-    <button>Connexion</button>
-  </p>
-</form>
+<section id="login">
+
+  <div class="accueille">
+    <h1>Connexion</h1>
+    <p>Connectez-vous pour accéder à votre compte</p>
+  </div>
+
+  <div class="formulaire">
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+      <p>
+        <label>Email</label>
+        <input formControlName="email">
+      </p>
+      <p>
+        <label>Mot de passe</label>
+        <input type="password" formControlName="password">
+      </p>
+      <p>
+        <button>Connexion</button>
+      </p>
+      <a routerLink="/register">Créer compte</a>
+    </form>
+  </div>
+</section>
+
+
