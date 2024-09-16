@@ -2,7 +2,6 @@ package org.example.recipify_back.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,11 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIgnoreProperties(value = {"id","slug"})
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String title;
 
     @Column(unique = true)
@@ -25,7 +24,6 @@ public class Recipe {
     private String instruction;
     private int calorie;
 
-    @NonNull
     private int serving;
 
     @Builder.Default
@@ -37,12 +35,11 @@ public class Recipe {
     private boolean isPrivate = false;
 
     @ManyToMany(mappedBy = "favoriteRecipes")
+    @JsonIgnore // Avoid circular references
     private List<User> usersWhoFavorited;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<RecipeIngredient> recipeIngredients;
-
-
     public int getTotalCalories() {
         return recipeIngredients.stream()
                 .mapToInt(ri -> {

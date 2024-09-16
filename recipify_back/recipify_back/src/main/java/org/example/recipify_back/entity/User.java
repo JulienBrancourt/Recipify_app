@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -20,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private int id;
 
     private String username;
@@ -35,20 +33,19 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "allergy_id")
     )
-
-    @JsonManagedReference
+    @JsonIgnore // Avoid circular references
     private List<Allergy> allergies;
+
     @ManyToMany
     @JoinTable(
             name = "user_favorite_recipes",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
+    @JsonIgnore // Avoid circular references
     private List<Recipe> favoriteRecipes;
 
-
     @OneToMany(mappedBy = "user")
+    @JsonIgnore // Avoid circular references for FridgeItems
     private List<FridgeItem> fridgeItems;
 }
-
-
