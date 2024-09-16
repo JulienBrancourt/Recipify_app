@@ -1,6 +1,7 @@
 package org.example.recipify_back.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 public class FridgeItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @JsonIgnore
     private int id;
 
     @ManyToOne
