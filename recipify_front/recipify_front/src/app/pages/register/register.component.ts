@@ -13,7 +13,7 @@ import {AuthService} from "../../service/auth.service";
 export class RegisterComponent {
 
   form = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
 
@@ -24,10 +24,10 @@ export class RegisterComponent {
 
   handleSubmit() {
     if (this.form.valid) {
-      const { email, password } = this.form.value;
+      const { username, password } = this.form.value;
 
       this.isSubmitting = true;
-      this.authService.register(email!, password!)
+      this.authService.register(username!, password!)
         .subscribe({
           next: (response: string) => {
             console.log('Inscription réussie', response);

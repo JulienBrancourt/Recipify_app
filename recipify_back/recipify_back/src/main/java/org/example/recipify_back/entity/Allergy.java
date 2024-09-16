@@ -1,5 +1,6 @@
 package org.example.recipify_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,9 @@ public class Allergy {
     private String allergyName;
 
     @ManyToMany(mappedBy = "allergies")
-    @JsonBackReference
+    @JsonIgnore // Prevent infinite recursion during serialization
     private List<User> users;
 }
+
 
 

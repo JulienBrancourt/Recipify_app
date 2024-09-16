@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {AuthService} from "../../service/auth.service";
+import { AuthService } from "../../service/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -13,40 +13,39 @@ import {AuthService} from "../../service/auth.service";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-
   form = new FormGroup({
-    email: new FormControl(''),
+    username: new FormControl(''),
     password: new FormControl(''),
   });
 
   errorMessage: string | null = null;
-  isSubmitting: boolean = false;
+  isSubmitting: boolean = false; // Linked to loading state
 
-  constructor(private authService: AuthService, private router: Router) {}
-
+  constructor(private authService: AuthService, private router: Router) { }
 
   handleSubmit() {
     if (this.form.valid) {
-      const email = this.form.get('email')?.value;
+      const username = this.form.get('username')?.value;
       const password = this.form.get('password')?.value;
 
-      this.isSubmitting = true;
-      this.authService.login(email!, password!)
+      this.isSubmitting = true; // Start loading
+      this.authService.login(username!, password!)
         .subscribe({
-          next: (response: string) => {
-            console.log('Connexion réussie', response);
+          next: (response: { token: string }) => {
+            console.log('Login successful, token:', response.token);
             this.router.navigate(['/dashboard']);
           },
-          error: (err: string) => {
-            console.error('Erreur de connexion', err);
-            this.errorMessage = 'Échec de la connexion. Veuillez vérifier vos identifiants.';
+          error: (err: any) => {
+            console.error('Login error', err);
+            this.errorMessage = 'Login failed. Please check your credentials.';
+            this.isSubmitting = false; // Stop loading on error
           },
           complete: () => {
-            this.isSubmitting = false;
+            this.isSubmitting = false; // Stop loading after complete
           }
         });
     } else {
-      this.errorMessage = 'Veuillez remplir tous les champs.';
+      this.errorMessage = 'Please fill in all fields.';
     }
   }
 }

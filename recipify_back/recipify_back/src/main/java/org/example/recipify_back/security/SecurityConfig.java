@@ -44,8 +44,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection for REST APIs
                 .authorizeHttpRequests(auth -> auth
                         // TODO A Remettre a la normal pour la version final !!!
-                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

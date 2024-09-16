@@ -28,6 +28,7 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
+        log.info("Received authentication request for user: {}", authRequest.getUsername());
         try {
             log.info("Attempting to authenticate user: {}", authRequest.getUsername());
             authenticationManager.authenticate(

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment.development";
 import {HttpClient} from "@angular/common/http";
-import {Observable, tap} from "rxjs";
+import {BehaviorSubject, catchError, Observable, tap, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,26 +9,54 @@ import {Observable, tap} from "rxjs";
 export class AuthService {
   apiUrl = environment.apiUrl
 
-  constructor(private http: HttpClient) { }
+  private loggedIn = new BehaviorSubject<boolean>(false);
 
-  login(email: string , password: string ): Observable<any> {
-    return this.http.post<{ token: string  }>(`${this.apiUrl}/authenticate`, {email, password})
+  constructor(private http: HttpClient) {
+    // Check if the user is already logged in when the service initializes
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      this.loggedIn.next(true);
+    }
+  }
+
+  isLogginObservable(): Observable<boolean> {
+    return this.loggedIn.asObservable();
+  }
+
+  login(username: string, password: string): Observable<{ token: string }> {
+    const requestBody = {
+      username: username,
+      password: password
+    };
+
+    return this.http.post<{ token: string }>(`${this.apiUrl}/authenticate`, requestBody)
       .pipe(
         tap(response => {
+          // Save the token to localStorage
           localStorage.setItem('authToken', response.token);
+          console.log('Login successful, JWT token stored.');
+          // Update the loggedIn state to true
+          this.loggedIn.next(true);
+        }),
+        catchError(error => {
+          console.error('Login error:', error.message);
+          return throwError(() => new Error('Login failed. Please try again later.'));
         })
-      )
-      ;
+      );
   }
-  register(email: string, password: string): Observable<any> {
-    const payload = { email, password };
+
+  register(username: string, password: string): Observable<any> {
+    const payload = { username, password };
     return this.http.post(`${this.apiUrl}/register`, payload);
   }
+
   logout(): void {
+    // Remove the token and update the loggedIn state
     localStorage.removeItem('authToken');
+    this.loggedIn.next(false);
   }
 
   isLoggedIn(): boolean {
-    return!!localStorage.getItem('authToken');
+    return !!localStorage.getItem('authToken');
   }
 }
