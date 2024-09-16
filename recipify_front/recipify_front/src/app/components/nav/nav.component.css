@@ -4,44 +4,73 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  overflow-x: hidden; /* Empêche le scroll horizontal */
+nav {
+  height: 150px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+
 }
 
-/* Navbar styling */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
+nav:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 0, 100% 0%, 100% 68%, 0 84%);
+  z-index: -1;
+  background-color: var(--primary);
   padding: 15px;
 }
 
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: white;
 }
 
-.nav-links {
+nav ul {
   list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
+  justify-content: center;
 }
 
-.nav-links li {
+nav ul li {
   margin: 0 15px;
 }
 
-.nav-links a {
-  color: white;
+nav ul li a {
+  color: var(--text-color);
   text-decoration: none;
-  font-size: 18px;
-  transition: color 0.3s ease;
+  font-size: 1.05rem;
+  font-weight: 600;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  position: relative;
+  padding: 5px 0;
 }
 
-.nav-links a:hover {
-  color: #ff6347;
+nav ul li a:hover {
+  color: var(--secondary);
+}
+
+nav ul li a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--secondary);
+  transition: width 0.3s ease;
+}
+
+nav ul li a:hover::before {
+  width: 100%;
 }
 
 /* Burger Menu Styling */
@@ -53,7 +82,6 @@ body {
 .burger div {
   width: 25px;
   height: 3px;
-  background-color: white;
   margin: 5px;
   transition: all 0.3s ease;
 }

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService } from "../../service/auth.service";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -36,9 +37,10 @@ export class LoginComponent {
             this.router.navigate(['/dashboard']);
           },
           error: (err: any) => {
-            console.error('Login error', err);
             this.errorMessage = 'Login failed. Please check your credentials.';
-            this.isSubmitting = false; // Stop loading on error
+            this.isSubmitting = false;
+            return this.errorMessage
+
           },
           complete: () => {
             this.isSubmitting = false; // Stop loading after complete

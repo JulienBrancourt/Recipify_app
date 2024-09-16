@@ -45,7 +45,7 @@ export class AuthService {
       );
   }
 
-  register(username: string, password: string): Observable<any> {
+  register(username: string, password: string, allergies: String[], diet: String[] ): Observable<any> {
     const payload = { username, password };
     return this.http.post(`${this.apiUrl}/register`, payload);
   }

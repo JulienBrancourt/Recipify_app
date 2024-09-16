@@ -1,16 +1,55 @@
-<div class="register-container">
+<section class="register-container">
+  <div>
+    <h2>Créer mon compte</h2>
+  </div>
+
   <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-    <label for="username">Pseudo:</label>
-    <input id="username" type="username" formControlName="username" required>
+    <div class="form-group">
+      <label for="username">Pseudo:</label>
+      <input id="username" type="text" formControlName="username" required>
+    </div>
 
-    <label for="password">Mot de passe:</label>
-    <input id="password" type="password" formControlName="password" required minlength="6">
+    <div class="form-group">
+      <label for="password">Mot de passe:</label>
+      <input id="password" type="password" formControlName="password">
+    </div>
 
-    <button type="submit" [disabled]="isSubmitting">S'inscrire</button>
+    <!-- Allergies section with toggle -->
+    <div class="dropdown-container">
+      <button type="button" class="dropdown-btn" (click)="toggleDropdown('allergies')">
+        Allergies
+        <span class="arrow"></span>
+      </button>
+      <div id="allergies-dropdown" class="dropdown-content">
+        @for (allergy of allergies; track allergy) {
+          <div class="checkbox-group">
+            <input type="checkbox" id="allergy-{{allergy}}" formControlName="allergies" [value]="allergy">
+            <label for="allergy-{{allergy}}">{{ allergy }}</label>
+          </div>
+        }
+      </div>
+    </div>
+
+
+    <div class="dropdown-container">
+      <button type="button" class="dropdown-btn" (click)="toggleDropdown('diet')">
+        Préférences alimentaires
+        <span class="arrow"></span>
+      </button>
+      <div id="diet-dropdown" class="dropdown-content">
+        @for (d of diet; track d) {
+          <div class="checkbox-group">
+            <input type="checkbox" id="diet-{{d}}" formControlName="diet" [value]="d">
+            <label for="diet-{{d}}">{{ d }}</label>
+          </div>
+        }
+      </div>
+    </div>
+
+    <button type="submit"  class="button" [disabled]="isSubmitting">S'inscrire</button>
+
+    @if (errorMessage) {
+      <div class="error-message">{{ errorMessage }}</div>
+    }
   </form>
-
-  @if (errorMessage){
-    <div class="error-message">{{ errorMessage }}</div>
-  }
-
-</div>
+</section>
