@@ -1,16 +1,14 @@
-<nav>
-    <ul>
-        <li>
-            <a routerLink="/">Connexion</a>
-        </li>
-        <li>
-            <a routerLink ="/dashboard"> Accueil</a>
-        </li>
-        <li>
-            <a routerLink ="/favoris"> Recettes Favorites</a>
-        </li>
-        <li>
-            <a routerLink ="/form-recette"> Créer une recette</a>
-        </li>
-    </ul>
+<nav class="navbar">
+  <div class="logo">Recipify</div>
+  <ul #navLinks class="nav-links">
+    <li><a routerLink="/" (click)="activeBurger()">Connexion</a></li>
+    <li><a routerLink="/dashboard" (click)="activeBurger()">Accueil</a></li>
+    <li><a routerLink="/favoris" (click)="activeBurger()">Recettes Favorites</a></li>
+    <li><a routerLink="/form-recette" (click)="activeBurger()">Créer une recette</a></li>
+  </ul>
+  <div #burger (click)="activeBurger()" class="burger">
+    <div class="line1"></div>
+    <div class="line2"></div>
+    <div class="line3"></div>
+  </div>
 </nav>
