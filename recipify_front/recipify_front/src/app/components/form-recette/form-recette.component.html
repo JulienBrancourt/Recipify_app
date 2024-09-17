@@ -1,32 +1,31 @@
 <h1>Créer une Nouvelle Recette</h1>
 
 <section class="formulaire">
-    <form action="/submit-recipe" method="post">
+    <form [formGroup]="recetteForm" (ngSubmit)="onSubmit()">
+      <div formControlName="recettes">
 
         <div>
         <label for="recipe-title">Titre de la recette :</label>
-        <input type="text" id="recipe-title" name="recipe-title" required>
+        <input type="text" id="recipe-title" formControlName="recipe-title">
         </div>
 
         <div>
-            <label for="ingredient1">Ingrédient 1 :</label>
-            <input type="text" id="ingredient1" name="ingredient1" required>
+            <label for="ingredient">Ingrédient  :</label>
+            <input type="text" id="ingredient" formControlName="ingredient">
+          <button class="button-fixed" type="button" (click)="addInput()">Ajouter un ingrédient</button>
         </div>
 
         <div>
             <label for="instructions">Instructions :</label>
-            <textarea id="instructions" name="instructions" rows="8"  required></textarea>
+            <textarea id="instructions" formControlName="instructions"  ></textarea>
         </div>
 
-        <div>
-            <label for="prep-time">Temps de préparation (en minutes) :</label>
-            <input type="number" id="prep-time" name="prep-time"  required>
-        </div>
 
         <div class="checkbox-group">
             <input type="checkbox"  name="myCheckbox">
             <label>Privée</label>
         </div>
+      </div>
 
         <div class="center">
         <button class="button" type="submit">Créer la recette</button>
