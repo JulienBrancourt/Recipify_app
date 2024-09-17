@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.recipify_back.entity.enumEntity.IngredientCategory;
+import org.example.recipify_back.entity.enumEntity.UnitOfMeasurement;
 
 import java.util.List;
 
@@ -26,6 +27,10 @@ public class Ingredient {
     @Enumerated(EnumType.STRING)
     private IngredientCategory ingredientCategory;
 
+    @Enumerated(EnumType.STRING)
+    private UnitOfMeasurement unitOfMeasurement;
+
     @OneToMany(mappedBy = "ingredient")
+    @JsonIgnore
     private List<FridgeItem> fridgeItems;
 }

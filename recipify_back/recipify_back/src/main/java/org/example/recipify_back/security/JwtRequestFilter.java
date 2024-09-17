@@ -29,13 +29,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            chain.doFilter(request, response);  // Let OPTIONS requests pass without JWT validation
+            return;
+        }
+
         final String path = request.getServletPath();
         final String authorizationHeader = request.getHeader("Authorization");
 
         log.info("Request path: {}", path);
 
-        // Skip JWT filter for specific paths
-        if (!path.startsWith("/admin") && !path.startsWith("/user")) {
+        if (!path.startsWith("/admin") && !path.startsWith("/user") && !path.startsWith("/ingredients")) {
             log.info("Skipping filter for path: {}", path);
             chain.doFilter(request, response);
             return;
@@ -53,14 +57,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 username = jwtUtil.extractUsername(jwt);  // Attempt to extract username
             } catch (Exception e) {
                 log.error("Failed to extract username from JWT. JWT might be invalid. Token: {}", jwt, e);
-                chain.doFilter(request, response);  // Proceed with the chain if token is invalid
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
         } else {
             log.warn("JWT Token missing or does not start with Bearer. Request path: {}", path);
-            chain.doFilter(request, response);  // Proceed without JWT
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT Token missing or malformed");
             return;
         }
+
 
         // Authenticate the user if JWT is valid and not already authenticated
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -77,6 +82,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } else {
                 log.warn("Invalid JWT for user: {}", username);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                return;
             }
         }
 

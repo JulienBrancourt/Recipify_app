@@ -6,6 +6,7 @@ import { NgIf } from '@angular/common';
 import { LoadingCardComponent } from './components/loading-card/loading-card.component';
 import { AuthService } from './service/auth.service';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,

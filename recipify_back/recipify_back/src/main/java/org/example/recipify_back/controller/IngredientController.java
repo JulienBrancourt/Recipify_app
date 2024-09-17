@@ -5,8 +5,12 @@ import org.example.recipify_back.entity.enumEntity.IngredientCategory;
 import org.example.recipify_back.service.IngredientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -36,6 +40,17 @@ public class IngredientController {
 
     @GetMapping("/ingredients")
     public List<Ingredient> getAllIngredients() {
+        // Récupérer l'authentication actuelle
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Récupérer le nom d'utilisateur
+        String username = authentication.getName();
+
+        // Log pour voir le nom d'utilisateur et les autorités (rôles)
+        System.out.println("Utilisateur connecté: " + username);
+        System.out.println("Rôles de l'utilisateur: " + authentication.getAuthorities());
+
+        // Vous pouvez ajouter une logique en fonction des informations récupérées
         return ingredientService.getAllIngredients();
     }
 
