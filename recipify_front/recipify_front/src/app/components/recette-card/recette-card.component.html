@@ -2,7 +2,7 @@
 
   <!-- Détails de la recette -->
   <!--    <div class="recipe-title">-->
-  <h2>Spagetthis Bolognaise</h2>
+  <h2>{{recette.title}}</h2>
   <!--    </div>-->
 
   <!-- <app-ingredients-card [ingredients]="recipe.ingredients"></app-ingredients-card> -->
@@ -34,8 +34,7 @@
 
 <!--   Boutons d'action -->
         <div class="recipe-actions">
-          <button class="button-fixed" (click)="addToFavorites()">Ajouter aux favoris</button>
-          <button class="button-fixed" (click)="shareRecipe()">Partager la recette</button>
+          <button class="button-fixed" (click)="addToFavorite()">Ajouter aux favoris</button>
         </div>
 
 </div>
