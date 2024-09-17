@@ -15,6 +15,7 @@ import java.util.List;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int id;
 
     private String title;
@@ -48,5 +49,4 @@ public class Recipe {
                 })
                 .sum();
     }
-
 }

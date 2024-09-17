@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
@@ -47,12 +46,12 @@ public class RecipeService {
     }
 
     public Recipe getRecipe(String slug) {
-        return recipeRepository.findBySlug(slug);
+        return recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
     }
 
     // TODO A revoir quand on passera par le front pour respecter les règles de RESTs
     public Recipe updateRecipe(String slug, Recipe updatedRecipe) {
-        Recipe existingRecipe = recipeRepository.findBySlug(slug);
+        Recipe existingRecipe = recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
 
         if (existingRecipe == null) {
             throw new RuntimeException("Recipe not found with slug: " + slug);
@@ -92,3 +91,16 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 }
+
+
+//{
+//        "title": "Boeuf Cuit",
+//        "instruction": "cuire le boeuf",
+//        "serving": 1,
+//        "recipeIngredients": [{
+//        "ingredientName": "boeuf",
+//        "calorie": 20,
+//        "ingredientCategory": "VIANDE",
+//        "fridgeItems": []
+//        }]
+//        }
