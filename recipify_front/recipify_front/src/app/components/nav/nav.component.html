@@ -1,6 +1,6 @@
 <nav class="navbar">
   <div class="logo">Recipify</div>
-  <ul #navLinks class="nav-links">
+  <ul #navLinks class="nav-links" [class.nav-active]="isNavActive()">
 
 
     <li><a routerLink="/dashboard" (click)="activeBurger()">Accueil</a></li>
@@ -12,7 +12,7 @@
       <li><a (click)="logout()">Déconnexion</a></li>
     }
   </ul>
-  <div #burger (click)="activeBurger()" class="burger">
+  <div #burger (click)="activeBurger()" class="burger" [class.toggle]="isNavActive()">
     <div class="line1"></div>
     <div class="line2"></div>
     <div class="line3"></div>

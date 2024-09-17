@@ -6,16 +6,26 @@ import {Recette} from "../utils/types/recetteType";
 })
 export class FavorisService {
   favoris: Recette[] = [];
-  constructor() { }
+  constructor() {
+    this.loadFavoris();
+  }
+
+  loadFavoris() {
+    const storedFavorites = localStorage.getItem('favoris');
+    if (storedFavorites) {
+      this.favoris = JSON.parse(storedFavorites);
+    }
+  }
 
   addFavori(recette: Recette) {
-    const isExisting = this.favoris.some(fav => fav.title === recette.title)
-    if (!isExisting) {
+    if (!this.isInFavoris(recette)) {
       this.favoris.push(recette);
       localStorage.setItem('favoris', JSON.stringify(this.favoris));
-    } else {
-      alert('Cette recette est déjà dans vos favoris');
     }
+  }
+
+  isInFavoris(recette: Recette): boolean {
+    return this.favoris.some(fav => fav.title === recette.title);
   }
 
   getFavoris(): Recette[] {
