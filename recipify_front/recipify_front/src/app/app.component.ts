@@ -23,9 +23,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isLogginObservable().subscribe((isLogged) => {
       this.isLogged = isLogged;
-      if (isLogged) {
-        this.router.navigate(['/dashboard']);
-      }
     });
   }
 }
