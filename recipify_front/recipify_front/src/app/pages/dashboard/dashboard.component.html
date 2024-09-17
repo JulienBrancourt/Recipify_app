@@ -1,8 +1,8 @@
-
-<h1>Bienvenue sur Recipify !!!</h1>
-
-<h2>Entrez vos ingredients</h2>
-
+<h2>Entrez les ingrédients de votre réfrigérateur</h2>
+<div class="center">
+  <button class="button-fixed" (click)="goToPage()">Voir les recettes</button>
+</div>
+<section class="formulaire">
 <form [formGroup]="ingredientForm" (ngSubmit)="onSubmit()">
   <div formArrayName="ingredients">
     <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
@@ -31,15 +31,14 @@
     </div>
   </div>
   <div>
-  <button type="button" (click)="addInput()">Ajouter un ingrédient</button>
+  <button class="button-fixed" type="button" (click)="addInput()">Ajouter un ingrédient</button>
   </div>
-  <div>
-  <button type="submit">Soumettre</button>
+  <div class="center">
+  <button class="button" type="submit">Soumettre</button>
   </div>
 </form>
+</section>
 
-
-    <button (click)="goToPage()">Voir la recette</button>
 
 
 
