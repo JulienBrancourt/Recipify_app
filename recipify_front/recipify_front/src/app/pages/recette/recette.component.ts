@@ -1,20 +1,16 @@
 import { Component } from '@angular/core';
+import {RecetteCardComponent} from "../../components/recette-card/recette-card.component";
 
 @Component({
   selector: 'app-recette',
   standalone: true,
-  imports: [],
+  imports: [
+    RecetteCardComponent
+  ],
   templateUrl: './recette.component.html',
   styleUrl: './recette.component.css'
 })
 export class RecetteComponent {
 
-  addToFavorites() {
-    alert('Recette ajoutée aux favoris !');
-  }
-
-  shareRecipe() {
-    alert('Recette partagée !');
-  }
 
 }
