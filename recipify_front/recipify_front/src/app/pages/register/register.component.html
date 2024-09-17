@@ -32,7 +32,7 @@
         <div *ngFor="let allergy of allergies; let i = index">
           <div class="checkbox-group">
             <input type="checkbox" [formControlName]="i" [value]="allergy">
-            <label>{{ allergy }}</label>
+            <label>{{ getDisplayName(allergyDisplayMap, allergy) }}</label>
           </div>
         </div>
       </div>
@@ -42,21 +42,21 @@
     <div class="dropdown-container">
       <button type="button"
               class="dropdown-btn"
-              (click)="toggleDropdown('diet')"
-              [class.active]="isDropdownOpen['diet']"
+              (click)="toggleDropdown('diets')"
+              [class.active]="isDropdownOpen['diets']"
               aria-controls="diet-dropdown">
         Préférences alimentaires
-        <span class="arrow" [class.active]="isDropdownOpen['diet']"></span>
+        <span class="arrow" [class.active]="isDropdownOpen['diets']"></span>
       </button>
       <div id="diet-dropdown"
-           *ngIf="isDropdownOpen['diet']"
+           *ngIf="isDropdownOpen['diets']"
            class="dropdown-content"
-           [class.active]="isDropdownOpen['diet']"
-           formArrayName="diet"> <!-- formArrayName pour la section diet -->
-        <div *ngFor="let d of diet; let i = index">
+           [class.active]="isDropdownOpen['diets']"
+           formArrayName="diets"> <!-- formArrayName pour la section diet -->
+        <div *ngFor="let d of diets; let i = index">
           <div class="checkbox-group">
             <input type="checkbox" [formControlName]="i" [value]="d">
-            <label>{{ d }}</label>
+            <label>{{ getDisplayName(dietDisplayMap, d) }}</label>
           </div>
         </div>
       </div>

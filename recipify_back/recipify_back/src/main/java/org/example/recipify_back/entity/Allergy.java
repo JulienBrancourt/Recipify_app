@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Allergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int id;
 
     private String allergyName;
@@ -26,6 +27,7 @@ public class Allergy {
     @ManyToMany(mappedBy = "allergies")
     @JsonIgnore // Prevent infinite recursion during serialization
     private List<User> users;
+
 }
 
 

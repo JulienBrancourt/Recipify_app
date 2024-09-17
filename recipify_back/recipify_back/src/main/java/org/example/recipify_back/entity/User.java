@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Data
 @NoArgsConstructor
@@ -48,4 +47,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnore // Avoid circular references for FridgeItems
     private List<FridgeItem> fridgeItems;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_diet",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "diet_id")
+    )
+    @JsonIgnore // Avoid circular references
+    private List<Diet> diets;
 }

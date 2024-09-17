@@ -1,10 +1,13 @@
 package org.example.recipify_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -14,6 +17,12 @@ import lombok.NoArgsConstructor;
 public class Diet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int id;
+
     private String dietName;
+
+    @ManyToMany(mappedBy = "diets")
+    @JsonIgnore // Prevent infinite recursion during serialization
+    private List<User> users;
 }
