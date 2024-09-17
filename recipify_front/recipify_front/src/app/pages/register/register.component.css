@@ -26,35 +26,6 @@ h2 {
   margin-bottom: 1.5rem;
 }
 
-
-
-input, select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-sizing: border-box;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-input:focus, select:focus {
-  border-color: #333;
-  outline: none;
-}
-
-.checkbox-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.checkbox-group input[type="checkbox"] {
-  width: 1rem;
-
-}
-
-
 /* Dropdown button */
 .dropdown-container {
   margin-bottom: 1.5rem;

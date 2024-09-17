@@ -1,0 +1,55 @@
+table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  font-family: var(--main-font);
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: var(--secondary);
+  color: white;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #dddddd;
+}
+
+th {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+td {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+    width: 100%;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: right;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  th::before, td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    font-weight: bold;
+  }
+
+  tbody tr {
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--secondary);
+  }
+}

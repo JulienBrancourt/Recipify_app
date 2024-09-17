@@ -16,9 +16,16 @@ body{
   margin: 0;
   padding: 0;
   background-color: var(--bg-color);
-  color: var(--text-color)
+  color: var(--text-color);
+  font-family: var(--main-font), sans-serif;
 
 }
+
+h1, h2 {
+  text-align: center;
+  margin: 20px 0;
+}
+
 
 a {
   color: var(--text-color);
@@ -29,6 +36,50 @@ main{
   height: 100%;
   padding: 0;
   margin: 0;
+}
+
+.formulaire{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  margin-top: 5vh;
+
+}
+
+form {
+  padding: 15px 0;
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+  color: #333333;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #333333;
+  outline: none;
 }
 
 
@@ -66,10 +117,64 @@ main{
   left: 0px;
 }
 
+.button-fixed{
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  padding: 13px 20px 13px;
+  outline: 0;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  background-color: var(--tertiary);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  z-index: 1;
+  color: white;
+}
+
+
 .error-message {
   color: red;
   font-size: 14px;
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10vh;
+  margin-bottom:5vh;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 5px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 1rem;
+  margin-top: 0.6rem;
+}
+input, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: #333;
+  outline: none;
+}
+
+
 
 @media (min-width: 768px) {
   button {

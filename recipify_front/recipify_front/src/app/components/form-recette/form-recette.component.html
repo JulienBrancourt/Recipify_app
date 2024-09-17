@@ -1,12 +1,13 @@
 <h1>Créer une Nouvelle Recette</h1>
 
+<section class="formulaire">
     <form action="/submit-recipe" method="post">
-       
+
         <div>
         <label for="recipe-title">Titre de la recette :</label>
-        <input type="text" id="recipe-title" name="recipe-title" placeholder="Entrez le titre de la recette" required>
+        <input type="text" id="recipe-title" name="recipe-title" required>
         </div>
-       
+
         <div>
             <label for="ingredient1">Ingrédient 1 :</label>
             <input type="text" id="ingredient1" name="ingredient1" required>
@@ -14,21 +15,23 @@
 
         <div>
             <label for="instructions">Instructions :</label>
-            <textarea id="instructions" name="instructions" rows="8" placeholder="Décrivez les étapes de préparation" required></textarea>
+            <textarea id="instructions" name="instructions" rows="8"  required></textarea>
         </div>
 
         <div>
             <label for="prep-time">Temps de préparation (en minutes) :</label>
-            <input type="number" id="prep-time" name="prep-time" placeholder="Ex: 30" required>
+            <input type="number" id="prep-time" name="prep-time"  required>
         </div>
 
-        <div class="checkbox-container">
-            <input type="checkbox" id="myCheckbox" name="myCheckbox">
-            <label for="myCheckbox">Privée</label>
+        <div class="checkbox-group">
+            <input type="checkbox"  name="myCheckbox">
+            <label>Privée</label>
         </div>
 
-        
-        <button type="submit">Créer la recette</button>
+        <div class="center">
+        <button class="button" type="submit">Créer la recette</button>
+        </div>
 
     </form>
+</section>
 
