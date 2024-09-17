@@ -26,12 +26,7 @@ h2 {
   margin-bottom: 1.5rem;
 }
 
-label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  display: block;
-  color: #555;
-}
+
 
 input, select {
   width: 100%;
@@ -58,6 +53,7 @@ input:focus, select:focus {
   width: 1rem;
 
 }
+
 
 /* Dropdown button */
 .dropdown-container {
@@ -105,7 +101,6 @@ input:focus, select:focus {
 .dropdown-content.active {
   display: block;
 }
-
 
 
 .error-message {

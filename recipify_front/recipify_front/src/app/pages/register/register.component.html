@@ -14,42 +14,55 @@
       <input id="password" type="password" formControlName="password">
     </div>
 
-    <!-- Allergies section with toggle -->
+    <!-- Allergies section -->
     <div class="dropdown-container">
-      <button type="button" class="dropdown-btn" (click)="toggleDropdown('allergies')">
+      <button type="button"
+              class="dropdown-btn"
+              (click)="toggleDropdown('allergies')"
+              [class.active]="isDropdownOpen['allergies']"
+              aria-controls="allergies-dropdown">
         Allergies
-        <span class="arrow"></span>
+        <span class="arrow" [class.active]="isDropdownOpen['allergies']"></span>
       </button>
-      <div id="allergies-dropdown" class="dropdown-content">
-        @for (allergy of allergies; track allergy) {
+      <div id="allergies-dropdown"
+           *ngIf="isDropdownOpen['allergies']"
+           class="dropdown-content"
+           [class.active]="isDropdownOpen['allergies']"
+           formArrayName="allergies"> <!-- Important : formArrayName doit être là -->
+        <div *ngFor="let allergy of allergies; let i = index">
           <div class="checkbox-group">
-            <input type="checkbox" id="allergy-{{allergy}}" formControlName="allergies" [value]="allergy">
-            <label for="allergy-{{allergy}}">{{ allergy }}</label>
+            <input type="checkbox" [formControlName]="i" [value]="allergy">
+            <label>{{ allergy }}</label>
           </div>
-        }
+        </div>
       </div>
     </div>
 
-
+    <!-- Régime alimentaire section -->
     <div class="dropdown-container">
-      <button type="button" class="dropdown-btn" (click)="toggleDropdown('diet')">
+      <button type="button"
+              class="dropdown-btn"
+              (click)="toggleDropdown('diet')"
+              [class.active]="isDropdownOpen['diet']"
+              aria-controls="diet-dropdown">
         Préférences alimentaires
-        <span class="arrow"></span>
+        <span class="arrow" [class.active]="isDropdownOpen['diet']"></span>
       </button>
-      <div id="diet-dropdown" class="dropdown-content">
-        @for (d of diet; track d) {
+      <div id="diet-dropdown"
+           *ngIf="isDropdownOpen['diet']"
+           class="dropdown-content"
+           [class.active]="isDropdownOpen['diet']"
+           formArrayName="diet"> <!-- formArrayName pour la section diet -->
+        <div *ngFor="let d of diet; let i = index">
           <div class="checkbox-group">
-            <input type="checkbox" id="diet-{{d}}" formControlName="diet" [value]="d">
-            <label for="diet-{{d}}">{{ d }}</label>
+            <input type="checkbox" [formControlName]="i" [value]="d">
+            <label>{{ d }}</label>
           </div>
-        }
+        </div>
       </div>
     </div>
+    <button type="submit" class="button" [disabled]="isSubmitting">S'inscrire</button>
 
-    <button type="submit"  class="button" [disabled]="isSubmitting">S'inscrire</button>
-
-    @if (errorMessage) {
-      <div class="error-message">{{ errorMessage }}</div>
-    }
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </form>
 </section>
