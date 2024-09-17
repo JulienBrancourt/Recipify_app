@@ -1,72 +1,75 @@
-/* Container styling */
-.container {
-  padding: 2rem 0;
+
+/* Footer sticky et amélioration visuelle */
+footer {
+  background-color: var(--primary);
+  padding: 40px 0;
+  margin-top: auto;  /* Cela permet de "pousser" le footer en bas si nécessaire */
+  width: 100%;
+  position: relative; /* Peut être ajusté à fixed selon le contexte */
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1); /* Légère ombre pour donner du relief */
 }
 
-.row {
+footer .row {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.col {
-  flex: 1 1 200px; /* Ajuste chaque colonne pour être flexible */
-  padding: 1rem;
-}
-
-/* Styling for links */
-a {
-  display: block;
-  margin-bottom: 0.5rem;
-  text-decoration: none;
-  color: #007bff;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Button styling */
-button {
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
+footer .col {
+  flex: 1;
+  min-width: 150px;
+  margin: 10px;
+  padding: 20px;
+  text-align: center;
   color: white;
-  border: none;
-  cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+footer .col:hover {
+  background-color: var(--secondary);
+  transition: background-color 0.3s ease;
 }
 
-/* Dropdown styling */
-.dropdowns {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.dropdown-btn {
-  background-color: #007bff;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
-}
-
-.dropdown-btn:hover {
-  background-color: #0056b3;
-}
-
-/* Centered text styling */
 .text-center {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 40px;
 }
 
-small {
-  display: block;
-  margin-top: 1rem;
-  color: #666;
+.text-center div {
+  color: white;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.text-center div:hover {
+  color: var(--secondary);
+  transition: color 0.3s ease;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  position: relative;
+  padding: 5px 0;
+  font-weight: 600;
+}
+
+footer a:hover {
+  color: var(--secondary);
+}
+
+footer a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--secondary);
+  transition: width 0.3s ease;
+}
+
+footer a:hover::before {
+  width: 100%;
 }

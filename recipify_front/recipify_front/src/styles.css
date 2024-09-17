@@ -10,6 +10,13 @@
 }
 
 
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+
+}
 
 
 body{
@@ -18,6 +25,7 @@ body{
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: var(--main-font), sans-serif;
+  max-width: 100%;
 
 }
 
