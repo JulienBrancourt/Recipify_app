@@ -129,6 +129,33 @@ input:focus, textarea:focus {
   margin-bottom:5vh;
 }
 
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 5px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 1rem;
+  margin-top: 0.6rem;
+}
+input, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: #333;
+  outline: none;
+}
+
+
 
 @media (min-width: 768px) {
   button {
