@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Recette} from "../../utils/types/recetteType";
-import {FavorisService} from "../../service/favoris.service";
 import {RecetteCardComponent} from "../../components/recette-card/recette-card.component";
+import {FavorisService} from "../../service/favoris.service";
 
 @Component({
   selector: 'app-favoris',

@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {Recette} from "../../utils/types/recetteType";
 import {FavorisService} from "../../service/favoris.service";
 
+
 @Component({
   selector: 'app-recette-card',
   standalone: true,
@@ -15,10 +16,15 @@ export class RecetteCardComponent {
   constructor(private favoriseService: FavorisService) {
   }
 
-  addToFavorite(){
-    this.favoriseService.addFavori(this.recette);
-    alert('Recette ajoutée aux favoris');
-  }
+  addToFavorite() {
+    const isExisting = this.favoriseService.isInFavoris(this.recette);
 
+    if (isExisting) {
+      alert('Cette recette est déjà dans vos favoris');
+    } else {
+      this.favoriseService.addFavori(this.recette);
+      alert('Recette ajoutée aux favoris');
+    }
+  }
 
 }
