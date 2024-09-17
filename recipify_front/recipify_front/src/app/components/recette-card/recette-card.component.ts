@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {Recette} from "../../utils/types/recetteType";
+import {FavorisService} from "../../service/favoris.service";
 
 @Component({
   selector: 'app-recette-card',
@@ -8,11 +10,15 @@ import { Component } from '@angular/core';
   styleUrl: './recette-card.component.css'
 })
 export class RecetteCardComponent {
-  addToFavorites() {
-    alert('Recette ajoutée aux favoris !');
+  @Input() recette!: Recette;
+
+  constructor(private favoriseService: FavorisService) {
   }
 
-  shareRecipe() {
-    alert('Recette partagée !');
+  addToFavorite(){
+    this.favoriseService.addFavori(this.recette);
+    alert('Recette ajoutée aux favoris');
   }
+
+
 }
