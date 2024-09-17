@@ -5,6 +5,7 @@
 <section class="formulaire">
 <form [formGroup]="ingredientForm" (ngSubmit)="onSubmit()">
   <div formArrayName="ingredients">
+
     <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
       <p>
       <label for="name">Ingrédient:</label>
