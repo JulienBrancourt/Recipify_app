@@ -1,41 +1,39 @@
 <div class="recipe-container">
 
-  <!-- Détails de la recette -->
-  <!--    <div class="recipe-title">-->
   <h2>{{recette.title}}</h2>
-  <!--    </div>-->
 
-  <!-- <app-ingredients-card [ingredients]="recipe.ingredients"></app-ingredients-card> -->
   <div class="recipe-list">
 
     <h3>Liste des ingrédients</h3>
-    <ul class="ingredient-list">
-      <li>
-        Viande Hachée
-      </li>
-      <li>
-        spaghettis
-      </li>
-    </ul>
+    @for (i of recette.ingredients; track i) {
+      <ul class="ingredient-list">
+        <li>
+          {{i.ingredientName}}
+        </li>
+
+      </ul>
+    }
+
   </div>
 
   <hr>
 
-  <!-- Instructions de la recette -->
+
   <div class="recipe-instructions">
     <h3>Instructions</h3>
-    <!-- <p>{{ recipe.instructions }}</p> -->
-
-    Faites Bouillir de l'eau blablabla
-    Par défaut, un Observable est synchrone. Cela signifie que lorsqu'on s'y abonne, il exécute son code immédiatement. C'est un appel unicast, c'est-à-dire que chaque abonnement reçoit sa propre exécution indépendante de l'Observable.
-
-    Cependant, les Observables peuvent aussi être asynchrones. Supposons que notre ami, l'Observable, veuille nous raconter une histoire en deux parties, avec une pause entre les deux:
+    <p>
+      {{recette.instruction}}
+    </p>
   </div>
 
-<!--   Boutons d'action -->
-        <div class="recipe-actions">
-          <button class="button-fixed" (click)="addToFavorite()">Ajouter aux favoris</button>
-        </div>
+  @if (view === 'global'){
+    <div class="recipe-actions">
+      <button class="button-fixed" (click)="addToFavorite()">Ajouter aux favoris</button>
+    </div>
+  } @else {
+    <button class="button-fixed" (click)="removeFromFavorites(recette.title)">Retirer de mes favoris</button>
+  }
+
 
 </div>
 

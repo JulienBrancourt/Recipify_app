@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import {Recette} from "../../utils/types/recetteType";
+import { Component, OnInit } from '@angular/core';
+import { Recette } from "../../utils/types/recetteType";
+import { FavorisService } from "../../service/favoris.service";
 import {RecetteCardComponent} from "../../components/recette-card/recette-card.component";
-import {FavorisService} from "../../service/favoris.service";
 
 @Component({
   selector: 'app-favoris',
@@ -10,17 +10,26 @@ import {FavorisService} from "../../service/favoris.service";
     RecetteCardComponent
   ],
   templateUrl: './favoris.component.html',
-  styleUrl: './favoris.component.css'
+  styleUrls: ['./favoris.component.css']
 })
-export class FavorisComponent {
-favoris: Recette[] = [];
+export class FavorisComponent implements OnInit {
+  favoris: Recette[] = [];
 
-constructor(private favorisService: FavorisService) {
-  this.favoris = this.favorisService.getFavoris();
-}
+  constructor(private favorisService: FavorisService) {}
 
-removeFromFavorites(title: string) {
-  this.favorisService.removeFavori(title);
-  this.favoris = this.favorisService.getFavoris();
-}
+  ngOnInit() {
+    this.favorisService.favoris$.subscribe(favoris => {
+      this.favoris = favoris;
+    });
+  }
+
+
+  onFavoriChanged() {
+    this.favorisService.loadFavoris();
+  }
+
+
+  removeFromFavorites(title: string) {
+    this.favorisService.removeFavori(title);
+  }
 }
