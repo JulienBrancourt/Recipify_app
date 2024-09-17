@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import {Recette} from "../utils/types/recetteType";
+import { Recette } from "../utils/types/recetteType";
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FavorisService {
-  favoris: Recette[] = [];
+  private favorisSubject = new BehaviorSubject<Recette[]>([]);
+  favoris$ = this.favorisSubject.asObservable();
+
   constructor() {
     this.loadFavoris();
   }
@@ -13,27 +16,30 @@ export class FavorisService {
   loadFavoris() {
     const storedFavorites = localStorage.getItem('favoris');
     if (storedFavorites) {
-      this.favoris = JSON.parse(storedFavorites);
+      this.favorisSubject.next(JSON.parse(storedFavorites));
     }
   }
 
   addFavori(recette: Recette) {
+    const favoris = this.favorisSubject.getValue();
     if (!this.isInFavoris(recette)) {
-      this.favoris.push(recette);
-      localStorage.setItem('favoris', JSON.stringify(this.favoris));
+      favoris.push(recette);
+      localStorage.setItem('favoris', JSON.stringify(favoris));
+      this.favorisSubject.next(favoris);
     }
   }
 
   isInFavoris(recette: Recette): boolean {
-    return this.favoris.some(fav => fav.title === recette.title);
+    return this.favorisSubject.getValue().some(fav => fav.title === recette.title);
   }
 
   getFavoris(): Recette[] {
-    return this.favoris;
+    return this.favorisSubject.getValue();
   }
 
   removeFavori(title: string) {
-    this.favoris = this.favoris.filter(fav => fav.title!== title);
-    localStorage.setItem('favoris', JSON.stringify(this.favoris));
+    const favoris = this.favorisSubject.getValue().filter(fav => fav.title !== title);
+    localStorage.setItem('favoris', JSON.stringify(favoris));
+    this.favorisSubject.next(favoris);
   }
 }

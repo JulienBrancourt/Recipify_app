@@ -1,30 +1,35 @@
-import {Component, Input} from '@angular/core';
-import {Recette} from "../../utils/types/recetteType";
-import {FavorisService} from "../../service/favoris.service";
-
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Recette } from "../../utils/types/recetteType";
+import { FavorisService } from "../../service/favoris.service";
 
 @Component({
   selector: 'app-recette-card',
   standalone: true,
   imports: [],
   templateUrl: './recette-card.component.html',
-  styleUrl: './recette-card.component.css'
+  styleUrls: ['./recette-card.component.css']
 })
 export class RecetteCardComponent {
   @Input() recette!: Recette;
+  @Input() view: 'global' | 'favorite' = 'global';
 
-  constructor(private favoriseService: FavorisService) {
-  }
+  @Output() favoriChanged = new EventEmitter<void>();
+
+  constructor(private favorisService: FavorisService) {}
 
   addToFavorite() {
-    const isExisting = this.favoriseService.isInFavoris(this.recette);
-
-    if (isExisting) {
+    if (this.favorisService.isInFavoris(this.recette)) {
       alert('Cette recette est déjà dans vos favoris');
     } else {
-      this.favoriseService.addFavori(this.recette);
+      this.favorisService.addFavori(this.recette);
       alert('Recette ajoutée aux favoris');
+      this.favoriChanged.emit();
     }
   }
 
+  removeFromFavorites(title: string) {
+    this.favorisService.removeFavori(title);
+    alert('Recette supprimée des favoris');
+    this.favoriChanged.emit();
+  }
 }

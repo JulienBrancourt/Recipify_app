@@ -140,6 +140,8 @@ input:focus, textarea:focus {
   touch-action: manipulation;
   z-index: 1;
   color: white;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 
 
