@@ -3,26 +3,40 @@
 
 <h2>Entrez vos ingredients</h2>
 
-<div class="ingredient-form">
-    <h2>Ingrédients</h2>
+<form [formGroup]="ingredientForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="ingredients">
+    <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+      <p>
+      <label for="name">Ingrédient:</label>
+      <input type=text id="name" formControlName="name">
+      </p>
 
-    <form [formGroup]="form" (ngSubmit)="submitIngredients()">
-        <div id="ingredient-fields">
-            <div class="ingredient-field">
-                <label>Ingrédient 1 :</label>
-                <input type="text" formControlName="ingredientName">
-                <label>Quantité :</label> 
-                <input type="number" formControlName= "quantity">
-            </div>
-            <div class="ingredient-field">
-                <label>Ingrédient 1 :</label>
-                <input type="text" formControlName="ingredientName">
-                <label>Quantité :</label> 
-                <input type="number" formControlName= "quantity">
-            </div>
-        </div>
+      <p>
+      <label for="quantity">Quantité:</label>
+      <input type=number id="quantity" formControlName="quantity">
+      </p>
 
-    <button type="button" (click)="addInput()">Ajouter un ingrédient</button>
+      <p>
+        <label for="unit">Unité:</label>
+        <input type="text" id="unit" formControlName="unit" list="unitOptions">
+        <datalist id="unitOptions">
+          <option *ngFor="let u of unit" [value]="u">{{ u }}</option>
+        </datalist>
+      </p>
+      <p>
+        <label for="expiration">Date d'expiration</label>
+        <input type="date" id="expiration" formControlName="expiration">
+      </p>
+
+    </div>
+  </div>
+  <div>
+  <button type="button" (click)="addInput()">Ajouter un ingrédient</button>
+  </div>
+  <div>
+  <button type="submit">Soumettre</button>
+  </div>
+</form>
 
 
     <button (click)="goToPage()">Voir la recette</button>
