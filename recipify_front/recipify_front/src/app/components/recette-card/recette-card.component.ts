@@ -8,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrl: './recette-card.component.css'
 })
 export class RecetteCardComponent {
+  addToFavorites() {
+    alert('Recette ajoutée aux favoris !');
+  }
 
+  shareRecipe() {
+    alert('Recette partagée !');
+  }
 }
