@@ -3,3 +3,11 @@ section {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+section:hover > :not(:hover) {
+  opacity: 0.5;
+}
+
+.recette-card {
+  transition: opacity 0.5s;
+}
