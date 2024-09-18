@@ -72,7 +72,7 @@ export class GetDataService implements OnInit {
       case 'private':
         return `${this.apiUrl}/private-recipes`;
       case 'favorite':
-        return `${this.apiUrl}/favorite-recipes`;
+        return `${this.apiUrl}/favorite`;
       default:
         return `${this.apiUrl}/recipes`;
     }
