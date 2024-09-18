@@ -31,6 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);  // Let OPTIONS requests pass without JWT validation
+            log.info("Skipping filter for path: OPTIONS");
             return;
         }
 
@@ -39,7 +40,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         log.info("Request path: {}", path);
 
-        if (!path.startsWith("/admin") && !path.startsWith("/user") && !path.startsWith("/ingredients")) {
+        if (path.matches("/register") || path.matches("/authenticate")
+                || path.matches("/allergies") || path.matches("/diets")) {
             log.info("Skipping filter for path: {}", path);
             chain.doFilter(request, response);
             return;
@@ -86,7 +88,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
         // Proceed with the rest of the filter chain
         chain.doFilter(request, response);
     }

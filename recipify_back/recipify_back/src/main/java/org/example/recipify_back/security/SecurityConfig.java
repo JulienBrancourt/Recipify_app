@@ -1,5 +1,6 @@
 package org.example.recipify_back.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,12 +8,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -41,17 +38,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF protection for REST APIs
+                .csrf(csrf -> csrf.disable()) // Désactiver CSRF pour les API REST
                 .authorizeHttpRequests(auth -> auth
-                        // TODO A Remettre a la normal pour la version final !!!
+                        // Routes accessibles sans authentification
+                        .requestMatchers("/register", "/authenticate", "/allergies", "/diets").permitAll()
+
+                        // Routes réservées aux administrateurs
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/**").permitAll()
+
+                        // Toutes les autres requêtes doivent être authentifiées avec rôle USER ou ADMIN
+                        .requestMatchers("/**").hasAnyRole("USER", "ADMIN")
+
+                        // Toute autre requête non spécifiée nécessite une authentification
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
 }
