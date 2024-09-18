@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { environment } from "../../environments/environment.development";
-import { HttpClient } from "@angular/common/http";
-import { Recette } from "../utils/types/recetteType";
-import { Observable } from "rxjs";
+import {Injectable} from '@angular/core';
+import {environment} from "../../environments/environment.development";
+import {HttpClient} from "@angular/common/http";
+import {Recette} from "../utils/types/recetteType";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,8 @@ import { Observable } from "rxjs";
 export class RecetteService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   createRecipe(recipe: Recette): Observable<string> {
     return this.http.post<string>(`${this.apiUrl}/recipe`, recipe);
