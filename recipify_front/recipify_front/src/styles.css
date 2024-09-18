@@ -10,6 +10,13 @@
 }
 
 
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+
+}
 
 
 body{
@@ -18,10 +25,11 @@ body{
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: var(--main-font), sans-serif;
+  max-width: 100%;
 
 }
 
-h1, h2 {
+h1, h2, h3 {
   text-align: center;
   margin: 20px 0;
 }
@@ -132,6 +140,8 @@ input:focus, textarea:focus {
   touch-action: manipulation;
   z-index: 1;
   color: white;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 
 

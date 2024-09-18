@@ -1,0 +1,39 @@
+<div class="recipe-container">
+
+  <h2>{{recette.title}}</h2>
+
+  <div class="recipe-list">
+
+    <h3>Liste des ingrédients</h3>
+    @for (i of recette.ingredients; track i) {
+      <ul class="ingredient-list">
+        <li>
+          {{i.ingredientName}}
+        </li>
+
+      </ul>
+    }
+
+  </div>
+
+  <hr>
+
+
+  <div class="recipe-instructions">
+    <h3>Instructions</h3>
+    <p>
+      {{recette.instruction}}
+    </p>
+  </div>
+
+  @if (view === 'global'){
+    <div class="recipe-actions">
+      <button class="button-fixed" (click)="addToFavorite()">Ajouter aux favoris</button>
+    </div>
+  } @else {
+    <button class="button-fixed" (click)="removeFromFavorites(recette.title)">Retirer de mes favoris</button>
+  }
+
+
+</div>
+

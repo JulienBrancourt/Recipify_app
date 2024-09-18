@@ -5,7 +5,9 @@
 <section class="formulaire">
 <form [formGroup]="ingredientForm" (ngSubmit)="onSubmit()">
   <div formArrayName="ingredients">
+
     <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+      <fieldset>
       <p>
       <label for="name">Ingrédient:</label>
       <input type=text id="name" formControlName="name">
@@ -27,7 +29,7 @@
         <label for="expiration">Date d'expiration</label>
         <input type="date" id="expiration" formControlName="expiration">
       </p>
-
+      </fieldset>
     </div>
   </div>
   <div>
