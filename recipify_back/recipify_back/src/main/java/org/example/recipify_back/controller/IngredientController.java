@@ -40,7 +40,6 @@ public class IngredientController {
 
     @GetMapping("/ingredients")
     public List<Ingredient> getAllIngredients() {
-        // Vous pouvez ajouter une logique en fonction des informations récupérées
         return ingredientService.getAllIngredients();
     }
 

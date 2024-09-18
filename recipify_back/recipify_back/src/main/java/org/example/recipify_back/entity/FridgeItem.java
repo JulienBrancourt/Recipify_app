@@ -38,4 +38,10 @@ public class FridgeItem {
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
+
+    @Override
+    public String toString() {
+        return "FridgeItem{id=" + id + ", ingredient=" + ingredient.getIngredientName() + ", quantity=" + quantity + "}";
+    }
+
 }

@@ -56,4 +56,10 @@ public class User {
     )
     @JsonIgnore // Avoid circular references
     private List<Diet> diets;
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", username='" + username + "'}";
+    }
+
 }

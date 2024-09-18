@@ -3,16 +3,19 @@
   <button class="button-fixed" (click)="goToPage()">Voir les recettes</button>
 </div>
 <section class="formulaire">
-<form [formGroup]="ingredientForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="ingredientForm" (ngSubmit)="handleSubmit()">
   <div formArrayName="ingredients">
 
     <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
       <fieldset>
-      <p>
-      <label for="name">Ingrédient:</label>
-      <input type=text id="name" formControlName="name">
-      </p>
-
+        <p>
+          <label for="name">Ingrédient:</label>
+          <input type="text" id="name" formControlName="name" list="ingredientOption">
+          <datalist id="ingredientOption">
+            <!-- Utilisation de 'ingredientName' pour afficher les noms des ingrédients -->
+            <option *ngFor="let ing of ingredientsArray" [value]="ing">{{ing}}</option>
+          </datalist>
+        </p>
       <p>
       <label for="quantity">Quantité:</label>
       <input type=number id="quantity" formControlName="quantity">
@@ -22,7 +25,7 @@
         <label for="unit">Unité:</label>
         <input type="text" id="unit" formControlName="unit" list="unitOptions">
         <datalist id="unitOptions">
-          <option *ngFor="let u of unit" [value]="u">{{ u }}</option>
+          <option *ngFor="let u of units" [value]="u">{{ getDisplayName(unitDisplayMap, u) }}</option>
         </datalist>
       </p>
       <p>
