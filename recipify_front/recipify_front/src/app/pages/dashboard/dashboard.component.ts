@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import {NgForOf} from "@angular/common";
 import {HttpClient} from "@angular/common/http";
 import {GetDataService} from "../../service/getData.service";
-
+import {FridgeService} from "../../service/fridge.service";
 
 
 @Component({
@@ -15,39 +15,46 @@ import {GetDataService} from "../../service/getData.service";
     NgForOf
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css']  // Correction ici, c'est "styleUrls" au pluriel
 })
 export class dashboardComponent implements OnInit {
   ingredientForm: FormGroup;
   ingredientsArray: string[] = [];
   units: string[] = [];
 
-  constructor(private fb: FormBuilder,private http: HttpClient, private router: Router, private dataService: GetDataService) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router,
+    private dataService: GetDataService,
+    private fridgeService: FridgeService
+  ) {
     this.ingredientForm = this.fb.group({
       ingredients: this.fb.array([]),
     });
   }
 
+
   ngOnInit(): void {
     this.addInput(); // Ajoute un champ par défaut au démarrage
+
+    // Récupération des ingrédients
     this.dataService.getIngredients().subscribe({
       next: (ingredientsArray) => {
-        this.ingredientsArray = ingredientsArray;
-        console.log(ingredientsArray)
+        this.ingredientsArray = ingredientsArray.map((i: any) => i.ingredientName);
       },
       error: (err) => {
-        console.error('Erreur lors de la récupération des ingredients:', err);
+        console.error('Erreur lors de la récupération des ingrédients:', err);
       }
     });
 
-
+    // Récupération des unités
     this.dataService.getUnits().subscribe({
       next: (units) => {
         this.units = units;
-        console.log(units)
       },
       error: (err) => {
-        console.error('Erreur lors de la récupération des units:', err);
+        console.error('Erreur lors de la récupération des unités:', err);
       }
     });
   }
@@ -56,48 +63,64 @@ export class dashboardComponent implements OnInit {
     return this.ingredientForm.get('ingredients') as FormArray;
   }
 
+  getDisplayName(map: { [key: string]: string }, value: string): string {
+    return map[value] || value;
+  }
+
   addInput(): void {
     const ingredientGroup = this.fb.group({
       name: [''],
       quantity: [''],
-      unit: [[]],
+      unit: [''],
       expiration: ['']
     });
     this.ingredients.push(ingredientGroup);
   }
 
-  unit = [
-    'GRAMMES',
-    'KILOGRAMMES',
-    'LITRES',
-    'CENTILITRES',
-    'MILLILITRES',
-    'CUILLERES_A_SOUPE',
-    'CUILLERES_A_CAFE',
-    'TASSE',
-    'VERRE',
-    'PINCEE',
-    'GOUTTE'
-  ];
+  unitDisplayMap: { [key: string]: string } = {
+    'GRAMMES': 'g',
+    'KILOGRAMMES': 'kg',
+    'LITRES': 'L',
+    'CENTILITRES': 'cl',
+    'MILLILITRES': 'ml',
+    'CUILLERES_A_SOUPE': 'cuillères à soupe',
+    'CUILLERES_A_CAFE': 'cuillères à café',
+    'TASSE': 'tasse',
+    'VERRE': 'verre',
+    'PINCEE': 'pincée',
+    'GOUTTE': 'goutte'
+  };
 
-  onSubmit(): void {
-    const formIngredientData = this.ingredientForm.value; // Récupération des données du formulaire
-    console.log(formIngredientData);
-    //TODO compléter l'url
-    const url = 'https://example.com/api/APIàcompléter';
 
-    // Envoi de la requête HTTP POST avec les données du formulaire
-    this.http.post(url, formIngredientData).subscribe({
-      next: response =>console.log('Form submitted successfully', response),
-      error: err => (console.error('Error submitting form : ', err))
+  handleSubmit() {
+    if (this.ingredientForm.valid) {
+      // Filtrer les ingrédients avec des champs non vides
+      const formIngredientData = this.ingredientForm.value.ingredients.filter((ingredient: any) => {
+        return ingredient.name && ingredient.quantity && ingredient.unit && ingredient.expiration;
+      });
+
+      if (formIngredientData.length === 0) {
+        // Afficher un message d'erreur si tous les ingrédients sont vides
+        console.error('Aucun ingrédient valide à ajouter');
+        return;
       }
-    );
+
+      console.log('Ingrédients ajoutés au frigo:', formIngredientData);
+      this.fridgeService.addToFridge(formIngredientData).subscribe({
+        next: (response) => {
+          console.log('Ingrédients ajoutés au frigo avec succès:', response);
+        },
+        error: (err) => {
+          console.error('Erreur lors de l\'ajout des ingrédients au frigo:', err);
+        }
+      });
+    } else {
+      console.error('Formulaire invalide');
+    }
   }
 
-  goToPage() {
-    this.router.navigate(['/recette']);
+  goToPage(): void {
+    this.router.navigate(['/fridge']).then(r => console.log('Navigation vers la page de frigo:', r));
   }
+
 }
-
-
-
