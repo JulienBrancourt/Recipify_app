@@ -13,7 +13,6 @@ export class AuthService {
   private adminRole = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {
-    // Check if the user is already logged in when the service initializes
     const token = localStorage.getItem('authToken');
     if (token) {
       this.loggedIn.next(true);
@@ -36,7 +35,6 @@ export class AuthService {
         tap(response => {
           // Save the token to localStorage
           localStorage.setItem('authToken', response.token);
-          console.log('Login successful, JWT token stored.');
           // Update the loggedIn state to true
           this.loggedIn.next(true);
           this.checkAdminRole(response.token);
@@ -50,13 +48,10 @@ export class AuthService {
 
   checkAdminRole(token: string): void {
     const decodedToken = this.decodeToken(token);
-    console.log('Decoded Token:', decodedToken); // Ajoute cette ligne pour vérifier le contenu
-
-    if (decodedToken && decodedToken.sub === 'admin') {
-      console.log('User is admin');
+    const role = decodedToken.sub;
+    if (decodedToken && role.toLowerCase() === 'admin') {
       this.adminRole.next(true);
     } else {
-      console.log('User is not admin');
       this.adminRole.next(false);
     }
   }
@@ -66,11 +61,8 @@ export class AuthService {
     try {
       // Sépare le token et extrait le payload
       const payload = token.split('.')[1];
-      console.log('decoded Payload', atob((payload)))
-
       // Décode le payload en Base64 et le transforme en JSON
       return JSON.parse(atob(payload));
-
     } catch (e) {
       // En cas d'erreur, affiche un message et retourne null
       console.error('Error decoding token:', e);
@@ -99,5 +91,8 @@ export class AuthService {
     return this.adminRole.value; // retourne true si admin
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
 
 }
