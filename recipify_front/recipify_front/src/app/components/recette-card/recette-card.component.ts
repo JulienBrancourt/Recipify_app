@@ -1,11 +1,14 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Recette } from "../../utils/types/recetteType";
 import { FavorisService } from "../../service/favoris.service";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-recette-card',
   standalone: true,
-  imports: [],
+  imports: [
+    NgClass
+  ],
   templateUrl: './recette-card.component.html',
   styleUrls: ['./recette-card.component.css']
 })
@@ -31,5 +34,10 @@ export class RecetteCardComponent {
     this.favorisService.removeFavori(title);
     alert('Recette supprimée des favoris');
     this.favoriChanged.emit();
+  }
+
+
+  detailsRecipe() {
+
   }
 }
