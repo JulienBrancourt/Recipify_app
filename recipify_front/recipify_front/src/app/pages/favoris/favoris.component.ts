@@ -17,10 +17,8 @@ export class FavorisComponent implements OnInit {
 
   constructor(private favorisService: FavorisService) {}
 
-  ngOnInit() {
-    this.favorisService.favoris$.subscribe(favoris => {
-      this.favoris = favoris;
-    });
+  ngOnInit(): void {
+    this.favorisService.getFavoris().subscribe(favoris => this.favoris = favoris);
   }
 
 
