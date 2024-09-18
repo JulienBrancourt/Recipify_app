@@ -1,5 +1,6 @@
 export type Recette = {
   title: string;
+  slug: string;
   instruction: string;
   calorie: number;
   serving: number;

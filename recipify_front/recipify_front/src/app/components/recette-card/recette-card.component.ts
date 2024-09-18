@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Recette } from "../../utils/types/recetteType";
 import { FavorisService } from "../../service/favoris.service";
 import {NgClass} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-recette-card',
@@ -14,11 +15,11 @@ import {NgClass} from "@angular/common";
 })
 export class RecetteCardComponent {
   @Input() recette!: Recette;
-  @Input() view: 'global' | 'favorite' = 'global';
+  @Input() view: 'global' | 'favorite' | 'admin' = 'global';
 
   @Output() favoriChanged = new EventEmitter<void>();
 
-  constructor(private favorisService: FavorisService) {}
+  constructor(private favorisService: FavorisService, private router: Router) {}
 
   addToFavorite() {
     if (this.favorisService.isInFavoris(this.recette)) {
@@ -38,6 +39,17 @@ export class RecetteCardComponent {
 
 
   detailsRecipe() {
-
+    console.log('Naviguer vers /recette-details avec slug:', this.recette.slug);
+    this.router.navigate(['/recette-details', this.recette.slug])
+      .then(success => {
+        if (success) {
+          console.log('Navigation réussie vers /recette-details');
+        } else {
+          console.error('Échec de la navigation vers /recette-details');
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de la navigation vers /recette-details', error);
+      });
   }
 }

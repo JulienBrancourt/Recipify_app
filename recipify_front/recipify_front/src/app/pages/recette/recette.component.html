@@ -1,5 +1,5 @@
-<section>
-  @for (recette of recettes; track recette){
+<section class="recette-section">
+  @for (recette of recettes; track recette) {
     <app-recette-card class="recette-card" [recette]="recette"> </app-recette-card>
   }
 </section>
