@@ -50,9 +50,10 @@ export class AuthService {
 
   checkAdminRole(token: string): void {
     const decodedToken = this.decodeToken(token);
-    console.log('Decoded Token:', decodedToken); // Ajoute cette ligne pour vérifier le contenu
+    const role = decodedToken.sub;
+    console.log('Decoded Token:', role.toLowerCase()); // Ajoute cette ligne pour vérifier le contenu
 
-    if (decodedToken && decodedToken.sub === 'admin') {
+    if (decodedToken && role.toLowerCase() === 'admin') {
       console.log('User is admin');
       this.adminRole.next(true);
     } else {
@@ -98,6 +99,5 @@ export class AuthService {
     console.log('Is Admin:', this.adminRole.value)
     return this.adminRole.value; // retourne true si admin
   }
-
 
 }
