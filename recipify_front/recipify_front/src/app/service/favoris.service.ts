@@ -10,27 +10,23 @@ import { environment } from '../../environments/environment.development';
 export class FavorisService {
   private apiUrl = environment.apiUrl;
   private favorisSubject = new BehaviorSubject<Recette[]>([]);
-  favoris = this.favorisSubject.asObservable();
+  favoris$ = this.favorisSubject.asObservable();
 
   constructor(private http: HttpClient) {
     this.loadFavoris();
   }
 
-  loadFavoris() {
-    this.http.get<Recette[]>(`${this.apiUrl}/userFavoriteRecipes`).subscribe(
-      favoris => this.favorisSubject.next(favoris),
-      error => console.error('Error loading favorites:', error)
-    );
+  loadFavoris(): void {
+    this.http.get<Recette[]>(`${this.apiUrl}/favorite`).subscribe({
+      next: (favoris) => this.favorisSubject.next(favoris),
+      error: (err) => console.error('Error loading favorites:', err)
+    });
   }
 
   addFavori(recette: Recette): Observable<Recette> {
-    return this.http.post<Recette>(`${this.apiUrl}/userFavoriteRecipe`, recette).pipe(
+    return this.http.post<Recette>(`${this.apiUrl}/favorite`, recette).pipe(
       tap(() => {
-        const favoris = this.favorisSubject.getValue();
-        if (!this.isInFavoris(recette)) {
-          favoris.push(recette);
-          this.favorisSubject.next(favoris);
-        }
+        this.loadFavoris();
       })
     );
   }
@@ -40,14 +36,13 @@ export class FavorisService {
   }
 
   getFavoris(): Observable<Recette[]> {
-    return this.favoris;
+    return this.favoris$;
   }
 
   removeFavori(title: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/userFavoriteRecipe/${title}`).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/favorite/${title}`).pipe(
       tap(() => {
-        const favoris = this.favorisSubject.getValue().filter(fav => fav.title !== title);
-        this.favorisSubject.next(favoris);
+        this.loadFavoris(); 
       })
     );
   }
