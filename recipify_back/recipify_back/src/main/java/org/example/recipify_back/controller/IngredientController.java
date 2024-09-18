@@ -40,16 +40,6 @@ public class IngredientController {
 
     @GetMapping("/ingredients")
     public List<Ingredient> getAllIngredients() {
-        // Récupérer l'authentication actuelle
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // Récupérer le nom d'utilisateur
-        String username = authentication.getName();
-
-        // Log pour voir le nom d'utilisateur et les autorités (rôles)
-        System.out.println("Utilisateur connecté: " + username);
-        System.out.println("Rôles de l'utilisateur: " + authentication.getAuthorities());
-
         // Vous pouvez ajouter une logique en fonction des informations récupérées
         return ingredientService.getAllIngredients();
     }
@@ -58,7 +48,6 @@ public class IngredientController {
     public List<Ingredient> getIngredientsByCategory(@RequestParam String category) {
         IngredientCategory ingredientCategory;
         try {
-            // Conversion de la chaîne en enum
             ingredientCategory = IngredientCategory.valueOf(category.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid ingredient category");
