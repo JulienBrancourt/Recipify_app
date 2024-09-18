@@ -16,7 +16,7 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:4200", "http://recipify_front:4200")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*") // Suppression de la virgule mal placée ici
+                        .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };
