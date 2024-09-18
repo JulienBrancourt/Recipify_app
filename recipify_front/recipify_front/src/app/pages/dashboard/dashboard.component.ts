@@ -119,8 +119,8 @@ export class dashboardComponent implements OnInit {
     }
   }
 
-  goToPage(): void {
-    this.router.navigate(['/fridge']).then(r => console.log('Navigation vers la page de frigo:', r));
+  goToPage() {
+    this.router.navigate(['/recipe']);
   }
 
 }
