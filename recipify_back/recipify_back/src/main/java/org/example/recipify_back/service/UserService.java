@@ -67,6 +67,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username.toLowerCase())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
     public User addAllergyToUser(String userName, String allergyName) {
         User user = userRepository.findByUsername(userName.toLowerCase())
