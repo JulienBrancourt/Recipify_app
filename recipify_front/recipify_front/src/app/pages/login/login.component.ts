@@ -33,7 +33,7 @@ export class LoginComponent {
       this.authService.login(username!, password!)
         .subscribe({
           next: (response: { token: string }) => {
-            console.log('Login successful, token:', response.token);
+            // console.log('Login successful, token:', response.token);
             this.router.navigate(['/dashboard']);
           },
           error: (err: any) => {

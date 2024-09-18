@@ -42,6 +42,11 @@ export class GetDataService implements OnInit {
     return this.http.get<any>(`${this.apiUrl}/ingredients`, { headers });
   }
 
+  getUnits(): Observable<any> {
+    const headers = this.createHeaders();
+    return this.http.get<any>(`${this.apiUrl}/units`, { headers });
+  }
+
   getMyIngredients(): Observable<any> {
     const headers = this.createHeaders();
     return this.http.get<any>(`${this.apiUrl}/my-ingredients`, { headers });
