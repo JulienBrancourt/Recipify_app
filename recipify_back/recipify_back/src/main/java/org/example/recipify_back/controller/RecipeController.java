@@ -38,10 +38,10 @@ public class RecipeController {
     }
 
     @PostMapping("/userFavoriteRecipe")
-    public ResponseEntity<?> updateUserFavoriteRecipe(@RequestParam String userName,
+    public ResponseEntity<?> updateUserFavoriteRecipe(
                                                       @RequestParam String slug) {
         try {
-            User updateUserFavorite = userService.addFavoriteRecipeToUser(userName, slug);
+            User updateUserFavorite = userService.addFavoriteRecipeToUser(slug);
             return ResponseEntity.ok(updateUserFavorite);
         } catch (RuntimeException e) {
             return ResponseEntity
