@@ -27,9 +27,6 @@ public class Ingredient {
     @Enumerated(EnumType.STRING)
     private IngredientCategory ingredientCategory;
 
-    @Enumerated(EnumType.STRING)
-    private UnitOfMeasurement unitOfMeasurement;
-
     @OneToMany(mappedBy = "ingredient")
     @JsonIgnore
     private List<FridgeItem> fridgeItems;
