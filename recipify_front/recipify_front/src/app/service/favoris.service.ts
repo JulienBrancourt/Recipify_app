@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Recette } from "../utils/types/recetteType";
-import { environment } from '../../environments/environment.development';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {Recette} from "../utils/types/recetteType";
+import {environment} from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,7 @@ export class FavorisService {
   removeFavori(title: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/favorite/${title}`).pipe(
       tap(() => {
-        this.loadFavoris(); 
+        this.loadFavoris();
       })
     );
   }

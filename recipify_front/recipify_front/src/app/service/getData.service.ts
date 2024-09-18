@@ -1,7 +1,7 @@
-import { Injectable, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
-import { environment } from "../../environments/environment.development";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import {Injectable, OnInit} from '@angular/core';
+import {Observable} from "rxjs";
+import {environment} from "../../environments/environment.development";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +9,11 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 export class GetDataService implements OnInit {
   apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   // Fonction pour récupérer le token
   private getAuthToken(): string | null {
