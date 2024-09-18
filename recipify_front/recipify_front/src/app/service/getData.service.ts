@@ -37,19 +37,15 @@ export class GetDataService implements OnInit {
 
   // Méthodes sécurisées nécessitant un token
   getIngredients(): Observable<any> {
-    const headers = this.createHeaders();
-    console.log('Headers being sent:', headers.get('Authorization'));
-    return this.http.get<any>(`${this.apiUrl}/ingredients`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/ingredients`);
   }
 
   getUnits(): Observable<any> {
-    const headers = this.createHeaders();
-    return this.http.get<any>(`${this.apiUrl}/units`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/units`);
   }
 
   getMyIngredients(): Observable<any> {
-    const headers = this.createHeaders();
-    return this.http.get<any>(`${this.apiUrl}/my-ingredients`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/my-ingredients`);
   }
 
   // Requêtes de recettes : public ne nécessite pas de token, private et favorite en ont besoin
@@ -59,12 +55,12 @@ export class GetDataService implements OnInit {
 
   getPrivateRecipe(): Observable<any> {
     const headers = this.createHeaders();
-    return this.http.get<any>(this.getRecipeUrl('private'), { headers });
+    return this.http.get<any>(this.getRecipeUrl('private'));
   }
 
   getFavoriteRecipe(): Observable<any> {
     const headers = this.createHeaders();
-    return this.http.get<any>(this.getRecipeUrl('favorite'), { headers });
+    return this.http.get<any>(this.getRecipeUrl('favorite'));
   }
 
   private getRecipeUrl(type: string): string {
