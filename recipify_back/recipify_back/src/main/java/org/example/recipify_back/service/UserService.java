@@ -86,12 +86,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User addFavoriteRecipeToUser(String userName, String slug) {
-        User user = userRepository.findByUsername(userName.toLowerCase())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+    public User addFavoriteRecipeToUser(String slug) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        if (userName == null){
+            throw  new RuntimeException("User not authenticated");
+        }
         Recipe recipe = recipeRepository.findBySlug(slug)
                 .orElseThrow(()-> new RuntimeException("No slug Found"))                ;
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         user.getFavoriteRecipes().add(recipe);
         return userRepository.save(user);
     }
@@ -106,7 +110,7 @@ public class UserService {
           throw new RuntimeException("User not authenticated");
       }
 
-      User user = userRepository.findByUsername(userName.toLowerCase())
+      User user = userRepository.findByUsername(userName)
               .orElseThrow(() -> new RuntimeException("User not found"));
 
       user.getFavoriteRecipes().forEach(recipes ->favoriteRecipeTitles.add(recipes.getTitle()));
