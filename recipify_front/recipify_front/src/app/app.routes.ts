@@ -18,11 +18,11 @@ export const routes: Routes =
 
  {path: 'dashboard', component: dashboardComponent},
 
- {path: 'favoris', component: FavorisComponent},
+ {path: 'favorite', component: FavorisComponent},
 
  {path: 'form-recette', component: FormRecetteComponent},
 
- {path: 'recette', component: RecetteComponent},
+ {path: 'recipe', component: RecetteComponent},
 
   {path: 'admin', loadComponent: () => import('./pages/admin/admin.component').then(module => module.AdminComponent), canActivate: [adminGuard]},
 

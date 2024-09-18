@@ -35,9 +35,7 @@ export class FavorisService {
     return this.favorisSubject.getValue().some(fav => fav.title === recette.title);
   }
 
-  getFavoris(): Observable<Recette[]> {
-    return this.favoris$;
-  }
+
 
   removeFavori(title: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/favorite/${title}`).pipe(

@@ -8,9 +8,12 @@ import org.example.recipify_back.repository.AllergyRepository;
 import org.example.recipify_back.repository.DietRepository;
 import org.example.recipify_back.repository.RecipeRepository;
 import org.example.recipify_back.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,4 +95,22 @@ public class UserService {
         user.getFavoriteRecipes().add(recipe);
         return userRepository.save(user);
     }
+
+
+  public List<String> getUserFavoriteRecipes() {
+    List<String> favoriteRecipeTitles = new ArrayList<>();
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String userName = authentication.getName();
+
+      if (userName == null) {
+          throw new RuntimeException("User not authenticated");
+      }
+
+      User user = userRepository.findByUsername(userName.toLowerCase())
+              .orElseThrow(() -> new RuntimeException("User not found"));
+
+      user.getFavoriteRecipes().forEach(recipes ->favoriteRecipeTitles.add(recipes.getTitle()));
+
+      return favoriteRecipeTitles;
+}
 }
