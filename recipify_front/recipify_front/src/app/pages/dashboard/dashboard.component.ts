@@ -20,6 +20,7 @@ import {GetDataService} from "../../service/getData.service";
 export class dashboardComponent implements OnInit {
   ingredientForm: FormGroup;
   ingredientsArray: string[] = [];
+  units: string[] = [];
 
   constructor(private fb: FormBuilder,private http: HttpClient, private router: Router, private dataService: GetDataService) {
     this.ingredientForm = this.fb.group({
@@ -36,6 +37,17 @@ export class dashboardComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des ingredients:', err);
+      }
+    });
+
+
+    this.dataService.getUnits().subscribe({
+      next: (units) => {
+        this.units = units;
+        console.log(units)
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des units:', err);
       }
     });
   }
