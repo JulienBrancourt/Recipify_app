@@ -38,6 +38,34 @@ export class RecetteComponent {
         { ingredientName: 'Sel', calorie: 100 },
         { ingredientName: 'Coulis de poivre', calorie: 100 }
       ]
+    },
+    {
+      title: 'Tarte aux fraises',
+      instruction: "Dans un moule, mélangez les pommes de terre, le sucre, le beurre, le lait, le sel et le coulis de poivre. Épaissez la pâte feuilletée et ajoutez le mélange. Faites fondre à feu vif jusqu'à ce que la pâ",
+      calorie: 0,
+      serving: 1,
+      ingredients: [
+        { ingredientName: 'Pommes de terre', calorie: 100 },
+        { ingredientName: 'Sucre', calorie: 100 },
+        { ingredientName: 'Beurre', calorie: 100 },
+        { ingredientName: 'Lait', calorie: 100 },
+        { ingredientName: 'Sel', calorie: 100 },
+        { ingredientName: 'Coulis de poivre', calorie: 100 }
+      ]
+    },
+    {
+      title: 'Tarte aux maroille',
+      instruction: "Dans un moule, mélangez les pommes de terre, le sucre, le beurre, le lait, le sel et le coulis de poivre. Épaissez la pâte feuilletée et ajoutez le mélange. Faites fondre à feu vif jusqu'à ce que la pâ",
+      calorie: 0,
+      serving: 1,
+      ingredients: [
+        { ingredientName: 'Pommes de terre', calorie: 100 },
+        { ingredientName: 'Sucre', calorie: 100 },
+        { ingredientName: 'Beurre', calorie: 100 },
+        { ingredientName: 'Lait', calorie: 100 },
+        { ingredientName: 'Sel', calorie: 100 },
+        { ingredientName: 'Coulis de poivre', calorie: 100 }
+      ]
     }
   ];
 
