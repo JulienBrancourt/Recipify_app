@@ -18,6 +18,9 @@
       <p>
       <label for="quantity">Quantité:</label>
       <input type=number id="quantity" formControlName="quantity">
+        <span *ngIf="ingredient.get('quantity')?.touched && ingredient.get('quantity')?.errors?.['min']">
+          La quantité doit être supérieure à 0.
+        </span>
       </p>
 
       <p>
