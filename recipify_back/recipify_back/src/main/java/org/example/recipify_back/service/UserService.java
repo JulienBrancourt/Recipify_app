@@ -8,17 +8,15 @@ import org.example.recipify_back.repository.AllergyRepository;
 import org.example.recipify_back.repository.DietRepository;
 import org.example.recipify_back.repository.RecipeRepository;
 import org.example.recipify_back.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.example.recipify_back.security.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 @Service
@@ -29,15 +27,16 @@ public class UserService {
     private final AllergyRepository allergyRepository;
     private final RecipeRepository recipeRepository;
     private final DietRepository dietRepository;
-
+    private final AuthService authService;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AllergyRepository allergyRepository, RecipeRepository recipeRepository, DietRepository dietRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AllergyRepository allergyRepository, RecipeRepository recipeRepository, DietRepository dietRepository, AuthService authService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.allergyRepository = allergyRepository;
         this.recipeRepository = recipeRepository;
         this.dietRepository = dietRepository;
+        this.authService = authService;
     }
 
     public User registerUser(User user, List<String> allergyNames, List<String> dietNames) {
@@ -87,34 +86,18 @@ public class UserService {
     }
 
     public User addFavoriteRecipeToUser(String slug) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        if (userName == null){
-            throw  new RuntimeException("User not authenticated");
-        }
         Recipe recipe = recipeRepository.findBySlug(slug)
-                .orElseThrow(()-> new RuntimeException("No slug Found"))                ;
-        User user = userRepository.findByUsername(userName)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("No slug Found"));
+        User user = authService.getAuthUser();
         user.getFavoriteRecipes().add(recipe);
         return userRepository.save(user);
     }
 
 
-  public List<String> getUserFavoriteRecipes() {
-    List<String> favoriteRecipeTitles = new ArrayList<>();
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      String userName = authentication.getName();
-
-      if (userName == null) {
-          throw new RuntimeException("User not authenticated");
-      }
-
-      User user = userRepository.findByUsername(userName)
-              .orElseThrow(() -> new RuntimeException("User not found"));
-
-      user.getFavoriteRecipes().forEach(recipes ->favoriteRecipeTitles.add(recipes.getTitle()));
-
-      return favoriteRecipeTitles;
-}
+    public List<String> getUserFavoriteRecipes() {
+        List<String> favoriteRecipeTitles = new ArrayList<>();
+        User user = authService.getAuthUser();
+        user.getFavoriteRecipes().forEach(recipes -> favoriteRecipeTitles.add(recipes.getTitle()));
+        return favoriteRecipeTitles;
+    }
 }
