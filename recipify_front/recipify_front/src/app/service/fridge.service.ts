@@ -23,4 +23,16 @@ export class FridgeService {
       })
     );
   }
+
+  getFromFridge(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/fridge`).pipe(
+      tap(response => {
+        console.log('Fridge content:', response);
+      }),
+      catchError(error => {
+        console.error('Error getting fridge content:', error.message);
+        return new Observable();
+      })
+    );
+  }
 }
