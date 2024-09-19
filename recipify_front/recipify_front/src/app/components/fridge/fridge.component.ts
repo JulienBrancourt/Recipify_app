@@ -1,7 +1,8 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FridgeService} from "../../service/fridge.service";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, LowerCasePipe, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
 import {UpdateService} from "../../service/behaviour-subject.service";
+import {SortPipe} from "../../pipe/sort.pipe";
 
 @Component({
   selector: 'app-fridge',
@@ -9,10 +10,13 @@ import {UpdateService} from "../../service/behaviour-subject.service";
   imports: [
     DatePipe,
     NgForOf,
-    NgIf
+    NgIf,
+    LowerCasePipe,
+    TitleCasePipe,
+    SortPipe
   ],
   templateUrl: './fridge.component.html',
-  styleUrl: './fridge.component.css'
+  styleUrl: './fridge.component.css',
 })
 export class FridgeComponent implements OnInit {
   // constructor(private fridgService: FridgeService) {}
@@ -38,6 +42,8 @@ export class FridgeComponent implements OnInit {
 
   // Déclare un tableau d'objets avec les propriétés attendues
   fridgeIngredients: { unit: string; quantity: number; name: string; expiration: Date }[] = [];
+  sortColumn: string = 'name';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(private fridgService: FridgeService, private updateService: UpdateService) {
   }
@@ -45,7 +51,7 @@ export class FridgeComponent implements OnInit {
   ngOnInit() {
     this.loadFridgeContents();
     this.updateService.update$.subscribe(() => {
-      this.loadFridgeContents(); // Recharge les ingrédients quand update est déclenché
+      this.loadFridgeContents();
     });
   }
 
@@ -54,6 +60,7 @@ export class FridgeComponent implements OnInit {
       next: (ingredients) => {
         this.fridgeIngredients = ingredients;
         console.log('Fridge content:', this.fridgeIngredients);
+        console.log(this.fridgeIngredients.length)
       },
       error: (error) => {
         console.error('Error getting fridge content:', error.message);
@@ -62,6 +69,15 @@ export class FridgeComponent implements OnInit {
         console.log('Fridge content retrieved');
       }
     });
+  }
+
+  changeSort(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
   }
 }
 
