@@ -35,7 +35,8 @@ export class AuthService {
         tap(response => {
           // Save the token to localStorage
           localStorage.setItem('authToken', response.token);
-          // Update the loggedIn state to true
+         // Je check si le token est bien présent
+
           this.loggedIn.next(true);
           this.checkAdminRole(response.token);
         }),

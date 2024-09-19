@@ -17,7 +17,6 @@ import { AuthService } from './service/auth.service';
 export class AppComponent implements OnInit {
   title = 'recipify_front';
   isLogged: boolean = false;
-  isLoading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
