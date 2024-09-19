@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-form-recette',
@@ -7,6 +7,12 @@ import { Component } from '@angular/core';
   templateUrl: './form-recette.component.html',
   styleUrl: './form-recette.component.css'
 })
-export class FormRecetteComponent {
+export class FormRecetteComponent implements OnInit {
+
+  constructor() {
+  }
+
+  ngOnInit() {
+  }
 
 }
