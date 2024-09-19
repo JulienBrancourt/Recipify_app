@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {HttpClient} from "@angular/common/http";
 import {GetDataService} from "../../service/getData.service";
 import {FridgeService} from "../../service/fridge.service";
@@ -12,7 +12,8 @@ import {FridgeService} from "../../service/fridge.service";
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']  // Correction ici, c'est "styleUrls" au pluriel
@@ -70,7 +71,7 @@ export class dashboardComponent implements OnInit {
   addInput(): void {
     const ingredientGroup = this.fb.group({
       name: [''],
-      quantity: [''],
+      quantity: ['', [Validators.required, Validators.min(1)]],
       unit: [''],
       expiration: ['']
     });
