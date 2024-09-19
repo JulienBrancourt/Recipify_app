@@ -41,6 +41,13 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<RecipeIngredient> recipeIngredients;
+
+
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    private User creator;
+
+
     public int getTotalCalories() {
         return recipeIngredients.stream()
                 .mapToInt(ri -> {
