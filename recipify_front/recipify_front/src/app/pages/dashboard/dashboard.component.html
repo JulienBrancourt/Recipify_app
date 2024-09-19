@@ -12,7 +12,6 @@
           <label for="name">Ingrédient:</label>
           <input type="text" id="name" formControlName="name" list="ingredientOption">
           <datalist id="ingredientOption">
-            <!-- Utilisation de 'ingredientName' pour afficher les noms des ingrédients -->
             <option *ngFor="let ing of ingredientsArray" [value]="ing">{{ing}}</option>
           </datalist>
         </p>

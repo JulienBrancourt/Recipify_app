@@ -10,4 +10,6 @@ export type Recette = {
 export type Ingredient = {
   ingredientName: string;
   calorie: number;
+  quantity: number;
+  unit: string;
 }
