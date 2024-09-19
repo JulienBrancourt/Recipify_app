@@ -1,1 +1,25 @@
-<p>fridge works!</p>
+<div *ngIf="fridgeIngredients.length > 0; else noIngredients">
+  <table>
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Quantité</th>
+      <th>Unité</th>
+      <th>Date d'expiration</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ingredient of fridgeIngredients">
+      <td>{{ ingredient.name }}</td>
+      <td>{{ ingredient.quantity }}</td>
+      <td>{{ ingredient.unit }}</td>
+      <td>{{ ingredient.expiration }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Message alternatif lorsque `fridgeIngredients` est vide -->
+<ng-template #noIngredients>
+  <p>No ingredients in the fridge.</p>
+</ng-template>
