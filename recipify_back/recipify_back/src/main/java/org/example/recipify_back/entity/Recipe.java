@@ -44,7 +44,7 @@ public class Recipe {
 
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
 
