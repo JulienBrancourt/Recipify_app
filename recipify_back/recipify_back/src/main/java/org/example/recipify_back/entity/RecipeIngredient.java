@@ -1,6 +1,7 @@
 package org.example.recipify_back.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.recipify_back.entity.enumEntity.UnitOfMeasurement;
@@ -17,6 +18,7 @@ public class RecipeIngredient {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
+    @JsonIgnore
     private Recipe recipe;
 
     @ManyToOne

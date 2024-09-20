@@ -1,5 +1,6 @@
 package org.example.recipify_back.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.recipify_back.entity.Recipe;
 import org.example.recipify_back.entity.User;
 import org.example.recipify_back.service.RecipeService;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 public class RecipeController {
     private final RecipeService recipeService;
@@ -43,8 +45,7 @@ public class RecipeController {
 
 
     @PostMapping("/userFavoriteRecipe")
-    public ResponseEntity<?> updateUserFavoriteRecipe(
-                                                      @RequestParam String slug) {
+    public ResponseEntity<?> AddFavoriteRecipe(@RequestParam String slug) {
         try {
             User updateUserFavorite = userService.addFavoriteRecipeToUser(slug);
             return ResponseEntity.ok(updateUserFavorite);
@@ -66,12 +67,13 @@ public class RecipeController {
 
 
     @GetMapping("/recipe/{slug}")
-    public Recipe getRecipe(@PathVariable("slug") String slug) {
+    public Map<String, Object> getRecipe(@PathVariable("slug") String slug) {
+        System.out.println("slug: " + slug);
         return recipeService.getRecipe(slug);
     }
 
     @GetMapping("/recipes")
-    public List<Recipe> getAllRecipes() {
+    public List<Map<String, Object>> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 

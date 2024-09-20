@@ -26,6 +26,7 @@ export class FavorisService {
   addFavori(recette: Recette): Observable<Recette> {
     return this.http.post<Recette>(`${this.apiUrl}/userFavoriteRecipe`, recette.slug).pipe(
       tap(() => {
+        console.log('Recette ajoutée aux favoris:', recette);
         this.loadFavoris();
       })
     );
