@@ -109,6 +109,8 @@ public class RecipeService {
             ingredientData.put("ingredientName", ingredient.getIngredient().getIngredientName());
             ingredientData.put("calorie", ingredient.getIngredient().getCalorie());
             ingredientData.put("ingredientCategory", ingredient.getIngredient().getIngredientCategory());
+            ingredientData.put("quantity", ingredient.getQuantity());
+            ingredientData.put("unit", ingredient.getUnit());
             ingredients.add(ingredientData);
         }
         recipe.put("recipeIngredients", ingredients);

@@ -1,21 +1,22 @@
 import {Component, OnInit} from '@angular/core';
-import {Recette} from "../../utils/types/recetteType";
+import {Ingredient, Recette, RecipeIngredient} from "../../utils/types/recetteType";
 import {ActivatedRoute} from "@angular/router";
 import {RecetteComponent} from "../recette/recette.component";
 import {GetDataService} from "../../service/getData.service";
 import {HttpClient} from "@angular/common/http";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-recette-details',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    NgForOf
   ],
   templateUrl: './recette-details.component.html',
   styleUrl: './recette-details.component.css'
 })
-export class RecetteDetailsComponent {
+export class RecetteDetailsComponent implements OnInit{
   recette!: Recette | undefined;
 
 
@@ -28,7 +29,17 @@ export class RecetteDetailsComponent {
     this.getDataService.getRecipeBySlug(slug).subscribe({
       next: (recette) => {
         console.log('Recette:', recette);
-        this.recette = recette;
+        // this.recette =recette;
+        this.recette = {...recette,
+          recipeIngredients: recette.recipeIngredients.map((ingredient: Ingredient) => ({
+            ingredient: {
+              ingredientName: ingredient.ingredientName,
+              calorie: ingredient.calorie,
+            },
+            quantity: recette.recipeIngredients.quantity,
+            unit: recette.recipeIngredients[0].unit,
+
+          }))}
       },
       error: (err) => {
         console.error('Erreur lors de la récupération de la recette:', err);

@@ -30,11 +30,11 @@ nav:before {
 
 
 .nav-links {
-  display: flex; /* Affiche les liens horizontalement */
+  display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(0); /* Position normale pour le desktop */
-  transition: none; /* Pas d'animation sur le desktop */
+  transform: translateX(0);
+  transition: none;
 }
 
 
