@@ -28,8 +28,13 @@ export class FavorisComponent implements OnInit {
   }
 
   getUserFavoriteRecipes(): void {
-    this.getDataService.getFavoriteRecipe().subscribe((favoris: Recette[]) => {
-      this.favoris = favoris;
+    this.getDataService.getFavoriteRecipe().subscribe({
+      next: (favoris) => {
+        this.favoris = favoris;
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des favoris:', err);
+      }
     });
   }
 
@@ -39,7 +44,7 @@ export class FavorisComponent implements OnInit {
 
   removeFromFavorites(title: string) {
     this.favorisService.removeFavori(title).subscribe(() => {
-      this.getUserFavoriteRecipes(); // Recharge les favoris après suppression
+      this.getUserFavoriteRecipes();
     });
   }
 }

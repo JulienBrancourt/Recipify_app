@@ -50,10 +50,15 @@ export class GetDataService implements OnInit {
     return this.http.get<any>(this.getRecipeUrl('favorite'));
   }
 
+  getRecipeBySlug(slug: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/recipe/${slug}`);
+  }
+
+
   private getRecipeUrl(type: string): string {
     switch (type) {
       case 'public':
-        return `${this.apiUrl}/public-recipes`;
+        return `${this.apiUrl}/recipes`;
       case 'private':
         return `${this.apiUrl}/private-recipes`;
       case 'favorite':

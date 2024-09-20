@@ -86,6 +86,7 @@ public class UserService {
     }
 
     public User addFavoriteRecipeToUser(String slug) {
+        log.info("slug: " + slug);
         Recipe recipe = recipeRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("No slug Found"));
         User user = authService.getAuthUser();

@@ -15,9 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -95,9 +93,15 @@ public class RecipeService {
     }
 
 
-
-    public Recipe getRecipe(String slug) {
-        return recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
+    public Map<String, Object> getRecipe(String slug) {
+        Recipe foundRecipe = recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
+        Map<String, Object> recipe = new HashMap<>();
+        recipe.put("title", foundRecipe.getTitle());
+        recipe.put("slug", foundRecipe.getSlug());
+        recipe.put("instruction", foundRecipe.getInstruction());
+        recipe.put("calorie", foundRecipe.getCalorie());
+        recipe.put("serving", foundRecipe.getServing());
+        return recipe;
     }
 
     // TODO A revoir quand on passera par le front pour respecter les règles de RESTs
@@ -138,8 +142,22 @@ public class RecipeService {
         }
     }
 
-    public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
+    public List<Map<String, Object>> getAllRecipes() {
+        User user = authService.getAuthUser();
+        log.info("Fetching all recipes...");
+        List<Recipe> recipes = recipeRepository.findAll();
+        List<Map<String, Object>> recipeList = new ArrayList<>();
+
+        for (Recipe recipe : recipes) {
+            Map<String, Object> recipeData = new HashMap<>();
+            recipeData.put("title", recipe.getTitle());
+            recipeData.put("slug", recipe.getSlug());
+            recipeData.put("instruction", recipe.getInstruction());
+            recipeData.put("calorie", recipe.getCalorie());
+            recipeData.put("serving", recipe.getServing());
+            recipeList.add(recipeData);
+        }
+        return recipeList;
     }
 
 
