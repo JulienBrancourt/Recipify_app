@@ -12,4 +12,14 @@ public class UserRegistrationDto {
     private String password;
     private List<String> allergies;
     private List<String> diets;
+
+    @Override
+    public String toString() {
+        return "UserRegistrationDto{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", allergies=" + allergies +
+                ", diets=" + diets +
+                '}';
+    }
 }

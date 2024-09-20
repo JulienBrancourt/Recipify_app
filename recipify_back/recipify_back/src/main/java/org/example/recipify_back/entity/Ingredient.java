@@ -30,4 +30,9 @@ public class Ingredient {
     @OneToMany(mappedBy = "ingredient")
     @JsonIgnore
     private List<FridgeItem> fridgeItems;
+
+    @Override
+    public String toString() {
+        return "Ingredient{id=" + id + ", ingredientName='" + ingredientName + "'}";
+    }
 }

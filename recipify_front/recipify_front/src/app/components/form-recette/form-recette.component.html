@@ -1,37 +1,60 @@
 <h1>Créer une Nouvelle Recette</h1>
 
 <section class="formulaire">
-    <form action="/submit-recipe" method="post">
+  <form [formGroup]="recetteForm" (ngSubmit)="handleSubmit()">
 
-        <div>
-        <label for="recipe-title">Titre de la recette :</label>
-        <input type="text" id="recipe-title" name="recipe-title" required>
-        </div>
+    <div>
+      <label for="title">Titre de la recette :</label>
+      <input type="text" id="title" formControlName="title" required>
+    </div>
 
-        <div>
-            <label for="ingredient1">Ingrédient 1 :</label>
-            <input type="text" id="ingredient1" name="ingredient1" required>
-        </div>
+    <fieldset formArrayName="ingredients">
+      <legend>Ingrédients</legend>
+      <div *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
+        <fieldset>
+          <p>
+            <label for="ingredientName">Nom de l'ingrédient:</label>
+            <input type="text" id="ingredientName" formControlName="ingredientName" list="ingredientOption" required>
+            <datalist id="ingredientOption">
+              <option *ngFor="let ing of ingredientsArray" [value]="ing">{{ing}}</option>
+            </datalist>
+          </p>
+          <p>
+            <label for="quantity">Quantité:</label>
+            <input type="number" id="quantity" formControlName="quantity" required>
+          </p>
+          <p>
+            <label for="unit{{i}}">Unité:</label>
+            <select id="unit{{i}}" formControlName="unit" required>
+              <option *ngFor="let u of units" [value]="u">{{ getUnitDisplayName(u)}}</option>
+            </select>
+          </p>
+        </fieldset>
+      </div>
+    </fieldset>
 
-        <div>
-            <label for="instructions">Instructions :</label>
-            <textarea id="instructions" name="instructions" rows="8"  required></textarea>
-        </div>
 
-        <div>
-            <label for="prep-time">Temps de préparation (en minutes) :</label>
-            <input type="number" id="prep-time" name="prep-time"  required>
-        </div>
 
-        <div class="checkbox-group">
-            <input type="checkbox"  name="myCheckbox">
-            <label>Privée</label>
-        </div>
+    <button class="button-fixed" type="button" (click)="addIngredient()">Ajouter un ingrédient</button>
 
-        <div class="center">
-        <button class="button" type="submit">Créer la recette</button>
-        </div>
+    <div>
+      <label for="instruction">Instructions :</label>
+      <textarea id="instruction" formControlName="instruction" rows="8" required></textarea>
+    </div>
 
-    </form>
+    <div>
+      <label for="prep-time">Temps de préparation (en minutes) :</label>
+      <input type="number" id="prep-time" formControlName="prepTime" required>
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="isPublic" formControlName="isPublic">
+      <label for="isPublic">Public</label>
+    </div>
+
+    <div class="center">
+      <button class="button" type="submit">Créer la recette</button>
+    </div>
+
+  </form>
 </section>
-

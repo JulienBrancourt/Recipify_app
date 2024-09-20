@@ -15,4 +15,14 @@ public class FridgeDto {
     private String unitOfMeasurement;
     private LocalDate expiration;
 
+    @Override
+    public String toString() {
+        return "FridgeDto{" +
+                "name='" + name + '\'' +
+                ", quantity=" + quantity +
+                ", unitOfMeasurement='" + unitOfMeasurement + '\'' +
+                ", expiration=" + expiration +
+                '}';
+    }
+
 }

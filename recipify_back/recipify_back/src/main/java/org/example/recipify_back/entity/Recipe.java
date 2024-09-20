@@ -25,6 +25,8 @@ public class Recipe {
     private String instruction;
     private int calorie;
 
+    private int time;
+
     private int serving;
 
     @Builder.Default
@@ -47,6 +49,21 @@ public class Recipe {
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", slug='" + slug + '\'' +
+                ", instruction='" + instruction + '\'' +
+                ", calorie=" + calorie +
+                ", serving=" + serving +
+                ", isApproved=" + isApproved +
+                ", isPrivate=" + isPrivate +
+                ", creator=" + creator +
+                '}';
+    }
 
     public int getTotalCalories() {
         return recipeIngredients.stream()

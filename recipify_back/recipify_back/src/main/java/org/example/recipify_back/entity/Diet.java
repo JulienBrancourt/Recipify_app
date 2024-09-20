@@ -25,4 +25,9 @@ public class Diet {
     @ManyToMany(mappedBy = "diets")
     @JsonIgnore // Prevent infinite recursion during serialization
     private List<User> users;
+
+    @Override
+    public String toString() {
+        return "Diet{id=" + id + ", dietName='" + dietName + "'}";
+    }
 }

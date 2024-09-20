@@ -1,12 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormArray, FormBuilder,FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgForOf, NgIf} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
 import {GetDataService} from "../../service/getData.service";
 import {FridgeService} from "../../service/fridge.service";
+<<<<<<< HEAD
+import {UnitService} from "../../service/unit-service.service";
+=======
 import {FridgeComponent} from "../../components/fridge/fridge.component";
 import {UpdateService} from "../../service/behaviour-subject.service";
+>>>>>>> main
 
 
 @Component({
@@ -28,11 +31,14 @@ export class dashboardComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
     private dataService: GetDataService,
     private fridgeService: FridgeService,
+<<<<<<< HEAD
+    private unitService: UnitService
+=======
     private updateService: UpdateService
+>>>>>>> main
   ) {
     this.ingredientForm = this.fb.group({
       ingredients: this.fb.array([]),
@@ -68,8 +74,8 @@ export class dashboardComponent implements OnInit {
     return this.ingredientForm.get('ingredients') as FormArray;
   }
 
-  getDisplayName(map: { [key: string]: string }, value: string): string {
-    return map[value] || value;
+  getUnitDisplayName(unit: string): string {
+    return this.unitService.getDisplayName(unit);
   }
 
   addInput(): void {
@@ -81,20 +87,6 @@ export class dashboardComponent implements OnInit {
     });
     this.ingredients.push(ingredientGroup);
   }
-
-  unitDisplayMap: { [key: string]: string } = {
-    'GRAMMES': 'g',
-    'KILOGRAMMES': 'kg',
-    'LITRES': 'L',
-    'CENTILITRES': 'cl',
-    'MILLILITRES': 'ml',
-    'CUILLERES_A_SOUPE': 'cuillères à soupe',
-    'CUILLERES_A_CAFE': 'cuillères à café',
-    'TASSE': 'tasse',
-    'VERRE': 'verre',
-    'PINCEE': 'pincée',
-    'GOUTTE': 'goutte'
-  };
 
 
   handleSubmit() {
