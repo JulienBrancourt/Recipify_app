@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RecipeController {
@@ -24,18 +26,21 @@ public class RecipeController {
     public ResponseEntity<?> registerRecipe(@RequestBody Recipe recipe) {
         try {
             recipeService.registerRecipe(recipe);
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body("Recipe created");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Ingrédients ajoutés avec succès");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while registering the recipe.");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "An error occurred while registering the recipe.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
     @PostMapping("/userFavoriteRecipe")
     public ResponseEntity<?> updateUserFavoriteRecipe(

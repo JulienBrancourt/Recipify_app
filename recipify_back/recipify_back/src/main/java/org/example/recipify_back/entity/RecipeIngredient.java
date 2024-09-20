@@ -27,4 +27,15 @@ public class RecipeIngredient {
 
     @Enumerated(EnumType.STRING)
     private UnitOfMeasurement unit;
+
+    @Override
+    public String toString() {
+        return "RecipeIngredient{" +
+                "id=" + id +
+                ", recipe=" + recipe +
+                ", ingredient=" + ingredient +
+                ", quantity=" + quantity +
+                ", unit=" + unit +
+                '}';
+    }
 }

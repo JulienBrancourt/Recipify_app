@@ -25,7 +25,7 @@ public class IngredientService {
     }
 
     public Ingredient getIngredientByName(String name) {
-        return ingredientRepository.findByIngredientName(name);
+        return ingredientRepository.findByIngredientName(name).orElseThrow(() -> new IllegalArgumentException("Ingredient not found: " ));
     }
 
     public List<Ingredient> getIngredientsByCategory(IngredientCategory category) {

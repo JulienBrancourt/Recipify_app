@@ -1,49 +1,100 @@
 package org.example.recipify_back.service;
 
+import org.example.recipify_back.entity.Ingredient;
 import org.example.recipify_back.entity.Recipe;
+import org.example.recipify_back.entity.RecipeIngredient;
+import org.example.recipify_back.entity.User;
+import org.example.recipify_back.repository.IngredientRepository;
 import org.example.recipify_back.repository.RecipeRepository;
+import org.example.recipify_back.security.AuthService;
 import org.example.recipify_back.utils.Slug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipeService {
     private static final Logger log = LoggerFactory.getLogger(RecipeService.class);
     private final RecipeRepository recipeRepository;
     private final Slug slugGenerator;
+    private final AuthService authService;
+    private final IngredientRepository ingredientRepository;
 
-    public RecipeService(RecipeRepository recipeRepository) {
+    public RecipeService(RecipeRepository recipeRepository, AuthService authService, IngredientRepository ingredientRepository) {
         this.recipeRepository = recipeRepository;
         this.slugGenerator = new Slug(recipeRepository);  // Instanciation du générateur de slug
+        this.authService = authService;
+        this.ingredientRepository = ingredientRepository;
     }
 
-    public Recipe registerRecipe(Recipe recipe) {
-        recipe.setTitle(recipe.getTitle().toLowerCase());
+    @Transactional
+    public void registerRecipe(Recipe recipe) {
+        List<RecipeIngredient> updatedIngredients = recipe.getRecipeIngredients().stream().map(recipeIngredient -> {
+            String ingredientName = recipeIngredient.getIngredient().getIngredientName();
 
-        // Générer un slug unique avec accents retirés et formatage propre
+            log.info("Processing ingredient: " + ingredientName);
+
+            Optional<Ingredient> ingredientFromDB = ingredientRepository.findByIngredientName(ingredientName);
+
+            log.info(String.valueOf(ingredientFromDB.isEmpty()));
+
+            if (ingredientFromDB.isEmpty()) {
+                throw new IllegalArgumentException("Ingredient not found: " + ingredientName);
+            }
+
+            log.info("Ingredient found: " + ingredientFromDB.get());
+
+            Ingredient ingredient = ingredientFromDB.get();
+
+            if (!Objects.equals(ingredientName, ingredient.getIngredientName())) {
+                throw new IllegalArgumentException("WTF BRO ? TA BDD EST MAL FOUTUE");
+            }
+
+            recipeIngredient.setIngredient(ingredient);
+
+            return recipeIngredient;
+        }).collect(Collectors.toList());
+
+        recipe.setRecipeIngredients(updatedIngredients);
+
+        // Associer chaque RecipeIngredient à la recette
+        updatedIngredients.forEach(ingredient -> ingredient.setRecipe(recipe));
+
+        log.info("Updated recipe ingredients: " + recipe.getRecipeIngredients());
+
+        // Assigner l'utilisateur connecté comme créateur de la recette
+        User user = authService.getAuthUser();
+        recipe.setCreator(user);
+
+        log.info("Recipe creator: " + user);
+
+        recipe.setTitle(recipe.getTitle().toLowerCase());
         String baseSlug = recipe.getTitle();
         String uniqueSlug = slugGenerator.generateUniqueSlug(baseSlug);
         recipe.setSlug(uniqueSlug);
+        log.info("Generated slug: " + uniqueSlug);
+
+        recipe.setCalorie(recipe.getTotalCalories());
+        log.info("Calorie count: " + recipe.getCalorie());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        recipe.setApproved(authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")));
 
-        if (authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
-            log.info("User is admin, approving recipe automatically");
-            recipe.setApproved(true);
-        } else {
-            log.info("User is not admin, recipe will be pending approval");
-            recipe.setApproved(false);
-        }
+        recipeRepository.save(recipe);
 
-        return recipeRepository.save(recipe);
+        log.info("Recipe registered: " + recipe);
     }
+
+
 
     public Recipe getRecipe(String slug) {
         return recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));

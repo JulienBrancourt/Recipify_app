@@ -6,16 +6,14 @@ import org.example.recipify_back.entity.Ingredient;
 import org.example.recipify_back.entity.User;
 import org.example.recipify_back.entity.enumEntity.UnitOfMeasurement;
 import org.example.recipify_back.repository.FridgeRepository;
+
 import org.example.recipify_back.repository.IngredientRepository;
 import org.example.recipify_back.security.AuthService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -52,7 +50,7 @@ public class FridgeService {
 
         User user = authService.getAuthUser();
 
-        // Validate and cast requestBody
+
         if (!(requestBody instanceof List<?> rawItems)) {
             throw new IllegalArgumentException("Invalid request body format. Expected a list of items.");
         }
@@ -78,21 +76,19 @@ public class FridgeService {
                 throw new IllegalArgumentException("Missing required fields in item data");
             }
 
-
             LocalDate expiration;
             try {
                 expiration = LocalDate.parse(expirationStr);
+                log.info("Expiration date: " + expiration);
             } catch (DateTimeParseException e) {
                 throw new IllegalArgumentException("Invalid expiration date format for item: " + name);
             }
 
-
-            Ingredient ingredient = ingredientRepository.findByIngredientName(name);
-            if (ingredient == null) {
+            Optional<Ingredient> ingredientOptional = ingredientRepository.findByIngredientName(name);
+            if (ingredientOptional.isEmpty()) {
                 throw new IllegalArgumentException("Ingredient not found: " + name);
             }
-
-
+            Ingredient ingredient = ingredientOptional.get();
             FridgeItem fridgeItem = FridgeItem.builder()
                     .user(user)
                     .ingredient(ingredient)
@@ -103,9 +99,6 @@ public class FridgeService {
 
             fridgeItems.add(fridgeItem);
         }
-
         fridgeRepository.saveAll(fridgeItems);
-
     }
-
 }
