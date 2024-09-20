@@ -1,8 +1,6 @@
 <nav class="navbar">
   <div class="logo">Recipify</div>
-  <ul #navLinks class="nav-links" [class.nav-active]="isNavActive()">
-
-
+  <ul #navLinks class="nav-links">
     <li><a routerLink="/dashboard" (click)="activeBurger()">Accueil</a></li>
     <li><a routerLink="/favorite" (click)="activeBurger()">Recettes Favorites</a></li>
     <li><a routerLink="/form-recette" (click)="activeBurger()">Créer une recette</a></li>

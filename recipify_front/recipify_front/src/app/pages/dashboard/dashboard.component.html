@@ -18,7 +18,7 @@
       <p>
       <label for="quantity">Quantité:</label>
       <input type=number id="quantity" formControlName="quantity">
-        <span *ngIf="ingredient.get('quantity')?.touched && ingredient.get('quantity')?.errors?.['min']">
+        <span *ngIf="ingredient.get('quantity')?.dirty && ingredient.get('quantity')?.errors?.['min']">
           La quantité doit être supérieure à 0.
         </span>
       </p>
@@ -44,6 +44,11 @@
   <button class="button" type="submit">Soumettre</button>
   </div>
 </form>
+
+</section>
+
+<section class="frigo">
+  <app-fridge></app-fridge>
 </section>
 
 
