@@ -1,6 +1,6 @@
  <h1>Recettes favorites</h1>
 <section>
- @for (recette of favoris; track recette){
-   <app-recette-card [recette]="recette" view="favorite" (favoriChanged)="onFavoriChanged()" ></app-recette-card>
+ @for (recette of favoriteRecettes; track recette){
+   <app-recette-card [recette]="recette" view="favorite" ></app-recette-card>
  }
 </section>

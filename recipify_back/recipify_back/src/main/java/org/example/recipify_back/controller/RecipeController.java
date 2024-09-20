@@ -1,8 +1,8 @@
 package org.example.recipify_back.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.recipify_back.entity.dto.FavoriteRecipeDto;
 import org.example.recipify_back.entity.Recipe;
+import org.example.recipify_back.entity.dto.FavoriteRecipeDto;
 import org.example.recipify_back.service.RecipeService;
 import org.example.recipify_back.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -68,7 +68,7 @@ public class RecipeController {
 
 
     @GetMapping("/favorite")
-    public List<String> getUserFavoriteRecipes() {
+    public List<Map<String, Object>> getUserFavoriteRecipes() {
         return userService.getUserFavoriteRecipes();
     }
 

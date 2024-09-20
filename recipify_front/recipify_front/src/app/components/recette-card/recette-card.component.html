@@ -14,12 +14,18 @@
       <span class="heart-icon empty" (click)="addToFavorite(recette.slug)">&#x2665;</span>
       <button class="button" (click)="detailsRecipe()">Voir plus</button>
     </div>
-  } @else {
+  } @else if (view === 'favorite') {
     <div class="recipe-actions">
     <span class="heart-icon filled" (click)="removeFromFavorites(recette.title)">&#x2665;</span>
     <button class="button" (click)="detailsRecipe()">Voir plus</button>
     </div>
+  } @else if (view === 'admin') {
+    <div class="recipe-actions">
+      <span class="heart-icon empty" (click)="addToFavorite(recette.slug)">&#x2665;</span>
+      <button class="button-fixed" (click)="detailsRecipe()">Voir plus</button>
+      <!-- <button class="button-fixed" (click)="deleteRecipe()">Supprimer</button> -->
+    </div>
+
   }
 
 </div>
-

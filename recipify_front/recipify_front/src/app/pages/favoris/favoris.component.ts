@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./favoris.component.css']
 })
 export class FavorisComponent implements OnInit {
-  favoris: Recette[] = [];
+  favoriteRecettes: Recette[] = [];
 
 
   constructor(
@@ -24,30 +24,17 @@ export class FavorisComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  this.getUserFavoriteRecipes();
-  }
-
-  getUserFavoriteRecipes(): void {
     this.getDataService.getFavoriteRecipe().subscribe({
-      next: (favoris) => {
-        this.favoris = favoris;
+      next: (recettes) => {
+        this.favoriteRecettes = recettes;
+        console.log('Recettes favorites récupérées:', recettes);
       },
       error: (err) => {
-        console.error('Erreur lors de la récupération des favoris:', err);
+        console.error('Erreur lors de la récupération des recettes favorites:', err);
       },
       complete: () => {
-        console.log('Favoris:', this.favoris);
+        console.log("Recettes favorites récupérées");
       }
-    });
-  }
-
-  onFavoriChanged() {
-    this.favorisService.loadFavoris();
-  }
-
-  removeFromFavorites(title: string) {
-    this.favorisService.removeFavori(title).subscribe(() => {
-      this.getUserFavoriteRecipes();
     });
   }
 }
