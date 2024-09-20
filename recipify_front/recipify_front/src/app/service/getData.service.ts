@@ -50,6 +50,9 @@ export class GetDataService implements OnInit {
     return this.http.get<any>(this.getRecipeUrl('favorite'));
   }
 
+  getAdminRecipe(): Observable<any> {
+    return this.http.get<any>(this.getRecipeUrl('admin'));
+  }
   getRecipeBySlug(slug: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/recipe/${slug}`);
   }
@@ -63,6 +66,8 @@ export class GetDataService implements OnInit {
         return `${this.apiUrl}/private-recipes`;
       case 'favorite':
         return `${this.apiUrl}/favorite`;
+      case 'admin':
+        return `${this.apiUrl}/admin`;
       default:
         return `${this.apiUrl}/recipes`;
     }

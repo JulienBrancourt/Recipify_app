@@ -22,10 +22,11 @@
   } @else if (view === 'admin') {
     <div class="recipe-actions">
       <span class="heart-icon empty" (click)="addToFavorite(recette.slug)">&#x2665;</span>
-      <button class="button-fixed" (click)="detailsRecipe()">Voir plus</button>
-      <!-- <button class="button-fixed" (click)="deleteRecipe()">Supprimer</button> -->
+      <button class="button" (click)="detailsRecipe()">Voir plus</button>
+      <button class="button" (click)="deleteRecipe()">Supprimer recette</button>
+      <button class="button" (click)="updateRecette()">Modifier recette</button>
     </div>
-
   }
 
 </div>
+

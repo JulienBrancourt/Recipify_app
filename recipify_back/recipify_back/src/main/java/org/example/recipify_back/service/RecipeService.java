@@ -117,7 +117,7 @@ public class RecipeService {
     }
 
     // TODO A revoir quand on passera par le front pour respecter les règles de RESTs
-    public Recipe updateRecipe(String slug, Recipe updatedRecipe) {
+         public Recipe updateRecipe(String slug, Recipe updatedRecipe) {
         Recipe existingRecipe = recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
 
         if (existingRecipe == null) {
@@ -140,19 +140,21 @@ public class RecipeService {
             existingRecipe.setServing(newServing);
         }
 
+
+
         // Sauvegarde de la recette mise à jour
         return recipeRepository.save(existingRecipe);
     }
 
 
-    public void deleteRecipe(String recipeName) {
-        Recipe recipe = recipeRepository.findByTitle(recipeName);
-        try {
-            recipeRepository.delete(recipe);
-        } catch (Exception e) {
-            throw new RuntimeException("Recipe not found");
-        }
+    public void deleteRecipe(String slug) {
+    Optional<Recipe> recipe = recipeRepository.findBySlug(slug);
+    if (recipe.isPresent()) {
+        recipeRepository.delete(recipe.get());
+    } else {
+        throw new RuntimeException("Recipe not found");
     }
+}
 
     public List<Map<String, Object>> getAllRecipes() {
         User user = authService.getAuthUser();

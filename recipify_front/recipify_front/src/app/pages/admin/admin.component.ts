@@ -4,28 +4,40 @@ import {RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.development";
 import {ApiResponse} from "../../utils/ApiResponse";
+import {GetDataService} from "../../service/getData.service";
+import {RecetteCardComponent} from "../../components/recette-card/recette-card.component";
+import {Recette} from "../../utils/types/recetteType";
+import {NgForOf} from "@angular/common";
 
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RecetteCardComponent, NgForOf],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements OnInit{
-  apiUrl = environment.apiUrl;
-  text = '';
+  recettes: Recette[] = [
+  ];
 
-  constructor(private http: HttpClient) { }
+  constructor(private data: GetDataService) { }
 
   ngOnInit() {
-    this.admin();
-  }
-
-  admin() {
-    this.http.get<ApiResponse>(this.apiUrl + 'admin').subscribe((data: ApiResponse) => {
-      console.log(data.message)
+    this.data.getAdminRecipe().subscribe({
+      next: (recettes) => {
+        this.recettes = recettes;
+        console.log('admin Recettes:', this.recettes);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des recettes:', err);
+      }
     });
   }
+  onRecetteDeleted(slug: string) {
+    this.recettes = this.recettes.filter(recette => recette.slug !== slug);
+    console.log(`Recette avec le slug "${slug}" supprimée de la liste.`);
+  }
+
+
 }
