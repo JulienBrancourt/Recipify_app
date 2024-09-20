@@ -1,7 +1,7 @@
 package org.example.recipify_back.controller;
 
 import org.example.recipify_back.entity.User;
-import org.example.recipify_back.entity.UserRegistrationDto;
+import org.example.recipify_back.entity.dto.UserRegistrationDto;
 import org.example.recipify_back.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

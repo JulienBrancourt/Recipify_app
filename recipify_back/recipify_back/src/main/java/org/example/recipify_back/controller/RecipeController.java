@@ -1,8 +1,8 @@
 package org.example.recipify_back.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.recipify_back.entity.dto.FavoriteRecipeDto;
 import org.example.recipify_back.entity.Recipe;
-import org.example.recipify_back.entity.User;
 import org.example.recipify_back.service.RecipeService;
 import org.example.recipify_back.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -45,12 +45,16 @@ public class RecipeController {
 
 
     @PostMapping("/userFavoriteRecipe")
-    public ResponseEntity<?> addFavoriteRecipe(@RequestBody RequestBody requestBody) {
+    public ResponseEntity<?> addFavoriteRecipe(@RequestBody FavoriteRecipeDto requestBody) {
         try {
-            log.info("Entrée Favorite: " + requestBody);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "WTF BRO ?");
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            if (userService.addFavoriteRecipeToUser(requestBody.getSlug())) {
+                log.info("Favorite recipe added successfully.");
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Favorite recipe added successfully.");
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to add favorite recipe.");
+            }
         } catch (RuntimeException e) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -61,6 +65,7 @@ public class RecipeController {
                     .body("An error occurred while updating user favorite recipes.");
         }
     }
+
 
     @GetMapping("/favorite")
     public List<String> getUserFavoriteRecipes() {

@@ -1,10 +1,14 @@
-<div *ngIf="recette">
-  <h2>{{ recette?.title }}</h2>
-  <p><strong>Calories:</strong> {{ recette?.calorie }}</p>
-  <p><strong>Instructions:</strong> {{ recette?.instruction }}</p>
-  <p><strong>Serving:</strong> {{ recette?.serving }}</p>
-  <p><strong>Slug:</strong> {{ recette?.slug }}</p>
-</div>
-<div *ngIf="!recette">
-  <p>Loading...</p>
-</div>
+@if(recette){
+  <div>
+    <h2>{{ recette.title }}</h2>
+    <p><strong>Calories:</strong> {{ recette.calorie }}</p>
+    <p><strong>Instructions:</strong> {{ recette.instruction }}</p>
+    <p><strong>Serving:</strong> {{ recette.serving }}</p>
+    <p><strong>Slug:</strong> {{ recette.slug }}</p>
+  </div>
+} @else {
+  <div>
+    <h2>Recette not found!</h2>
+  </div>
+}
+
