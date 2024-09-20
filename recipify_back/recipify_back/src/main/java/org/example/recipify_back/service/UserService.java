@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -85,13 +86,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User addFavoriteRecipeToUser(String slug) {
-        log.info("slug: " + slug);
-        Recipe recipe = recipeRepository.findBySlug(slug)
-                .orElseThrow(() -> new RuntimeException("No slug Found"));
-        User user = authService.getAuthUser();
-        user.getFavoriteRecipes().add(recipe);
-        return userRepository.save(user);
+    public boolean  addFavoriteRecipeToUser(String slug) {
+        try {
+            Optional<Recipe> recipefound = recipeRepository.findBySlug(slug);
+            if (recipefound.isEmpty()) {
+                throw new RuntimeException("Recipe not found.");
+            }else {
+                Recipe recipe = recipefound.get();
+                User user = authService.getAuthUser();
+                user.getFavoriteRecipes().add(recipe);
+                userRepository.save(user);
+                return true;
+            }
+        }   catch (Exception e) {
+            log.error("Error while adding favorite recipe", e);
+            throw new RuntimeException("Error while adding favorite recipe", e);
+        }
     }
 
 

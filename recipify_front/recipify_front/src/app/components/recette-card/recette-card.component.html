@@ -11,7 +11,7 @@
 
   @if (view === 'global'){
     <div class="recipe-actions">
-      <span class="heart-icon empty" (click)="addToFavorite()">&#x2665;</span>
+      <span class="heart-icon empty" (click)="addToFavorite(recette.slug)">&#x2665;</span>
       <button class="button" (click)="detailsRecipe()">Voir plus</button>
     </div>
   } @else {

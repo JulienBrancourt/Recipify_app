@@ -25,6 +25,7 @@ export class FridgeService {
   }
 
   getFromFridge(): Observable<any> {
+    console.log('Getting fridge content');
     return this.http.get<any>(`${this.apiUrl}/fridge`).pipe(
       tap(response => {
         console.log('Fridge content:', response);

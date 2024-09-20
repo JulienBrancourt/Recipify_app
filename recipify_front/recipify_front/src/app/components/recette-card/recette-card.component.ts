@@ -3,6 +3,7 @@ import { Recette } from "../../utils/types/recetteType";
 import { FavorisService } from "../../service/favoris.service";
 import {NgClass} from "@angular/common";
 import {Router} from "@angular/router";
+import {FridgeService} from "../../service/fridge.service";
 
 @Component({
   selector: 'app-recette-card',
@@ -21,19 +22,22 @@ export class RecetteCardComponent {
 
   constructor(private favorisService: FavorisService, private router: Router) {}
 
-  addToFavorite() {
-    if (this.favorisService.isInFavoris(this.recette)) {
-      alert('Cette recette est déjà dans vos favoris');
-    } else {
-      this.favorisService.addFavori(this.recette);
-      alert('Recette ajoutée aux favoris');
-      this.favoriChanged.emit();
-    }
+  addToFavorite(slug: string) {
+    this.favorisService.addFavori(slug).subscribe({
+      next: () => {
+        this.favoriChanged.emit();
+      },
+      error: (err) => {
+        console.error('Erreur lors de l\'ajout de la recette aux favoris:', err);
+      },
+      complete: () => {
+        console.log("Favoris Ajouté");
+      }
+    });
   }
 
   removeFromFavorites(title: string) {
     this.favorisService.removeFavori(title);
-    alert('Recette supprimée des favoris');
     this.favoriChanged.emit();
   }
 

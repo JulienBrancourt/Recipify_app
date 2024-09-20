@@ -25,6 +25,7 @@ public class FridgeController {
 
     @PostMapping("/fridge")
     public ResponseEntity<?> addIngredientsToFridge(@RequestBody Object requestBody) {
+        logger.info("Entrée Fridge: " + requestBody);
         fridgeService.saveFridgeItems(requestBody);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Ingrédients ajoutés avec succès");

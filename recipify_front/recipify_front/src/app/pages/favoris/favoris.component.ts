@@ -34,6 +34,9 @@ export class FavorisComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des favoris:', err);
+      },
+      complete: () => {
+        console.log('Favoris:', this.favoris);
       }
     });
   }

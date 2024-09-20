@@ -16,7 +16,9 @@ import {GetDataService} from "../../service/getData.service";
 export class RecetteComponent implements OnInit {
 
   recettes: Recette[] = [];
-  constructor(private data: GetDataService) {}
+  constructor(private data: GetDataService) {
+
+  }
 
   ngOnInit() {
     this.data.getPublicRecipe().subscribe({
