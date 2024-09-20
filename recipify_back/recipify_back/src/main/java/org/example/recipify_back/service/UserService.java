@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -86,29 +84,37 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean  addFavoriteRecipeToUser(String slug) {
+    public boolean addFavoriteRecipeToUser(String slug) {
         try {
             Optional<Recipe> recipefound = recipeRepository.findBySlug(slug);
             if (recipefound.isEmpty()) {
                 throw new RuntimeException("Recipe not found.");
-            }else {
+            } else {
                 Recipe recipe = recipefound.get();
                 User user = authService.getAuthUser();
                 user.getFavoriteRecipes().add(recipe);
                 userRepository.save(user);
                 return true;
             }
-        }   catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error while adding favorite recipe", e);
             throw new RuntimeException("Error while adding favorite recipe", e);
         }
     }
 
 
-    public List<String> getUserFavoriteRecipes() {
-        List<String> favoriteRecipeTitles = new ArrayList<>();
+    public List<Map<String, Object>> getUserFavoriteRecipes() {
         User user = authService.getAuthUser();
-        user.getFavoriteRecipes().forEach(recipes -> favoriteRecipeTitles.add(recipes.getTitle()));
-        return favoriteRecipeTitles;
+        List<Recipe> recipes = user.getFavoriteRecipes();
+        List<Map<String, Object>> newRecipes = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            Map<String, Object> recipeData = new HashMap<>();
+            recipeData.put("title", recipe.getTitle());
+            recipeData.put("slug", recipe.getSlug());
+            recipeData.put("instruction", recipe.getInstruction());
+            newRecipes.add(recipeData);
+        }
+        return newRecipes;
     }
+
 }
