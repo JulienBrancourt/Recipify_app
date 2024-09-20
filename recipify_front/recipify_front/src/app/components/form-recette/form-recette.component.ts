@@ -94,7 +94,7 @@ export class FormRecetteComponent implements OnInit {
         quantity: ingredient.quantity || 0,
         unit: ingredient.unit || '',
       })),
-      public: !this.recetteForm.value.isPublic,
+      public: this.recetteForm.value.isPublic || false,
     };
 
     console.log('Nouvelle recette:', newRecette);
@@ -107,8 +107,8 @@ export class FormRecetteComponent implements OnInit {
         console.error('Erreur lors de la création de la recette:', err);
       },
       complete: () => {
-        // this.recetteForm.reset();
-        // this.ingredients.clear();
+        this.recetteForm.reset();
+        this.ingredients.clear();
       }
     });
   }
