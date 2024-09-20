@@ -45,10 +45,12 @@ public class RecipeController {
 
 
     @PostMapping("/userFavoriteRecipe")
-    public ResponseEntity<?> AddFavoriteRecipe(@RequestParam String slug) {
+    public ResponseEntity<?> addFavoriteRecipe(@RequestBody RequestBody requestBody) {
         try {
-            User updateUserFavorite = userService.addFavoriteRecipeToUser(slug);
-            return ResponseEntity.ok(updateUserFavorite);
+            log.info("Entrée Favorite: " + requestBody);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "WTF BRO ?");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (RuntimeException e) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
