@@ -28,6 +28,15 @@ export class NavComponent implements AfterViewInit {
 
   ngAfterViewInit() {}
 
-  activeBurger() {  this.isNavActive.set(!this.isNavActive());
+  // activeBurger() {  this.isNavActive.set(!this.isNavActive());
+  // }
+
+  activeBurger() {
+    this.isNavActive.set(!this.isNavActive());
+    if (this.isNavActive()) {
+      this.navLinks.nativeElement.classList.add('nav-active');
+    } else {
+      this.navLinks.nativeElement.classList.remove('nav-active');
+    }
   }
 }
