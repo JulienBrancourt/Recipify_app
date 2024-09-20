@@ -4,12 +4,9 @@ import {Router} from '@angular/router';
 import {NgForOf, NgIf} from "@angular/common";
 import {GetDataService} from "../../service/getData.service";
 import {FridgeService} from "../../service/fridge.service";
-<<<<<<< HEAD
 import {UnitService} from "../../service/unit-service.service";
-=======
 import {FridgeComponent} from "../../components/fridge/fridge.component";
 import {UpdateService} from "../../service/behaviour-subject.service";
->>>>>>> main
 
 
 @Component({
@@ -34,11 +31,11 @@ export class dashboardComponent implements OnInit {
     private router: Router,
     private dataService: GetDataService,
     private fridgeService: FridgeService,
-<<<<<<< HEAD
-    private unitService: UnitService
-=======
-    private updateService: UpdateService
->>>>>>> main
+
+    private unitService: UnitService,
+
+    private updateService: UpdateService,
+
   ) {
     this.ingredientForm = this.fb.group({
       ingredients: this.fb.array([]),
