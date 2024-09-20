@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {BehaviorSubject, catchError, Observable, tap} from 'rxjs';
 import {Recette} from "../utils/types/recetteType";
 import {environment} from '../../environments/environment.development';
 
@@ -23,14 +23,18 @@ export class FavorisService {
     });
   }
 
-  addFavori(recette: Recette): Observable<Recette> {
-    return this.http.post<Recette>(`${this.apiUrl}/userFavoriteRecipe`, recette.slug).pipe(
+  addFavori(recette: Recette): Observable<any> {
+    console.log('Slug de la recette:', recette.slug);
+    return this.http.post<any>(`${this.apiUrl}/userFavoriteRecipe`, recette).pipe(
       tap(() => {
         this.loadFavoris();
+      }),
+      catchError(error => {
+        console.error('Erreur lors de l\'ajout de la recette aux favoris:', error);
+        return new Observable<any>();
       })
     );
   }
-
   isInFavoris(recette: Recette): boolean {
     return this.favorisSubject.getValue().some(fav => fav.title === recette.title);
   }

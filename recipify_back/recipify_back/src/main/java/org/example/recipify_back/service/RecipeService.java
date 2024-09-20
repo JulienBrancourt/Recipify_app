@@ -20,7 +20,9 @@ public class RecipeService {
 
     public RecipeService(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
-        this.slugGenerator = new Slug(recipeRepository);  // Instanciation du générateur de slug
+        this.slugGenerator = new Slug(recipeRepository);
+        this.authService = authService;
+        this.ingredientRepository = ingredientRepository;
     }
 
     public Recipe registerRecipe(Recipe recipe) {
@@ -45,8 +47,28 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
-    public Recipe getRecipe(String slug) {
-        return recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
+
+    public Map<String, Object> getRecipe(String slug) {
+        Recipe foundRecipe = recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
+        Map<String, Object> recipe = new HashMap<>();
+        recipe.put("title", foundRecipe.getTitle());
+        recipe.put("slug", foundRecipe.getSlug());
+        recipe.put("instruction", foundRecipe.getInstruction());
+        recipe.put("calorie", foundRecipe.getCalorie());
+        recipe.put("serving", foundRecipe.getServing());
+
+        // Add recipe ingredients
+        List<Map<String, Object>> ingredients = new ArrayList<>();
+        for (RecipeIngredient ingredient : foundRecipe.getRecipeIngredients()) {
+            Map<String, Object> ingredientData = new HashMap<>();
+            ingredientData.put("ingredientName", ingredient.getIngredient().getIngredientName());
+            ingredientData.put("calorie", ingredient.getIngredient().getCalorie());
+            ingredientData.put("ingredientCategory", ingredient.getIngredient().getIngredientCategory());
+            ingredients.add(ingredientData);
+        }
+        recipe.put("recipeIngredients", ingredients);
+
+        return recipe;
     }
 
     // TODO A revoir quand on passera par le front pour respecter les règles de RESTs
@@ -87,8 +109,34 @@ public class RecipeService {
         }
     }
 
-    public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
+    public List<Map<String, Object>> getAllRecipes() {
+        User user = authService.getAuthUser();
+        log.info("Fetching all recipes...");
+        List<Recipe> recipes = recipeRepository.findAll();
+        List<Map<String, Object>> recipeList = new ArrayList<>();
+
+        for (Recipe recipe : recipes) {
+            Map<String, Object> recipeData = new HashMap<>();
+            recipeData.put("title", recipe.getTitle());
+            recipeData.put("slug", recipe.getSlug());
+            recipeData.put("instruction", recipe.getInstruction());
+            recipeData.put("calorie", recipe.getCalorie());
+            recipeData.put("serving", recipe.getServing());
+
+            // Add recipe ingredients
+            List<Map<String, Object>> ingredients = new ArrayList<>();
+            for (RecipeIngredient ingredient : recipe.getRecipeIngredients()) {
+                Map<String, Object> ingredientData = new HashMap<>();
+                ingredientData.put("ingredientName", ingredient.getIngredient().getIngredientName());
+                ingredientData.put("calorie", ingredient.getIngredient().getCalorie());
+                ingredientData.put("ingredientCategory", ingredient.getIngredient().getIngredientCategory());
+                ingredients.add(ingredientData);
+            }
+            recipeData.put("recipeIngredients", ingredients);
+
+            recipeList.add(recipeData);
+        }
+        return recipeList;
     }
 
 
