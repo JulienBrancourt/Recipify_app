@@ -28,7 +28,7 @@ public class RecipeService {
 
     public RecipeService(RecipeRepository recipeRepository, AuthService authService, IngredientRepository ingredientRepository) {
         this.recipeRepository = recipeRepository;
-        this.slugGenerator = new Slug(recipeRepository);  // Instanciation du générateur de slug
+        this.slugGenerator = new Slug(recipeRepository);
         this.authService = authService;
         this.ingredientRepository = ingredientRepository;
     }
@@ -101,6 +101,18 @@ public class RecipeService {
         recipe.put("instruction", foundRecipe.getInstruction());
         recipe.put("calorie", foundRecipe.getCalorie());
         recipe.put("serving", foundRecipe.getServing());
+
+        // Add recipe ingredients
+        List<Map<String, Object>> ingredients = new ArrayList<>();
+        for (RecipeIngredient ingredient : foundRecipe.getRecipeIngredients()) {
+            Map<String, Object> ingredientData = new HashMap<>();
+            ingredientData.put("ingredientName", ingredient.getIngredient().getIngredientName());
+            ingredientData.put("calorie", ingredient.getIngredient().getCalorie());
+            ingredientData.put("ingredientCategory", ingredient.getIngredient().getIngredientCategory());
+            ingredients.add(ingredientData);
+        }
+        recipe.put("recipeIngredients", ingredients);
+
         return recipe;
     }
 
@@ -155,6 +167,18 @@ public class RecipeService {
             recipeData.put("instruction", recipe.getInstruction());
             recipeData.put("calorie", recipe.getCalorie());
             recipeData.put("serving", recipe.getServing());
+
+            // Add recipe ingredients
+            List<Map<String, Object>> ingredients = new ArrayList<>();
+            for (RecipeIngredient ingredient : recipe.getRecipeIngredients()) {
+                Map<String, Object> ingredientData = new HashMap<>();
+                ingredientData.put("ingredientName", ingredient.getIngredient().getIngredientName());
+                ingredientData.put("calorie", ingredient.getIngredient().getCalorie());
+                ingredientData.put("ingredientCategory", ingredient.getIngredient().getIngredientCategory());
+                ingredients.add(ingredientData);
+            }
+            recipeData.put("recipeIngredients", ingredients);
+
             recipeList.add(recipeData);
         }
         return recipeList;
