@@ -4,7 +4,12 @@ import {Router} from '@angular/router';
 import {NgForOf, NgIf} from "@angular/common";
 import {GetDataService} from "../../service/getData.service";
 import {FridgeService} from "../../service/fridge.service";
+<<<<<<< HEAD
 import {UnitService} from "../../service/unit-service.service";
+=======
+import {FridgeComponent} from "../../components/fridge/fridge.component";
+import {UpdateService} from "../../service/behaviour-subject.service";
+>>>>>>> main
 
 
 @Component({
@@ -13,7 +18,8 @@ import {UnitService} from "../../service/unit-service.service";
   imports: [
     ReactiveFormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    FridgeComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']  // Correction ici, c'est "styleUrls" au pluriel
@@ -28,7 +34,11 @@ export class dashboardComponent implements OnInit {
     private router: Router,
     private dataService: GetDataService,
     private fridgeService: FridgeService,
+<<<<<<< HEAD
     private unitService: UnitService
+=======
+    private updateService: UpdateService
+>>>>>>> main
   ) {
     this.ingredientForm = this.fb.group({
       ingredients: this.fb.array([]),
@@ -96,6 +106,7 @@ export class dashboardComponent implements OnInit {
       this.fridgeService.addToFridge(formIngredientData).subscribe({
         next: (response) => {
           console.log('Ingrédients ajoutés au frigo avec succès:', response);
+          this.updateService.triggerUpdate()
         },
         error: (err) => {
           console.error('Erreur lors de l\'ajout des ingrédients au frigo:', err);
