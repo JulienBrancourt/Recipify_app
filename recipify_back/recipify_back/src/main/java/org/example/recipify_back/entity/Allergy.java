@@ -28,6 +28,11 @@ public class Allergy {
     @JsonIgnore // Prevent infinite recursion during serialization
     private List<User> users;
 
+    @Override
+    public String toString() {
+        return "Allergy{id=" + id + ", allergyName='" + allergyName + "'}";
+    }
+
 }
 
 

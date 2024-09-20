@@ -10,12 +10,13 @@ export class AuthService {
   apiUrl = environment.apiUrl
 
   private loggedIn = new BehaviorSubject<boolean>(false);
+  private adminRole = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {
-    // Check if the user is already logged in when the service initializes
     const token = localStorage.getItem('authToken');
     if (token) {
       this.loggedIn.next(true);
+      this.checkAdminRole(token);
     }
   }
 
@@ -34,9 +35,10 @@ export class AuthService {
         tap(response => {
           // Save the token to localStorage
           localStorage.setItem('authToken', response.token);
-          console.log('Login successful, JWT token stored.');
-          // Update the loggedIn state to true
+         // Je check si le token est bien présent
+
           this.loggedIn.next(true);
+          this.checkAdminRole(response.token);
         }),
         catchError(error => {
           console.error('Login error:', error.message);
@@ -45,8 +47,33 @@ export class AuthService {
       );
   }
 
-  register(username: string, password: string, allergies: String[], diets: String[] ): Observable<any> {
-    const payload = { username, password, allergies, diets };
+  checkAdminRole(token: string): void {
+    const decodedToken = this.decodeToken(token);
+    const role = decodedToken.sub;
+    if (decodedToken && role.toLowerCase() === 'admin') {
+      this.adminRole.next(true);
+    } else {
+      this.adminRole.next(false);
+    }
+  }
+
+
+  decodeToken(token: string): any {
+    try {
+      // Sépare le token et extrait le payload
+      const payload = token.split('.')[1];
+      // Décode le payload en Base64 et le transforme en JSON
+      return JSON.parse(atob(payload));
+    } catch (e) {
+      // En cas d'erreur, affiche un message et retourne null
+      console.error('Error decoding token:', e);
+      return null;
+    }
+  }
+
+
+  register(username: string, password: string, allergies: String[], diets: String[]): Observable<any> {
+    const payload = {username, password, allergies, diets};
     return this.http.post(`${this.apiUrl}/register`, payload);
   }
 
@@ -59,4 +86,14 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('authToken');
   }
+
+  isAdmin(): boolean {
+    console.log('Is Admin:', this.adminRole.value)
+    return this.adminRole.value; // retourne true si admin
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+
 }

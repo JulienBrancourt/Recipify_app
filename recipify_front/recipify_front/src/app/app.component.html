@@ -1,9 +1,7 @@
 
-
 <app-nav *ngIf="isLogged"></app-nav>
 
 <main>
-  <app-loading-card [isLoading]="isLoading"></app-loading-card>
   <router-outlet />
 </main>
 <app-footer *ngIf="isLogged"></app-footer>

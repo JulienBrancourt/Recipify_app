@@ -3,23 +3,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 450px;
+  width: 400px;
   height: auto;
-  border: 1px solid var(--secondary);
   margin: 10px;
   border-radius: 15px;
   /*overflow: hidden;*/
-  box-shadow: 5px 5px 10px -2px rgba(211,97,53,0.46);
+  box-shadow: 5px 5px 10px -2px rgb(54, 52, 52);
   background-color: white;
   position: relative;
-
-
 }
 
 .recipe-container div{
   margin-bottom: 10px;
 }
-
 
 .recipe-list {
   width: 100%;
@@ -34,6 +30,7 @@
   display: flex;
   justify-content: space-around;
   margin-top: 10px;
+  gap: 15px;
 }
 
 h2 {
@@ -54,12 +51,35 @@ h2::before {
   position: absolute;
   display: block;
   width: 80%;
-  top: 60%; /* ajuster pour que le clip-path soit visible sous le texte */
+  top: 60%;
   left: 50%;
   transform: translateX(-50%);
   height: .5em;
   background-color: var(--secondary);
   z-index: -1;
   clip-path: polygon(0 100%, 80% 100%, 100% 0, 20% 0);
+}
+
+.clamp-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.7em;
+}
+
+.heart-icon {
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.heart-icon.filled {
+  color: var(--tertiary);
+}
+
+.heart-icon.empty {
+  color: transparent;
+  -webkit-text-stroke: 1px black;
 }
 

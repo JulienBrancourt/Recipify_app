@@ -3,73 +3,77 @@
 footer {
   background-color: var(--primary);
   padding: 40px 0;
-  margin-top: auto;  /* Cela permet de "pousser" le footer en bas si nécessaire */
-  width: 100%;
-  position: relative; /* Peut être ajusté à fixed selon le contexte */
-  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1); /* Légère ombre pour donner du relief */
+  /*margin-top: auto;  !* Cela permet de "pousser" le footer en bas si nécessaire *!*/
+  /*width: 100%;*/
+  /*position: fixed; !* Peut être ajusté à fixed selon le contexte *!*/
+  /*box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1); !* Légère ombre pour donner du relief *!*/
 }
 
-footer .row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+/*footer .row {*/
+/*  display: flex;*/
+/*  justify-content: space-between;*/
+/*  flex-wrap: wrap;*/
+/*  max-width: 1200px;*/
+/*  margin: 0 auto;*/
+/*}*/
 
-footer .col {
-  flex: 1;
-  min-width: 150px;
-  margin: 10px;
-  padding: 20px;
-  text-align: center;
-  color: white;
-}
+/*footer .col {*/
+/*  flex: 1;*/
+/*  min-width: 150px;*/
+/*  margin: 10px;*/
+/*  padding: 20px;*/
+/*  text-align: center;*/
+/*  color: white;*/
+/*}*/
 
-footer .col:hover {
-  background-color: var(--secondary);
-  transition: background-color 0.3s ease;
+/*footer .col:hover {*/
+/*  background-color: var(--secondary);*/
+/*  transition: background-color 0.3s ease;*/
+/*}*/
+
+a {
+  font-size: 1em;
 }
 
 .text-center {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
-.text-center div {
-  color: white;
-  margin-bottom: 10px;
-  font-weight: 600;
-}
+/*.text-center div {*/
+/*  color: white;*/
+/*  margin-bottom: 10px;*/
+/*  font-weight: 600;*/
+/*}*/
 
-.text-center div:hover {
-  color: var(--secondary);
-  transition: color 0.3s ease;
-}
+/*.text-center div:hover {*/
+/*  color: var(--secondary);*/
+/*  transition: color 0.3s ease;*/
+/*}*/
 
-footer a {
-  color: white;
-  text-decoration: none;
-  position: relative;
-  padding: 5px 0;
-  font-weight: 600;
-}
+/*footer a {*/
+/*  color: white;*/
+/*  text-decoration: none;*/
+/*  position: relative;*/
+/*  padding: 5px 0;*/
+/*  font-weight: 600;*/
+/*}*/
 
-footer a:hover {
-  color: var(--secondary);
-}
+/*footer a:hover {*/
+/*  color: var(--secondary);*/
+/*}*/
 
-footer a::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: var(--secondary);
-  transition: width 0.3s ease;
-}
+/*footer a::before {*/
+/*  content: '';*/
+/*  position: absolute;*/
+/*  bottom: 0;*/
+/*  left: 0;*/
+/*  width: 0;*/
+/*  height: 2px;*/
+/*  background-color: var(--secondary);*/
+/*  transition: width 0.3s ease;*/
+/*}*/
 
-footer a:hover::before {
-  width: 100%;
-}
+/*footer a:hover::before {*/
+/*  width: 100%;*/
+/*}*/

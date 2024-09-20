@@ -1,0 +1,25 @@
+<!--<div *ngIf="fridgeIngredients.length > 0; else noIngredients">-->
+  <table>
+    <thead>
+    <tr>
+      <th (click)="changeSort('name')">Nom</th>
+      <th (click)="changeSort('quantity')">Quantité</th>
+      <th (click)="changeSort('unit')">Unité</th>
+      <th (click)="changeSort('expiration')">Date d'expiration</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ingredient of fridgeIngredients | sort: sortColumn: sortDirection">
+      <td>{{ ingredient.name | titlecase}}</td>
+      <td>{{ ingredient.quantity }}</td>
+      <td>{{ ingredient.unit | lowercase }}</td>
+      <td>{{ ingredient.expiration | date: 'dd/MM/yyyy' }}</td>
+    </tr>
+    </tbody>
+  </table>
+<!--</div>-->
+
+<!-- Message alternatif lorsque `fridgeIngredients` est vide -->
+<!--<ng-template #noIngredients>-->
+<!--  <p>No ingredients in the fridge.</p>-->
+<!--</ng-template>-->

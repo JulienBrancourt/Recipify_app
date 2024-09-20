@@ -28,12 +28,6 @@ export class NavComponent implements AfterViewInit {
 
   ngAfterViewInit() {}
 
-  activeBurger() {
-    const navLinks = this.navLinks.nativeElement;
-    const burger = this.burger.nativeElement;
-
-    // Toggle the active classes on burger and navLinks
-    navLinks.classList.toggle('nav-active');
-    burger.classList.toggle('toggle');
+  activeBurger() {  this.isNavActive.set(!this.isNavActive());
   }
 }

@@ -103,6 +103,10 @@ nav ul li a:hover::before {
     transform: translateX(100vw); /* Décalé en dehors de l'écran sans affecter la largeur de la page */
     transition: transform 0.5s ease-in;
   }
+  .nav-links {
+    z-index: 1000;
+  }
+
 
   .nav-links.nav-active {
     transform: translateX(0);

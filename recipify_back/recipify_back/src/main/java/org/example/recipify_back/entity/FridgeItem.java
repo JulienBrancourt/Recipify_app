@@ -34,8 +34,14 @@ public class FridgeItem {
     private int quantity;
 
     @Enumerated(EnumType.STRING)
-    private UnitOfMeasurement unit;
+    private UnitOfMeasurement unitOfMeasurement;
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
+
+    @Override
+    public String toString() {
+        return "FridgeItem{id=" + id + ", ingredient=" + ingredient.getIngredientName() + ", quantity=" + quantity + "}";
+    }
+
 }

@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
+
+
 
 @Component({
   selector: 'app-form-recette',
@@ -12,27 +15,10 @@ import {HttpClient} from "@angular/common/http";
   templateUrl: './form-recette.component.html',
   styleUrl: './form-recette.component.css'
 })
-export class FormRecetteComponent implements OnInit{
 
-  recetteForm: FormGroup;
-
-  constructor(private fb: FormBuilder,private http: HttpClient) {
-    this.recetteForm = this.fb.group({
-
-    })
-  }
+export class FormRecetteComponent{
 
 
-  addInput() {
-  }
-
-  ngOnInit(): void {
-    this.addInput();
-  }
-
-  onSubmit() {
-
-  }
 }
 
 

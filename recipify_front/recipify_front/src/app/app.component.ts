@@ -6,6 +6,7 @@ import { NgIf } from '@angular/common';
 import { LoadingCardComponent } from './components/loading-card/loading-card.component';
 import { AuthService } from './service/auth.service';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -16,7 +17,6 @@ import { AuthService } from './service/auth.service';
 export class AppComponent implements OnInit {
   title = 'recipify_front';
   isLogged: boolean = false;
-  isLoading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 

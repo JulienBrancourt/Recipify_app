@@ -1,0 +1,13 @@
+section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.recette-card:hover {
+  transform: scale(1.03);
+}
+
+.recette-card {
+  transition: transform 0.3s ease;
+}
