@@ -4,6 +4,8 @@ import org.example.recipify_back.entity.Ingredient;
 import org.example.recipify_back.entity.Recipe;
 import org.example.recipify_back.entity.RecipeIngredient;
 import org.example.recipify_back.entity.User;
+import org.example.recipify_back.entity.dto.IngredientDto;
+import org.example.recipify_back.entity.dto.RecipeDto;
 import org.example.recipify_back.repository.IngredientRepository;
 import org.example.recipify_back.repository.RecipeRepository;
 import org.example.recipify_back.repository.UserRepository;
@@ -38,63 +40,60 @@ public class RecipeService {
     }
 
     @Transactional
-    public void registerRecipe(Recipe recipe) {
-        List<RecipeIngredient> updatedIngredients = recipe.getRecipeIngredients().stream().map(recipeIngredient -> {
-            String ingredientName = recipeIngredient.getIngredient().getIngredientName();
+    public boolean registerRecipe(Recipe recipe) {
+        try {
+            // Traiter les ingrédients et les associer à la recette
+            List<RecipeIngredient> updatedIngredients = recipe.getRecipeIngredients().stream().map(recipeIngredient -> {
+                String ingredientName = recipeIngredient.getIngredient().getIngredientName();
+                log.info("Processing ingredient: " + ingredientName);
 
-            log.info("Processing ingredient: " + ingredientName);
+                Ingredient ingredient = ingredientRepository.findByIngredientName(ingredientName)
+                        .orElseThrow(() -> new IllegalArgumentException("Ingredient not found: " + ingredientName));
 
-            Optional<Ingredient> ingredientFromDB = ingredientRepository.findByIngredientName(ingredientName);
+                recipeIngredient.setIngredient(ingredient);
+                return recipeIngredient;
+            }).collect(Collectors.toList());
 
-            log.info(String.valueOf(ingredientFromDB.isEmpty()));
+            // Mise à jour des ingrédients et association à la recette
+            recipe.setRecipeIngredients(updatedIngredients);
+            updatedIngredients.forEach(ingredient -> ingredient.setRecipe(recipe));
 
-            if (ingredientFromDB.isEmpty()) {
-                throw new IllegalArgumentException("Ingredient not found: " + ingredientName);
-            }
+            // Assignation de l'utilisateur comme créateur
+            User user = authService.getAuthUser();
+            recipe.setCreator(user);
+            log.info("Recipe creator: " + user);
 
-            log.info("Ingredient found: " + ingredientFromDB.get());
+            // Génération du slug unique
+            recipe.setTitle(recipe.getTitle().toLowerCase());
+            String baseSlug = recipe.getTitle();
+            String uniqueSlug = slugGenerator.generateUniqueSlug(baseSlug);
+            recipe.setSlug(uniqueSlug);
+            log.info("Generated slug: " + uniqueSlug);
 
-            Ingredient ingredient = ingredientFromDB.get();
+            // Calcul des calories
+            recipe.setCalorie(recipe.getTotalCalories());
+            log.info("Calorie count: " + recipe.getCalorie());
 
-            if (!Objects.equals(ingredientName, ingredient.getIngredientName())) {
-                throw new IllegalArgumentException("WTF BRO ? TA BDD EST MAL FOUTUE");
-            }
+            // Vérification des droits d'approbation
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            recipe.setApproved(authentication != null && authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")));
 
-            recipeIngredient.setIngredient(ingredient);
+            // Enregistrement de la recette
+            recipeRepository.save(recipe);
+            log.info("Recipe registered: " + recipe);
 
-            return recipeIngredient;
-        }).collect(Collectors.toList());
+            return true; // Retourne true si tout est réussi
 
-        recipe.setRecipeIngredients(updatedIngredients);
-
-        // Associer chaque RecipeIngredient à la recette
-        updatedIngredients.forEach(ingredient -> ingredient.setRecipe(recipe));
-
-        log.info("Updated recipe ingredients: " + recipe.getRecipeIngredients());
-
-        // Assigner l'utilisateur connecté comme créateur de la recette
-        User user = authService.getAuthUser();
-        recipe.setCreator(user);
-
-        log.info("Recipe creator: " + user);
-
-        recipe.setTitle(recipe.getTitle().toLowerCase());
-        String baseSlug = recipe.getTitle();
-        String uniqueSlug = slugGenerator.generateUniqueSlug(baseSlug);
-        recipe.setSlug(uniqueSlug);
-        log.info("Generated slug: " + uniqueSlug);
-
-        recipe.setCalorie(recipe.getTotalCalories());
-        log.info("Calorie count: " + recipe.getCalorie());
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        recipe.setApproved(authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")));
-
-        recipeRepository.save(recipe);
-
-        log.info("Recipe registered: " + recipe);
+        } catch (IllegalArgumentException e) {
+            log.error("Error registering recipe: ", e);
+            throw e; // Lancer l'exception pour une gestion par le contrôleur
+        } catch (Exception e) {
+            log.error("Unexpected error during recipe registration: ", e);
+            return false; // Retourne false si une exception imprévue survient
+        }
     }
+
 
 
     public Map<String, Object> getRecipe(String slug) {
@@ -106,7 +105,7 @@ public class RecipeService {
         recipe.put("calorie", foundRecipe.getCalorie());
         recipe.put("serving", foundRecipe.getServing());
 
-        // Add recipe ingredients
+
         List<Map<String, Object>> ingredients = new ArrayList<>();
         for (RecipeIngredient ingredient : foundRecipe.getRecipeIngredients()) {
             Map<String, Object> ingredientData = new HashMap<>();
@@ -123,112 +122,113 @@ public class RecipeService {
     }
 
 
-         public Recipe updateRecipe(String slug, Recipe updatedRecipe) {
-        Recipe existingRecipe = recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
+    public Recipe updateRecipe(String slug, Recipe updatedRecipe) {
+        try {
+            Recipe existingRecipe = recipeRepository.findBySlug(slug)
+                    .orElseThrow(() -> new RuntimeException("Recipe not found with slug: " + slug));
 
-        if (existingRecipe == null) {
-            throw new RuntimeException("Recipe not found with slug: " + slug);
+            // Mise à jour du titre
+            String newTitle = updatedRecipe.getTitle();
+            if (newTitle != null && !newTitle.trim().isEmpty()) {
+                existingRecipe.setTitle(newTitle.trim());
+                existingRecipe.setSlug(slugGenerator.generateUniqueSlug(newTitle.trim()));
+            }
+
+            // Mise à jour des instructions
+            String newInstruction = updatedRecipe.getInstruction();
+            if (newInstruction != null && !newInstruction.trim().isEmpty()) {
+                existingRecipe.setInstruction(newInstruction.trim());
+            }
+
+            // Mise à jour des portions
+            int newServing = updatedRecipe.getServing();
+            if (newServing > 0) {
+                existingRecipe.setServing(newServing);
+            }
+
+            // Sauvegarder la recette mise à jour dans le repository
+            recipeRepository.save(existingRecipe);
+
+            return existingRecipe;  // Retourne la recette mise à jour
+
+        } catch (RuntimeException e) {
+            log.error("Recipe not found or error during update: ", e);
+            throw e;  // Lancer l'exception capturée pour gestion dans le contrôleur
+        } catch (Exception e) {
+            log.error("Error updating recipe: ", e);
+            throw new RuntimeException("An unexpected error occurred while updating the recipe.", e);
         }
-
-        String newTitle = updatedRecipe.getTitle();
-        if (newTitle != null && !newTitle.trim().isEmpty()) {
-            existingRecipe.setTitle(newTitle.trim());
-            existingRecipe.setSlug(slugGenerator.generateUniqueSlug(newTitle.trim()));
-        }
-
-        String newInstruction = updatedRecipe.getInstruction();
-        if (newInstruction != null && !newInstruction.trim().isEmpty()) {
-            existingRecipe.setInstruction(newInstruction.trim());
-        }
-
-        int newServing = updatedRecipe.getServing();
-        if (newServing > 0) {
-            existingRecipe.setServing(newServing);
-        }
-
-
-        return recipeRepository.save(existingRecipe);
     }
 
 
 
 
     @Transactional
-    public void deleteRecipe(String slug) {
-        log.info("Attempting to delete recipe with slug: " + slug);
-        Optional<Recipe> recipeOptional = recipeRepository.findBySlug(slug);
-        if (recipeOptional.isPresent()) {
-            Recipe recipe = recipeOptional.get();
-            log.info("Recipe found: " + recipe);
+    public boolean deleteRecipe(String slug) {
+        try {
+            log.info("Attempting to delete recipe with slug: " + slug);
 
+            // Rechercher la recette par son slug
+            Optional<Recipe> recipeOptional = recipeRepository.findBySlug(slug);
 
-            List<User> usersWhoFavorited = userRepository.findUsersByFavoriteRecipesContaining(recipe);
-            log.info("Found " + usersWhoFavorited.size() + " users who favorited this recipe.");
+            if (recipeOptional.isPresent()) {
+                Recipe recipe = recipeOptional.get();
+                log.info("Recipe found: " + recipe);
 
+                // Trouver les utilisateurs qui ont cette recette en favoris
+                List<User> usersWhoFavorited = userRepository.findUsersByFavoriteRecipesContaining(recipe);
+                log.info("Found " + usersWhoFavorited.size() + " users who favorited this recipe.");
 
-            for (User user : usersWhoFavorited) {
-                log.info("Removing recipe from user: " + user.getUsername());
-                user.getFavoriteRecipes().remove(recipe);
-                userRepository.save(user);
-                log.info("Removed recipe from user: " + user.getUsername());
+                // Supprimer la recette des favoris de chaque utilisateur
+                for (User user : usersWhoFavorited) {
+                    log.info("Removing recipe from user: " + user.getUsername());
+                    user.getFavoriteRecipes().remove(recipe);
+                    userRepository.save(user);
+                    log.info("Removed recipe from user: " + user.getUsername());
+                }
+
+                // Refresh des entités avant la suppression pour éviter les erreurs de suppression
+                recipeRepository.flush();
+                userRepository.flush();
+
+                recipeRepository.delete(recipe);
+                log.info("Deleted recipe with slug: " + slug);
+
+                return true;
+            } else {
+                log.error("No recipe found with slug: " + slug);
+                return false;
             }
-
-
-            recipeRepository.flush();
-            userRepository.flush();
-
-
-            recipeRepository.delete(recipe);
-            log.info("Deleted recipe with slug: " + slug);
-        } else {
-            log.error("No recipe found with slug: " + slug);
-            throw new RuntimeException("Recipe not found");
+        } catch (Exception e) {
+            log.error("An error occurred while deleting the recipe: ", e);
+            return false;
         }
     }
 
 
-    public List<Map<String, Object>> getAllRecipes() {
-        User user = authService.getAuthUser();
+    public List<RecipeDto> getAllRecipes() {
         log.info("Fetching all recipes...");
         List<Recipe> recipes = recipeRepository.findAll();
-        List<Map<String, Object>> recipeList = new ArrayList<>();
 
-        for (Recipe recipe : recipes) {
-            Map<String, Object> recipeData = new HashMap<>();
-            recipeData.put("title", recipe.getTitle());
-            recipeData.put("slug", recipe.getSlug());
-            recipeData.put("instruction", recipe.getInstruction());
-            recipeData.put("calorie", recipe.getCalorie());
-            recipeData.put("serving", recipe.getServing());
+        return recipes.stream().map(recipe -> {
+            // Transformer les ingrédients en IngredientDto
+            List<IngredientDto> ingredients = recipe.getRecipeIngredients().stream()
+                    .map(ingredient -> new IngredientDto(
+                            ingredient.getIngredient().getIngredientName(),
+                            ingredient.getIngredient().getCalorie(),
+                            ingredient.getIngredient().getIngredientCategory().name()))
+                    .collect(Collectors.toList());
 
-            // Add recipe ingredients
-            List<Map<String, Object>> ingredients = new ArrayList<>();
-            for (RecipeIngredient ingredient : recipe.getRecipeIngredients()) {
-                Map<String, Object> ingredientData = new HashMap<>();
-                ingredientData.put("ingredientName", ingredient.getIngredient().getIngredientName());
-                ingredientData.put("calorie", ingredient.getIngredient().getCalorie());
-                ingredientData.put("ingredientCategory", ingredient.getIngredient().getIngredientCategory());
-                ingredients.add(ingredientData);
-            }
-            recipeData.put("recipeIngredients", ingredients);
-
-            recipeList.add(recipeData);
-        }
-        return recipeList;
+            // Transformer la recette en RecipeDto
+            return new RecipeDto(
+                    recipe.getTitle(),
+                    recipe.getSlug(),
+                    recipe.getInstruction(),
+                    recipe.getCalorie(),
+                    recipe.getServing(),
+                    ingredients
+            );
+        }).collect(Collectors.toList());
     }
 
-
 }
-
-
-//{
-//        "title": "Boeuf Cuit",
-//        "instruction": "cuire le boeuf",
-//        "serving": 1,
-//        "recipeIngredients": [{
-//        "ingredientName": "boeuf",
-//        "calorie": 20,
-//        "ingredientCategory": "VIANDE",
-//        "fridgeItems": []
-//        }]
-//        }
