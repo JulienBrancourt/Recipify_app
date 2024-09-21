@@ -4,6 +4,8 @@ import org.example.recipify_back.entity.Allergy;
 import org.example.recipify_back.entity.Diet;
 import org.example.recipify_back.entity.Recipe;
 import org.example.recipify_back.entity.User;
+import org.example.recipify_back.entity.dto.AddFavoriteRecipeDto;
+import org.example.recipify_back.entity.dto.FavoriteRecipeDetailsDto;
 import org.example.recipify_back.repository.AllergyRepository;
 import org.example.recipify_back.repository.DietRepository;
 import org.example.recipify_back.repository.RecipeRepository;
@@ -14,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -86,35 +88,34 @@ public class UserService {
 
     public boolean addFavoriteRecipeToUser(String slug) {
         try {
-            Optional<Recipe> recipefound = recipeRepository.findBySlug(slug);
-            if (recipefound.isEmpty()) {
-                throw new RuntimeException("Recipe not found.");
-            } else {
-                Recipe recipe = recipefound.get();
-                User user = authService.getAuthUser();
-                user.getFavoriteRecipes().add(recipe);
-                userRepository.save(user);
-                return true;
-            }
-        } catch (Exception e) {
+            Recipe recipe = recipeRepository.findBySlug(slug)
+                    .orElseThrow(() -> new RuntimeException("Recipe not found."));
+
+            User user = authService.getAuthUser();
+            user.getFavoriteRecipes().add(recipe);
+            userRepository.save(user);
+
+            return true;
+        } catch (RuntimeException e) {
             log.error("Error while adding favorite recipe", e);
+            throw e;  // Ne pas encapsuler inutilement les exceptions Runtime déjà capturées
+        } catch (Exception e) {
+            log.error("Unexpected error while adding favorite recipe", e);
             throw new RuntimeException("Error while adding favorite recipe", e);
         }
     }
 
 
-    public List<Map<String, Object>> getUserFavoriteRecipes() {
+    public List<FavoriteRecipeDetailsDto> getUserFavoriteRecipes() {
         User user = authService.getAuthUser();
         List<Recipe> recipes = user.getFavoriteRecipes();
-        List<Map<String, Object>> newRecipes = new ArrayList<>();
-        for (Recipe recipe : recipes) {
-            Map<String, Object> recipeData = new HashMap<>();
-            recipeData.put("title", recipe.getTitle());
-            recipeData.put("slug", recipe.getSlug());
-            recipeData.put("instruction", recipe.getInstruction());
-            newRecipes.add(recipeData);
-        }
-        return newRecipes;
+
+        return recipes.stream()
+                .map(recipe -> new FavoriteRecipeDetailsDto(
+                        recipe.getTitle(),
+                        recipe.getSlug(),
+                        recipe.getInstruction()))
+                .collect(Collectors.toList());
     }
 
 }

@@ -26,6 +26,11 @@ public class AllergyService {
         return allergyRepository.save(allergy);
     }
 
+
+
+
+    // TODO En prévision mais Jamais utilisé à terminer et régler.
+
     public Allergy findAllergyByName(String allergyName) throws RuntimeException {
         Allergy allergy = allergyRepository.findByAllergyName(allergyName.toLowerCase()).orElseThrow(() -> new RuntimeException("Allergy Not Found"));
         if (allergy == null) {
@@ -33,8 +38,6 @@ public class AllergyService {
         }
         return allergy;
     }
-
-
 
     public Allergy updateAllergy(String allergyName) {
         Allergy allergy = allergyRepository.findByAllergyName(allergyName).orElseThrow(() -> new RuntimeException("Allergy Not Found"));

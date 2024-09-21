@@ -124,6 +124,9 @@ export class RecetteCardComponent implements OnInit {
         },
         error: (err) => {
           console.error('Erreur lors de la suppression de la recette:', err);
+        },
+        complete: () => {
+          window.location.reload();
         }
       });
     }

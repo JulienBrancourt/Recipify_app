@@ -1,5 +1,6 @@
 package org.example.recipify_back.controller;
 
+import org.example.recipify_back.entity.dto.FridgeDto;
 import org.example.recipify_back.service.FridgeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +25,24 @@ public class FridgeController {
     }
 
     @PostMapping("/fridge")
-    public ResponseEntity<?> addIngredientsToFridge(@RequestBody Object requestBody) {
+    public ResponseEntity<Map<String, String>> addIngredientsToFridge(@RequestBody Object requestBody) {
         logger.info("Entrée Fridge: " + requestBody);
-        fridgeService.saveFridgeItems(requestBody);
+        boolean success = fridgeService.saveFridgeItems(requestBody);
+
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Ingrédients ajoutés avec succès");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        if (success) {
+            response.put("message", "Ingrédients ajoutés avec succès");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } else {
+            response.put("message", "Erreur lors de l'ajout des ingrédients");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 
     @GetMapping("/fridge")
-    public List<Map<String, Object>> getFridgeItems() {
-        return fridgeService.getFridgeItems();
+    public ResponseEntity<List<FridgeDto>> getFridgeItems() {
+        List<FridgeDto> fridgeItems = fridgeService.getFridgeItems();
+        return ResponseEntity.ok(fridgeItems);  // Typage fort avec List<FridgeDto>
     }
 
 }

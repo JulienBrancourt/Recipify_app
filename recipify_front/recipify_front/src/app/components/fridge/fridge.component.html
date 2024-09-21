@@ -12,7 +12,7 @@
     <tr *ngFor="let ingredient of fridgeIngredients | sort: sortColumn: sortDirection">
       <td>{{ ingredient.name | titlecase}}</td>
       <td>{{ ingredient.quantity }}</td>
-      <td>{{ ingredient.unit | lowercase }}</td>
+      <td>{{ ingredient.unitOfMeasurement | lowercase }}</td>
       <td>{{ ingredient.expiration | date: 'dd/MM/yyyy' }}</td>
     </tr>
     </tbody>

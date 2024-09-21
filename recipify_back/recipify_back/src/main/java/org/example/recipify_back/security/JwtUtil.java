@@ -35,6 +35,7 @@ public class JwtUtil {
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         String token = createToken(claims, username);
+//        claims.put("exp", System.currentTimeMillis() + 1000 * 60 * 60 * 10);
         log.info("Generated JWT for user: {}", username);  // Log lors de la génération d'un token
         return token;
     }
