@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { Recette } from '../utils/types/recetteType';
@@ -9,20 +9,25 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AdminService {
   private apiUrl = environment.apiUrl;
-  private adminSubject = new BehaviorSubject<Recette[]>([]);
+  adminSubject = new BehaviorSubject<Recette[]>([]);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   updateRecette(slug: string, recette: Recette): Observable<Recette> {
     return this.http.put<Recette>(`${this.apiUrl}/admin/${slug}`, recette).pipe(
       tap((updatedRecette) => {
-        const currentRecettes = this.adminSubject.value;
+        const currentRecettes = [...this.adminSubject.value];
         const index = currentRecettes.findIndex(r => r.slug === slug);
+
         if (index !== -1) {
+
           currentRecettes[index] = updatedRecette;
         } else {
+
           currentRecettes.push(updatedRecette);
         }
+
         this.adminSubject.next(currentRecettes);
       }),
       catchError((error) => {
@@ -32,20 +37,20 @@ export class AdminService {
     );
   }
 
+
   deleteRecettes(slug: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/admin/${slug}`).pipe(
       tap(() => {
         const currentRecettes = this.adminSubject.value;
-        const index = currentRecettes.findIndex(r => r.slug === slug);
-        if (index !== -1) {
-          currentRecettes.splice(index, 1);
-        }
-        this.adminSubject.next(currentRecettes);
+        const updatedRecettes = currentRecettes.filter(r => r.slug !== slug);
+        this.adminSubject.next(updatedRecettes);
       }),
       catchError((error) => {
         console.error('Error deleting recette', error);
-        throw error;
+        return of();
       })
     );
   }
+
+
 }

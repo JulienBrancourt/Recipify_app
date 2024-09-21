@@ -16,7 +16,7 @@
     </div>
   } @else if (view === 'favorite') {
     <div class="recipe-actions">
-    <span class="heart-icon filled" (click)="removeFromFavorites(recette.title)">&#x2665;</span>
+    <span class="heart-icon filled" (click)="removeFromFavorites(recette.slug)">&#x2665;</span>
     <button class="button" (click)="detailsRecipe()">Voir plus</button>
     </div>
   } @else if (view === 'admin') {
@@ -24,8 +24,38 @@
       <span class="heart-icon empty" (click)="addToFavorite(recette.slug)">&#x2665;</span>
       <button class="button" (click)="detailsRecipe()">Voir plus</button>
       <button class="button" (click)="deleteRecipe()">Supprimer recette</button>
-      <button class="button" (click)="updateRecette()">Modifier recette</button>
+      <button class="button" (click)="toggleEdit()">Modifier recette</button>
     </div>
+    @if(isEditing) {
+      <h3>Modifier la recette</h3>
+      <form [formGroup]="editForm" (ngSubmit)="updateRecette()">
+        <div>
+          <label>Titre:</label>
+          <input formControlName="title" />
+        </div>
+        <div>
+          <label>Instructions:</label>
+          <textarea formControlName="instruction"></textarea>
+        </div>
+        <div formArrayName="ingredients">
+          <div *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
+                <label for="ingredientName">Nom de l'ingrédient:</label>
+                <input type="text" id="ingredientName" formControlName="ingredientName" list="ingredientOption" required>
+                <datalist id="ingredientOption">
+                  <option *ngFor="let ing of ingredientsArray" [value]="ing">{{ing}}</option>
+                </datalist>
+              <p>
+                <label for="quantity">Quantité:</label>
+                <input type="number" id="quantity" formControlName="quantity" required>
+              </p>
+          </div>
+        </div>
+        <div class="recipe-actions">
+        <button class="button-fixed" type="submit" [disabled]="editForm.invalid">Enregistrer</button>
+        <button class="button-fixed" type="button" (click)="toggleEdit()">Annuler</button>
+        </div>
+      </form>
+    }
   }
 
 </div>

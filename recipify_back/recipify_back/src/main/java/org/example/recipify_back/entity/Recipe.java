@@ -1,6 +1,5 @@
 package org.example.recipify_back.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,9 +11,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     @JsonIgnore
     private int id;
 
@@ -41,14 +42,12 @@ public class Recipe {
     @JsonIgnore // Avoid circular references
     private List<User> usersWhoFavorited;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipeIngredients;
-
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
-
 
     @Override
     public String toString() {
