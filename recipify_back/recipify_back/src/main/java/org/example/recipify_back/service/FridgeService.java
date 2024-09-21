@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,19 +34,17 @@ public class FridgeService {
         User user = authService.getAuthUser();
         List<FridgeItem> fridgeItems = fridgeRepository.findByUser(user);
 
-        List<FridgeDto> items = new ArrayList<>();
-
-        for (FridgeItem fridgeItem : fridgeItems) {
-            FridgeDto itemDto = new FridgeDto(
-                    fridgeItem.getIngredient().getIngredientName(),
-                    fridgeItem.getQuantity(),
-                    fridgeItem.getUnitOfMeasurement().name(),
-                    fridgeItem.getExpirationDate()
-            );
-            items.add(itemDto);
-        }
-        return items;
+        // Utilisation de la Stream API pour transformer la liste en FridgeDto
+        return fridgeItems.stream()
+                .map(fridgeItem -> new FridgeDto(
+                        fridgeItem.getIngredient().getIngredientName(),
+                        fridgeItem.getQuantity(),
+                        fridgeItem.getUnitOfMeasurement().name(),
+                        fridgeItem.getExpirationDate()
+                ))
+                .collect(Collectors.toList());
     }
+
 
 
     public boolean saveFridgeItems(Object requestBody) {
