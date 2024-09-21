@@ -6,6 +6,7 @@ import org.example.recipify_back.entity.RecipeIngredient;
 import org.example.recipify_back.entity.User;
 import org.example.recipify_back.repository.IngredientRepository;
 import org.example.recipify_back.repository.RecipeRepository;
+import org.example.recipify_back.repository.UserRepository;
 import org.example.recipify_back.security.AuthService;
 import org.example.recipify_back.utils.Slug;
 import org.slf4j.Logger;
@@ -25,12 +26,15 @@ public class RecipeService {
     private final Slug slugGenerator;
     private final AuthService authService;
     private final IngredientRepository ingredientRepository;
+    private final UserRepository userRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, AuthService authService, IngredientRepository ingredientRepository) {
+
+    public RecipeService(RecipeRepository recipeRepository, AuthService authService, IngredientRepository ingredientRepository, UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
         this.slugGenerator = new Slug(recipeRepository);
         this.authService = authService;
         this.ingredientRepository = ingredientRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -118,7 +122,7 @@ public class RecipeService {
         return recipe;
     }
 
-    // TODO A revoir quand on passera par le front pour respecter les règles de RESTs
+
          public Recipe updateRecipe(String slug, Recipe updatedRecipe) {
         Recipe existingRecipe = recipeRepository.findBySlug(slug).orElseThrow(() -> new RuntimeException("Recipe Not Found"));
 
@@ -143,20 +147,45 @@ public class RecipeService {
         }
 
 
-
-        // Sauvegarde de la recette mise à jour
         return recipeRepository.save(existingRecipe);
     }
 
 
+
+
+    @Transactional
     public void deleteRecipe(String slug) {
-    Optional<Recipe> recipe = recipeRepository.findBySlug(slug);
-    if (recipe.isPresent()) {
-        recipeRepository.delete(recipe.get());
-    } else {
-        throw new RuntimeException("Recipe not found");
+        log.info("Attempting to delete recipe with slug: " + slug);
+        Optional<Recipe> recipeOptional = recipeRepository.findBySlug(slug);
+        if (recipeOptional.isPresent()) {
+            Recipe recipe = recipeOptional.get();
+            log.info("Recipe found: " + recipe);
+
+
+            List<User> usersWhoFavorited = userRepository.findUsersByFavoriteRecipesContaining(recipe);
+            log.info("Found " + usersWhoFavorited.size() + " users who favorited this recipe.");
+
+
+            for (User user : usersWhoFavorited) {
+                log.info("Removing recipe from user: " + user.getUsername());
+                user.getFavoriteRecipes().remove(recipe);
+                userRepository.save(user);
+                log.info("Removed recipe from user: " + user.getUsername());
+            }
+
+
+            recipeRepository.flush();
+            userRepository.flush();
+
+
+            recipeRepository.delete(recipe);
+            log.info("Deleted recipe with slug: " + slug);
+        } else {
+            log.error("No recipe found with slug: " + slug);
+            throw new RuntimeException("Recipe not found");
+        }
     }
-}
+
 
     public List<Map<String, Object>> getAllRecipes() {
         User user = authService.getAuthUser();
