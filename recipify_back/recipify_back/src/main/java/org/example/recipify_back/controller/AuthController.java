@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.recipify_back.entity.security.AuthRequest;
 import org.example.recipify_back.security.JwtUtil;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,24 +28,32 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<Map<String, String>> createAuthenticationToken(@RequestBody AuthRequest authRequest) {
         log.info("Received authentication request for user: {}", authRequest.getUsername());
+
         try {
             log.info("Attempting to authenticate user: {}", authRequest.getUsername());
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
             log.info("Authentication successful for user: {}", authRequest.getUsername());
+
         } catch (AuthenticationException e) {
             log.error("Authentication failed for user: {}", authRequest.getUsername(), e);
-            throw new Exception("Incorrect username or password", e);
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Incorrect username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
 
-
+        // Génération du JWT
         String jwt = jwtUtil.generateToken(authRequest.getUsername());
+
+        // Préparation de la réponse avec le token
         Map<String, String> response = new HashMap<>();
         response.put("token", jwt);
+
         log.info("JWT generated for user: {}", authRequest.getUsername());
         return ResponseEntity.ok(response);
     }
+
 }
