@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class FavoriteRecipeDto {
+public class AddFavoriteRecipeDto {
     private String slug;
 }
 
