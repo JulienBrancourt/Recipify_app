@@ -25,12 +25,18 @@ public class FridgeController {
     }
 
     @PostMapping("/fridge")
-    public ResponseEntity<?> addIngredientsToFridge(@RequestBody Object requestBody) {
+    public ResponseEntity<Map<String, String>> addIngredientsToFridge(@RequestBody Object requestBody) {
         logger.info("Entrée Fridge: " + requestBody);
-        fridgeService.saveFridgeItems(requestBody);
+        boolean success = fridgeService.saveFridgeItems(requestBody);
+
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Ingrédients ajoutés avec succès");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        if (success) {
+            response.put("message", "Ingrédients ajoutés avec succès");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } else {
+            response.put("message", "Erreur lors de l'ajout des ingrédients");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 
     @GetMapping("/fridge")

@@ -48,59 +48,62 @@ public class FridgeService {
     }
 
 
-    public void saveFridgeItems(Object requestBody) {
+    public boolean saveFridgeItems(Object requestBody) {
+        try {
+            User user = authService.getAuthUser();
 
-        User user = authService.getAuthUser();
-
-
-        if (!(requestBody instanceof List<?> rawItems)) {
-            throw new IllegalArgumentException("Invalid request body format. Expected a list of items.");
-        }
-
-        if (rawItems.isEmpty() || !(rawItems.get(0) instanceof Map)) {
-            throw new IllegalArgumentException("Invalid request body format.");
-        }
-
-
-        List<Map<String, Object>> items = (List<Map<String, Object>>) rawItems;
-
-        List<FridgeItem> fridgeItems = new ArrayList<>();
-
-
-        for (Map<String, Object> itemData : items) {
-
-            String name = (String) itemData.get("name");
-            Integer quantity = (Integer) itemData.get("quantity");
-            String unit = (String) itemData.get("unit");
-            String expirationStr = (String) itemData.get("expiration");
-
-            if (name == null || quantity == null || unit == null || expirationStr == null) {
-                throw new IllegalArgumentException("Missing required fields in item data");
+            if (!(requestBody instanceof List<?> rawItems)) {
+                throw new IllegalArgumentException("Invalid request body format. Expected a list of items.");
             }
 
-            LocalDate expiration;
-            try {
-                expiration = LocalDate.parse(expirationStr);
-                log.info("Expiration date: " + expiration);
-            } catch (DateTimeParseException e) {
-                throw new IllegalArgumentException("Invalid expiration date format for item: " + name);
+            if (rawItems.isEmpty() || !(rawItems.get(0) instanceof Map)) {
+                throw new IllegalArgumentException("Invalid request body format.");
             }
 
-            Optional<Ingredient> ingredientOptional = ingredientRepository.findByIngredientName(name);
-            if (ingredientOptional.isEmpty()) {
-                throw new IllegalArgumentException("Ingredient not found: " + name);
-            }
-            Ingredient ingredient = ingredientOptional.get();
-            FridgeItem fridgeItem = FridgeItem.builder()
-                    .user(user)
-                    .ingredient(ingredient)
-                    .quantity(quantity)
-                    .unitOfMeasurement(UnitOfMeasurement.valueOf(unit.toUpperCase())) // Handle enum case
-                    .expirationDate(expiration)
-                    .build();
+            List<Map<String, Object>> items = (List<Map<String, Object>>) rawItems;
+            List<FridgeItem> fridgeItems = new ArrayList<>();
 
-            fridgeItems.add(fridgeItem);
+            for (Map<String, Object> itemData : items) {
+                String name = (String) itemData.get("name");
+                Integer quantity = (Integer) itemData.get("quantity");
+                String unit = (String) itemData.get("unit");
+                String expirationStr = (String) itemData.get("expiration");
+
+                if (name == null || quantity == null || unit == null || expirationStr == null) {
+                    throw new IllegalArgumentException("Missing required fields in item data");
+                }
+
+                LocalDate expiration;
+                try {
+                    expiration = LocalDate.parse(expirationStr);
+                    log.info("Expiration date: " + expiration);
+                } catch (DateTimeParseException e) {
+                    throw new IllegalArgumentException("Invalid expiration date format for item: " + name);
+                }
+
+                Optional<Ingredient> ingredientOptional = ingredientRepository.findByIngredientName(name);
+                if (ingredientOptional.isEmpty()) {
+                    throw new IllegalArgumentException("Ingredient not found: " + name);
+                }
+
+                Ingredient ingredient = ingredientOptional.get();
+                FridgeItem fridgeItem = FridgeItem.builder()
+                        .user(user)
+                        .ingredient(ingredient)
+                        .quantity(quantity)
+                        .unitOfMeasurement(UnitOfMeasurement.valueOf(unit.toUpperCase())) // Handle enum case
+                        .expirationDate(expiration)
+                        .build();
+
+                fridgeItems.add(fridgeItem);
+            }
+
+            fridgeRepository.saveAll(fridgeItems);  // Sauvegarder les items dans le repository
+            return true;  // Retourner true si tout s'est bien passé
+
+        } catch (IllegalArgumentException | DateTimeParseException e) {
+            log.error("Error while saving fridge items: ", e);
+            return false;  // Retourner false en cas d'erreur
         }
-        fridgeRepository.saveAll(fridgeItems);
     }
 }
