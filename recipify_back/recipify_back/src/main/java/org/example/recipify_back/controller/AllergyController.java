@@ -43,6 +43,8 @@ public class AllergyController {
         return allergyService.getAllAllergy();
     }
 
+
+    // TODO En prévision mais Jamais utilisé à terminer et régler.
     @PutMapping("/allergy/{allergyName}")
     public void updateAllergy(@RequestBody Allergy allergy) throws RuntimeException {
         allergyService.updateAllergy(allergy.getAllergyName());
