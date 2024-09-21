@@ -23,13 +23,12 @@ public class IngredientController {
     }
 
     @PostMapping("/ingredient")
-    public ResponseEntity<?> addIngredient(@RequestBody Ingredient ingredient) {
+    public ResponseEntity<String> addIngredient(@RequestBody Ingredient ingredient) {
         try {
             ingredientService.addIngredient(ingredient);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("ingredient created");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Ingredient created successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating ingredient: " + e.getMessage());
         }
     }
 
