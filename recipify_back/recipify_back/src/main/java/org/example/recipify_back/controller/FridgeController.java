@@ -1,5 +1,6 @@
 package org.example.recipify_back.controller;
 
+import org.example.recipify_back.entity.dto.FridgeDto;
 import org.example.recipify_back.service.FridgeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,9 @@ public class FridgeController {
     }
 
     @GetMapping("/fridge")
-    public List<Map<String, Object>> getFridgeItems() {
-        return fridgeService.getFridgeItems();
+    public ResponseEntity<List<FridgeDto>> getFridgeItems() {
+        List<FridgeDto> fridgeItems = fridgeService.getFridgeItems();
+        return ResponseEntity.ok(fridgeItems);  // Typage fort avec List<FridgeDto>
     }
 
 }

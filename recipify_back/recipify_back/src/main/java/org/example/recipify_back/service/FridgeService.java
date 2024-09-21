@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.recipify_back.entity.FridgeItem;
 import org.example.recipify_back.entity.Ingredient;
 import org.example.recipify_back.entity.User;
+import org.example.recipify_back.entity.dto.FridgeDto;
 import org.example.recipify_back.entity.enumEntity.UnitOfMeasurement;
 import org.example.recipify_back.repository.FridgeRepository;
 
@@ -28,19 +29,20 @@ public class FridgeService {
         this.authService = authService;
     }
 
-    public List<Map<String, Object>> getFridgeItems() {
+    public List<FridgeDto> getFridgeItems() {
         User user = authService.getAuthUser();
         List<FridgeItem> fridgeItems = fridgeRepository.findByUser(user);
 
-        List<Map<String, Object>> items = new ArrayList<>();
+        List<FridgeDto> items = new ArrayList<>();
 
         for (FridgeItem fridgeItem : fridgeItems) {
-            Map<String, Object> item = new HashMap<>();
-            item.put("name", fridgeItem.getIngredient().getIngredientName());
-            item.put("quantity", fridgeItem.getQuantity());
-            item.put("unit", fridgeItem.getUnitOfMeasurement().name());
-            item.put("expiration", fridgeItem.getExpirationDate().toString());
-            items.add(item);
+            FridgeDto itemDto = new FridgeDto(
+                    fridgeItem.getIngredient().getIngredientName(),
+                    fridgeItem.getQuantity(),
+                    fridgeItem.getUnitOfMeasurement().name(),
+                    fridgeItem.getExpirationDate()
+            );
+            items.add(itemDto);
         }
         return items;
     }

@@ -19,27 +19,6 @@ import {SortPipe} from "../../pipe/sort.pipe";
   styleUrl: './fridge.component.css',
 })
 export class FridgeComponent implements OnInit {
-  // constructor(private fridgService: FridgeService) {}
-  // fridgeIngredients: string[] = [];
-  //
-  //
-  // ngOnInit() {
-  //   this.fridgService.getFromFridge().subscribe({
-  //       next: (fridgeIngredients) => {
-  //         console.log('Fridge content:', fridgeIngredients);
-  //       },
-  //       error: (error) => {
-  //         console.error('Error getting fridge content:', error.message);
-  //       },
-  //       complete: () => {
-  //         console.log('Fridge content retrieved');
-  //       }
-  //     }
-  //   );
-  // }
-  // Traitement des données / pipe classement par ordre alphabétique / Catégories
-
-
   // Déclare un tableau d'objets avec les propriétés attendues
   fridgeIngredients: { unit: string; quantity: number; name: string; expiration: Date }[] = [];
   sortColumn: string = 'name';
@@ -60,7 +39,8 @@ export class FridgeComponent implements OnInit {
       next: (ingredients) => {
         this.fridgeIngredients = ingredients;
         console.log('Fridge content:', this.fridgeIngredients);
-        console.log(this.fridgeIngredients.length)
+        // Log des Unités
+        console.log('Units:', this.fridgeIngredients.map((i) => i.unit));
       },
       error: (error) => {
         console.error('Error getting fridge content:', error.message);
