@@ -81,9 +81,9 @@ export class FormRecetteComponent implements OnInit {
 
     const newRecette: Recette = {
       title: this.recetteForm.value.title || '',
-      slug: '',  // You may need a slug generation logic
+      slug: '',
       instruction: this.recetteForm.value.instruction || '',
-      calorie: 0,  // To be calculated in the backend
+      calorie: 0,
       serving: 1,
       time: Number(this.recetteForm.value.prepTime) || 0,
       recipeIngredients: (this.recetteForm.value.ingredients as any[]).map(ingredient => ({
