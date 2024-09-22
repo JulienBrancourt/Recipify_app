@@ -3,6 +3,6 @@
   <h2>Recettes</h2>
 <section class="recette-section">
   <div *ngFor="let r of recettes" >
-    <app-recette-card [recette]="r" view="admin" (recetteDeleted)="onRecetteDeleted(r.slug)"></app-recette-card>
+    <app-recette-card [recette]="r" view="admin" (recetteDeleted)="onRecetteDeleted($event)"></app-recette-card>
   </div>
 </section>

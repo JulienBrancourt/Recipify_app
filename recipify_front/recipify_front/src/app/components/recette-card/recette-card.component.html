@@ -37,19 +37,31 @@
           <label>Instructions:</label>
           <textarea formControlName="instruction"></textarea>
         </div>
-        <div formArrayName="ingredients">
-          <div *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
-                <label for="ingredientName">Nom de l'ingrédient:</label>
-                <input type="text" id="ingredientName" formControlName="ingredientName" list="ingredientOption" required>
-                <datalist id="ingredientOption">
-                  <option *ngFor="let ing of ingredientsArray" [value]="ing">{{ing}}</option>
-                </datalist>
-              <p>
-                <label for="quantity">Quantité:</label>
-                <input type="number" id="quantity" formControlName="quantity" required>
-              </p>
-          </div>
+        <fieldset formArrayName="ingredients">
+        <legend>Ingrédients</legend>
+        <div *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
+          <fieldset>
+            <p>
+              <label for="ingredientName">Nom de l'ingrédient:</label>
+              <input type="text" id="ingredientName" formControlName="ingredientName" list="ingredientOption" required>
+              <datalist id="ingredientOption">
+                <option *ngFor="let ing of ingredientsArray" [value]="ing">{{ing}}</option>
+              </datalist>
+            </p>
+            <p>
+              <label for="quantity">Quantité:</label>
+              <input type="number" id="quantity" formControlName="quantity" required>
+            </p>
+            <p>
+              <label for="unit{{i}}">Unité:</label>
+              <select id="unit{{i}}" formControlName="unit" required>
+                <option *ngFor="let u of units" [value]="u">{{ getUnitDisplayName(u)}}</option>
+              </select>
+            </p>
+          </fieldset>
         </div>
+      </fieldset>
+        <button class="button-fixed" type="button" (click)="addIngredientInput()">Ajouter un ingrédient </button>
         <div class="recipe-actions">
         <button class="button-fixed" type="submit" [disabled]="editForm.invalid">Enregistrer</button>
         <button class="button-fixed" type="button" (click)="toggleEdit()">Annuler</button>
