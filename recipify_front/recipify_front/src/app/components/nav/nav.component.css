@@ -15,6 +15,19 @@ nav {
 
 }
 
+.logo {
+  display: flex;
+  align-items: center; /* Aligner verticalement */
+  font-size: 24px;
+  font-weight: bold;
+  gap: 10px; /* Espacement entre le logo et le texte */
+}
+
+.logo img {
+  max-width: 50px;
+  height: auto;
+}
+
 nav:before {
   content: '';
   position: absolute;
