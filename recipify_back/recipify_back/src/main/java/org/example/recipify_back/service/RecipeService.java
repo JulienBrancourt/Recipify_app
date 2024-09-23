@@ -127,33 +127,50 @@ public class RecipeService {
             Recipe existingRecipe = recipeRepository.findBySlug(slug)
                     .orElseThrow(() -> new RuntimeException("Recipe not found with slug: " + slug));
 
-            // Mise à jour du titre
+
             String newTitle = updatedRecipe.getTitle();
             if (newTitle != null && !newTitle.trim().isEmpty()) {
                 existingRecipe.setTitle(newTitle.trim());
                 existingRecipe.setSlug(slugGenerator.generateUniqueSlug(newTitle.trim()));
             }
 
-            // Mise à jour des instructions
             String newInstruction = updatedRecipe.getInstruction();
             if (newInstruction != null && !newInstruction.trim().isEmpty()) {
                 existingRecipe.setInstruction(newInstruction.trim());
             }
 
-            // Mise à jour des portions
             int newServing = updatedRecipe.getServing();
             if (newServing > 0) {
                 existingRecipe.setServing(newServing);
             }
 
-            // Sauvegarder la recette mise à jour dans le repository
+
+            List<RecipeIngredient> updatedIngredients = updatedRecipe.getRecipeIngredients().stream().map(recipeIngredient -> {
+                String ingredientName = recipeIngredient.getIngredient().getIngredientName();
+                log.info("Processing ingredient: " + ingredientName);
+
+                Ingredient ingredient = ingredientRepository.findByIngredientName(ingredientName)
+                       .orElseThrow(() -> new IllegalArgumentException("Ingredient not found: " + ingredientName));
+
+                recipeIngredient.setIngredient(ingredient);
+                return recipeIngredient;
+            }).collect(Collectors.toList());
+
+
+            existingRecipe.setRecipeIngredients(updatedIngredients);
+            updatedIngredients.forEach(ingredient -> ingredient.setRecipe(existingRecipe));
+
+
+            existingRecipe.setCalorie(updatedRecipe.getTotalCalories());
+
+
             recipeRepository.save(existingRecipe);
 
-            return existingRecipe;  // Retourne la recette mise à jour
+            return existingRecipe;
 
         } catch (RuntimeException e) {
             log.error("Recipe not found or error during update: ", e);
-            throw e;  // Lancer l'exception capturée pour gestion dans le contrôleur
+            throw e;
         } catch (Exception e) {
             log.error("Error updating recipe: ", e);
             throw new RuntimeException("An unexpected error occurred while updating the recipe.", e);
