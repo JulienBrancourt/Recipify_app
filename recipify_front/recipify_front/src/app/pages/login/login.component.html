@@ -1,9 +1,15 @@
 <app-loading-card [isLoading]="isLoading"></app-loading-card>
+
+<div class = "header-section">
+  <h1>Bienvenue sur Recipify!</h1>
+  <p>Connectez-vous pour accéder à votre compte</p>
+</div>
+
 <section id="login">
   <div class="accueil">
-    <h1>Bienvenue sur Recipify!</h1>
-    <p>Connectez-vous pour accéder à votre compte</p>
+    <img src="logo.png" alt="Logo Recipify">
   </div>
+
 
   <div class="formulaire">
     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
@@ -25,5 +31,3 @@
     </form>
   </div>
 </section>
-
-
