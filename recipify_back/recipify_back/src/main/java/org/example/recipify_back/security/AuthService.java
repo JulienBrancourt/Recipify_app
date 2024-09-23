@@ -30,7 +30,7 @@ public class AuthService {
             throw new RuntimeException("User not authenticated");
         }
 
-        String specificRole = "ROLE_ADMIN"; // Le rôle spécifique que vous cherchez
+        String specificRole = "ROLE_ADMIN";
 
         boolean hasSpecificRole = authentication.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals(specificRole));
@@ -40,7 +40,7 @@ public class AuthService {
         } else {
             log.info("L'utilisateur n'a pas le rôle spécifique : " + specificRole);
         }
-        // Recherche de l'utilisateur dans la base de données
+
 
         return userRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("User not found"));

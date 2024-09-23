@@ -70,27 +70,27 @@ public class RecipeService {
             recipe.setSlug(uniqueSlug);
             log.info("Generated slug: " + uniqueSlug);
 
-            // Calcul des calories
+
             recipe.setCalorie(recipe.getTotalCalories());
             log.info("Calorie count: " + recipe.getCalorie());
 
-            // Vérification des droits d'approbation
+
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             recipe.setApproved(authentication != null && authentication.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")));
 
-            // Enregistrement de la recette
+
             recipeRepository.save(recipe);
             log.info("Recipe registered: " + recipe);
 
-            return true; // Retourne true si tout est réussi
+            return true;
 
         } catch (IllegalArgumentException e) {
             log.error("Error registering recipe: ", e);
-            throw e; // Lancer l'exception pour une gestion par le contrôleur
+            throw e;
         } catch (Exception e) {
             log.error("Unexpected error during recipe registration: ", e);
-            return false; // Retourne false si une exception imprévue survient
+            return false;
         }
     }
 

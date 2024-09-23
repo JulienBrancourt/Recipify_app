@@ -34,7 +34,7 @@ public class FridgeService {
         User user = authService.getAuthUser();
         List<FridgeItem> fridgeItems = fridgeRepository.findByUser(user);
 
-        // Utilisation de la Stream API pour transformer la liste en FridgeDto
+
         return fridgeItems.stream()
                 .map(fridgeItem -> new FridgeDto(
                         fridgeItem.getIngredient().getIngredientName(),
@@ -90,19 +90,19 @@ public class FridgeService {
                         .user(user)
                         .ingredient(ingredient)
                         .quantity(quantity)
-                        .unitOfMeasurement(UnitOfMeasurement.valueOf(unit.toUpperCase())) // Handle enum case
+                        .unitOfMeasurement(UnitOfMeasurement.valueOf(unit.toUpperCase()))
                         .expirationDate(expiration)
                         .build();
 
                 fridgeItems.add(fridgeItem);
             }
 
-            fridgeRepository.saveAll(fridgeItems);  // Sauvegarder les items dans le repository
-            return true;  // Retourner true si tout s'est bien passé
+            fridgeRepository.saveAll(fridgeItems);
+            return true;
 
         } catch (IllegalArgumentException | DateTimeParseException e) {
             log.error("Error while saving fridge items: ", e);
-            return false;  // Retourner false en cas d'erreur
+            return false;
         }
     }
 }

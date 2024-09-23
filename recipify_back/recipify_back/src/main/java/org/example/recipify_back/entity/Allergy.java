@@ -25,7 +25,7 @@ public class Allergy {
     private String allergyName;
 
     @ManyToMany(mappedBy = "allergies")
-    @JsonIgnore // Prevent infinite recursion during serialization
+    @JsonIgnore
     private List<User> users;
 
     @Override

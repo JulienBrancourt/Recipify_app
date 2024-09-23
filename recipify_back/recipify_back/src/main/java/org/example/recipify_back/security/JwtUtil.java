@@ -36,7 +36,7 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         String token = createToken(claims, username);
 //        claims.put("exp", System.currentTimeMillis() + 1000 * 60 * 60 * 10);
-        log.info("Generated JWT for user: {}", username);  // Log lors de la génération d'un token
+        log.info("Generated JWT for user: {}", username);
         return token;
     }
 
@@ -45,14 +45,14 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Expire dans 10 heures
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
     }
 
     public String extractUsername(String token) {
         String username = extractClaim(token, Claims::getSubject);
-        log.debug("Extracted username from JWT: {}", username);  // Log lors de l'extraction du username
+        log.debug("Extracted username from JWT: {}", username);
         return username;
     }
 
@@ -65,10 +65,10 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    // Extraire tous les claims du token JWT en vérifiant avec la clé publique
+
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(publicKey) // Utiliser la clé publique pour valider
+                .setSigningKey(publicKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

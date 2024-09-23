@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 public class DietController {
-//    private static final Logger log = LoggerFactory.getLogger(DietController.class);
+
     private final DietService dietService;
 
     public DietController(DietService dietService) {

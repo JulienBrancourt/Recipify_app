@@ -53,11 +53,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "diet_id")
     )
-    @JsonIgnore // Avoid circular references
+    @JsonIgnore
     private List<Diet> diets;
 
     @OneToMany(mappedBy = "creator")
-    @JsonIgnore // Avoid circular references
+    @JsonIgnore
     private List<Recipe> createdRecipes;
 
     @Override

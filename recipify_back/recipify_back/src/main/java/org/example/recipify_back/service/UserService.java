@@ -41,32 +41,35 @@ public class UserService {
     }
 
     public User registerUser(User user, List<String> allergyNames, List<String> dietNames) {
-        // Check if the username already exists
+
         if (userRepository.findByUsername(user.getUsername().toLowerCase()).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Fetch the allergy entities by their names
+
         List<Allergy> allergies = allergyRepository.findByAllergyNameIn(allergyNames);
         user.setAllergies(allergies);
 
-        // Log les allergies trouvées
+
         log.info("Allergies trouvées pour {}: {}", user.getUsername(), allergies.stream()
                 .map(Allergy::getAllergyName)
                 .collect(Collectors.joining(", ")));
 
-        // Fetch the diet entities by their names
+
         List<Diet> diets = dietRepository.findByDietNameIn(dietNames);
         user.setDiets(diets);
 
-        // Log les régimes trouvés
+        // Add auto admin for the live demo
+        user.setAdmin(true);
+
+
         log.info("Régimes trouvés pour {}: {}", user.getUsername(), diets.stream()
                 .map(Diet::getDietName)
                 .collect(Collectors.joining(", ")));
 
-        // Save the user
+
         return userRepository.save(user);
     }
 
@@ -98,7 +101,7 @@ public class UserService {
             return true;
         } catch (RuntimeException e) {
             log.error("Error while adding favorite recipe", e);
-            throw e;  // Ne pas encapsuler inutilement les exceptions Runtime déjà capturées
+            throw e;
         } catch (Exception e) {
             log.error("Unexpected error while adding favorite recipe", e);
             throw new RuntimeException("Error while adding favorite recipe", e);

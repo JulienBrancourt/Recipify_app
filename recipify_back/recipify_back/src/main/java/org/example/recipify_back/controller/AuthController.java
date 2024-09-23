@@ -45,10 +45,10 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
 
-        // Génération du JWT
+
         String jwt = jwtUtil.generateToken(authRequest.getUsername());
 
-        // Préparation de la réponse avec le token
+
         Map<String, String> response = new HashMap<>();
         response.put("token", jwt);
 

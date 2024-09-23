@@ -25,19 +25,18 @@ public class registerController {
     public ResponseEntity<User> register(@RequestBody UserRegistrationDto registrationDto) {
         log.info("Registering user: {}", registrationDto.getUsername());
 
-        // Extract the allergies and diet from the DTO
         List<String> allergies = registrationDto.getAllergies();
         List<String> diets = registrationDto.getDiets();
 
         log.info("Allergies: {}", allergies);
         log.info("Diets: {}", diets);
 
-        // Create a new User from the DTO
+
         User user = new User();
         user.setUsername(registrationDto.getUsername());
         user.setPassword(registrationDto.getPassword());
 
-        // Register the user
+
         User registeredUser = userService.registerUser(user, allergies, diets);
 
         return ResponseEntity.ok(registeredUser);

@@ -35,14 +35,14 @@ public class RecipeController {
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
                 response.put("message", "Une erreur est survenue lors de l'enregistrement de la recette.");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);  // Retourne 500 si false est retourné
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
             }
         } catch (IllegalArgumentException e) {
             response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // 400 pour erreurs de validation ou d'ingrédients
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (RuntimeException e) {
             response.put("message", "Recette non trouvée ou autre erreur spécifique.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);  // 404 pour erreurs liées aux entités manquantes
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 

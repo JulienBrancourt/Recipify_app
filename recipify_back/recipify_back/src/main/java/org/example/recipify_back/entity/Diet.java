@@ -23,7 +23,7 @@ public class Diet {
     private String dietName;
 
     @ManyToMany(mappedBy = "diets")
-    @JsonIgnore // Prevent infinite recursion during serialization
+    @JsonIgnore
     private List<User> users;
 
     @Override
